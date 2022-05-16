@@ -1,0 +1,239 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "golang-backend interface",
+        "title": "Intelligent Pasture Backend APIs",
+        "contact": {
+            "name": "aken",
+            "url": "https://github.com/ChenKen9869",
+            "email": "972576519@qq.com"
+        },
+        "license": {
+            "name": "license(Mandatory)",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "version(1.0)"
+    },
+    "host": "localhost:8081",
+    "basePath": "/",
+    "paths": {
+        "/user/info": {
+            "get": {
+                "description": "get user informations",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "username",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "查询成功",
+                        "schema": {
+                            "$ref": "#/definitions/swagResponse.SuccessResponse200"
+                        }
+                    },
+                    "400": {
+                        "description": "用户信息不存在",
+                        "schema": {
+                            "$ref": "#/definitions/swagResponse.FailureResponse400"
+                        }
+                    },
+                    "401": {
+                        "description": "权限不足",
+                        "schema": {
+                            "$ref": "#/definitions/swagResponse.FailureResponse401"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/login": {
+            "post": {
+                "description": "user login",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "description": "userinfo",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "登录成功",
+                        "schema": {
+                            "$ref": "#/definitions/swagResponse.SuccessResponse200"
+                        }
+                    },
+                    "422": {
+                        "description": "输入参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/swagResponse.FailureResponse422"
+                        }
+                    },
+                    "500": {
+                        "description": "系统异常",
+                        "schema": {
+                            "$ref": "#/definitions/swagResponse.FailureResponse500"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/register": {
+            "post": {
+                "description": "user register",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "description": "userinfo",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "注册成功",
+                        "schema": {
+                            "$ref": "#/definitions/swagResponse.SuccessResponse200"
+                        }
+                    },
+                    "422": {
+                        "description": "输入参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/swagResponse.FailureResponse422"
+                        }
+                    },
+                    "500": {
+                        "description": "系统异常",
+                        "schema": {
+                            "$ref": "#/definitions/swagResponse.FailureResponse500"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "swagResponse.FailureResponse400": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 400
+                },
+                "data": {
+                    "type": "string",
+                    "example": "null"
+                },
+                "msg": {
+                    "type": "string",
+                    "example": "错误请求"
+                }
+            }
+        },
+        "swagResponse.FailureResponse401": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 401
+                },
+                "data": {
+                    "type": "string",
+                    "example": "null"
+                },
+                "msg": {
+                    "type": "string",
+                    "example": "权限不足"
+                }
+            }
+        },
+        "swagResponse.FailureResponse422": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 422
+                },
+                "data": {
+                    "type": "string",
+                    "example": "null"
+                },
+                "msg": {
+                    "type": "string",
+                    "example": "语义错误"
+                }
+            }
+        },
+        "swagResponse.FailureResponse500": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 500
+                },
+                "data": {
+                    "type": "string",
+                    "example": "null"
+                },
+                "msg": {
+                    "type": "string",
+                    "example": "服务器内部错误"
+                }
+            }
+        },
+        "swagResponse.SuccessResponse200": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 200
+                },
+                "data": {},
+                "msg": {
+                    "type": "string",
+                    "example": "操作成功"
+                }
+            }
+        }
+    }
+}
