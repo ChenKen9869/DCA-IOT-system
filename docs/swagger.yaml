@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  swagResponse.FailureResponse400:
+  server.FailureResponse400:
     properties:
       code:
         example: 400
@@ -9,10 +9,10 @@ definitions:
         example: "null"
         type: string
       msg:
-        example: 错误请求
+        example: 语法无效
         type: string
     type: object
-  swagResponse.FailureResponse401:
+  server.FailureResponse401:
     properties:
       code:
         example: 401
@@ -24,7 +24,7 @@ definitions:
         example: 权限不足
         type: string
     type: object
-  swagResponse.FailureResponse422:
+  server.FailureResponse422:
     properties:
       code:
         example: 422
@@ -33,10 +33,10 @@ definitions:
         example: "null"
         type: string
       msg:
-        example: 语义错误
+        example: 无法处理
         type: string
     type: object
-  swagResponse.FailureResponse500:
+  server.FailureResponse500:
     properties:
       code:
         example: 500
@@ -48,7 +48,7 @@ definitions:
         example: 服务器内部错误
         type: string
     type: object
-  swagResponse.SuccessResponse200:
+  server.SuccessResponse200:
     properties:
       code:
         example: 200
@@ -58,7 +58,7 @@ definitions:
         example: 操作成功
         type: string
     type: object
-host: localhost:8081
+host: 8.142.115.160:5930
 info:
   contact:
     email: 972576519@qq.com
@@ -71,15 +71,1143 @@ info:
   title: Intelligent Pasture Backend APIs
   version: version(1.0)
 paths:
+  /biology/create:
+    post:
+      consumes:
+      - multipart/form-data
+      description: create biology
+      parameters:
+      - description: biology name
+        in: formData
+        name: BiologyName
+        required: true
+        type: string
+      - description: biology type
+        in: formData
+        name: BiologyType
+        required: true
+        type: string
+      - description: company id(farmhouse id)
+        in: header
+        name: CompanyId
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
+  /biology/create_epidemic_prevention_record:
+    post:
+      consumes:
+      - multipart/form-data
+      description: create biology epidemic prevention record
+      parameters:
+      - description: biology id
+        in: formData
+        name: BiologyId
+        required: true
+        type: integer
+      - description: vaccine description
+        in: formData
+        name: VaccineDescription
+        required: true
+        type: string
+      - description: inoculation time
+        in: formData
+        name: InoculationTime
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
+  /biology/create_medical_record:
+    post:
+      consumes:
+      - multipart/form-data
+      description: create biology medical record
+      parameters:
+      - description: biology id
+        in: formData
+        name: BiologyId
+        required: true
+        type: integer
+      - description: disease
+        in: formData
+        name: Disease
+        required: true
+        type: string
+      - description: illness time
+        in: formData
+        name: IllnessTime
+        required: true
+        type: string
+      - description: treatment plan
+        in: formData
+        name: TreatmentPlan
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
+  /biology/create_operation_record:
+    post:
+      consumes:
+      - multipart/form-data
+      description: create biology operation record
+      parameters:
+      - description: biology id
+        in: formData
+        name: BiologyId
+        required: true
+        type: integer
+      - description: doctor
+        in: formData
+        name: Doctor
+        required: true
+        type: string
+      - description: operation time
+        in: formData
+        name: OperationTime
+        required: true
+        type: string
+      - description: process description
+        in: formData
+        name: ProcessDescription
+        required: true
+        type: string
+      - description: result
+        in: formData
+        name: Result
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
+  /biology/create_type:
+    post:
+      consumes:
+      - multipart/form-data
+      description: create biology type
+      parameters:
+      - description: type name
+        in: formData
+        name: BiologyTypeId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
+  /biology/delete:
+    delete:
+      consumes:
+      - application/json
+      description: delete biology
+      parameters:
+      - description: id
+        in: query
+        name: Id
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
+  /biology/delete_type:
+    delete:
+      consumes:
+      - application/json
+      description: delete biology type
+      parameters:
+      - description: type name
+        in: query
+        name: BiologyTypeId
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
+  /biology/get_epidemic_prevention_record_list:
+    get:
+      consumes:
+      - application/json
+      description: get epidemic prevention record list of biology
+      parameters:
+      - description: biology id
+        in: query
+        name: BiologyId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
+  /biology/get_list:
+    get:
+      consumes:
+      - application/json
+      description: get all biologies of farmhouse
+      parameters:
+      - description: company id
+        in: query
+        name: CompanyId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
+  /biology/get_medical_record_list:
+    get:
+      consumes:
+      - application/json
+      description: get medical record list of biology
+      parameters:
+      - description: biology id
+        in: query
+        name: BiologyId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
+  /biology/get_operation_record_list:
+    get:
+      consumes:
+      - application/json
+      description: get operation record list of biology
+      parameters:
+      - description: biology id
+        in: query
+        name: BiologyId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
+  /biology/get_picture:
+    get:
+      consumes:
+      - application/json
+      description: get picture of biology
+      parameters:
+      - description: biology id
+        in: query
+        name: BiologyId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
+  /biology/get_picture_path:
+    get:
+      consumes:
+      - application/json
+      description: get static picture path of biology
+      parameters:
+      - description: biology id
+        in: query
+        name: BiologyId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
+  /biology/get_with_device_list:
+    get:
+      consumes:
+      - application/json
+      description: get all biologies with devices of company
+      parameters:
+      - description: company id
+        in: query
+        name: CompanyId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
+  /biology/update_farmhouse:
+    put:
+      consumes:
+      - application/json
+      description: update biology farmhouse
+      parameters:
+      - description: biology id
+        in: formData
+        name: BiologyId
+        required: true
+        type: integer
+      - description: farmhouse id
+        in: formData
+        name: FarmhouseId
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
+  /biology/update_picture:
+    post:
+      consumes:
+      - application/json
+      description: update biology picture
+      parameters:
+      - description: biology id
+        in: formData
+        name: BiologyId
+        required: true
+        type: integer
+      - description: new picture
+        in: formData
+        name: BiologyPicture
+        required: true
+        type: file
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
+  /company/company_user/create:
+    post:
+      consumes:
+      - multipart/form-data
+      description: add company auth to user
+      parameters:
+      - description: company id
+        in: formData
+        name: CompanyId
+        required: true
+        type: string
+      - description: user id
+        in: formData
+        name: UserId
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Company
+  /company/company_user/delete:
+    delete:
+      consumes:
+      - application/json
+      description: delete company auth of user
+      parameters:
+      - description: company id
+        in: query
+        name: CompanyId
+        required: true
+        type: integer
+      - description: user id
+        in: formData
+        name: UserId
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Company
+  /company/create:
+    post:
+      consumes:
+      - multipart/form-data
+      description: create company
+      parameters:
+      - description: company_name
+        in: formData
+        name: Name
+        required: true
+        type: string
+      - description: parent id
+        in: formData
+        name: ParentId
+        required: true
+        type: string
+      - description: location
+        in: formData
+        name: Location
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Company
+  /company/delete:
+    delete:
+      consumes:
+      - application/json
+      description: delete company
+      parameters:
+      - description: company id
+        in: query
+        name: CompanyId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Company
+  /company/get/employeelist:
+    get:
+      consumes:
+      - application/json
+      description: get employee list of company
+      parameters:
+      - description: company id
+        in: query
+        name: CompanyId
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Company
+  /company/get/info:
+    get:
+      consumes:
+      - application/json
+      description: get company information
+      parameters:
+      - description: company id
+        in: query
+        name: CompanyId
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Company
+  /company/get/treelist:
+    get:
+      consumes:
+      - application/json
+      description: get user's company tree
+      parameters:
+      - description: user id
+        in: query
+        name: UserId
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Company
+  /device/fixed/create:
+    post:
+      consumes:
+      - multipart/form-data
+      description: create fixed device
+      parameters:
+      - description: company id
+        in: formData
+        name: CompanyId
+        required: true
+        type: string
+      - description: device id
+        in: formData
+        name: DeviceId
+        required: true
+        type: string
+      - description: type name
+        in: formData
+        name: TypeId
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-fixed
+  /device/fixed/create_type:
+    post:
+      consumes:
+      - multipart/form-data
+      description: create fixed device type
+      parameters:
+      - description: type name
+        in: formData
+        name: FixedDeviceTypeId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-fixed
+  /device/fixed/delete:
+    delete:
+      consumes:
+      - application/json
+      description: delete fixed device
+      parameters:
+      - description: id
+        in: query
+        name: Id
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-fixed
+  /device/fixed/delete_type:
+    delete:
+      consumes:
+      - application/json
+      description: delete fixed device type
+      parameters:
+      - description: type name
+        in: query
+        name: FixedDeviceTypeId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-fixed
+  /device/fixed/get_by_farmhouse:
+    get:
+      consumes:
+      - application/json
+      description: get all fixed devices by farmhouse
+      parameters:
+      - description: company id
+        in: query
+        name: CompanyId
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-fixed
+  /device/fixed/get_fio_latest:
+    get:
+      consumes:
+      - application/json
+      description: get latest five-in-one device information
+      parameters:
+      - description: Id
+        in: query
+        name: Id
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-fixed
+  /device/fixed/get_fio_list_by_time:
+    get:
+      consumes:
+      - application/json
+      description: get five-in-one information within time period
+      parameters:
+      - description: id
+        in: query
+        name: Id
+        required: true
+        type: string
+      - description: start time
+        in: query
+        name: StartTime
+        required: true
+        type: string
+      - description: end time
+        in: query
+        name: EndTime
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-fixed
+  /device/fixed/get_monitor:
+    get:
+      consumes:
+      - application/json
+      description: get monitor streaming address
+      parameters:
+      - description: id
+        in: query
+        name: Id
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-fixed
+  /device/portable/create:
+    post:
+      consumes:
+      - multipart/form-data
+      description: create portable device
+      parameters:
+      - description: biology id
+        in: formData
+        name: BiologyId
+        required: true
+        type: string
+      - description: device id
+        in: formData
+        name: DeviceId
+        required: true
+        type: string
+      - description: type name
+        in: formData
+        name: TypeId
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-portable
+  /device/portable/create_type:
+    post:
+      consumes:
+      - multipart/form-data
+      description: create portable device type
+      parameters:
+      - description: type name
+        in: formData
+        name: PortableDeviceTypeId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-portable
+  /device/portable/delete:
+    delete:
+      consumes:
+      - application/json
+      description: delete portable device
+      parameters:
+      - description: id
+        in: query
+        name: Id
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-portable
+  /device/portable/delete_type:
+    delete:
+      consumes:
+      - application/json
+      description: delete portable device type
+      parameters:
+      - description: type name
+        in: query
+        name: PortableDeviceTypeId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-portable
+  /device/portable/get_by_farmhouse:
+    get:
+      consumes:
+      - application/json
+      description: get all portable devices by farmhouse
+      parameters:
+      - description: company id
+        in: query
+        name: CompanyId
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-portable
+  /fence/create:
+    post:
+      consumes:
+      - multipart/form-data
+      description: fence create
+      parameters:
+      - description: position
+        in: formData
+        name: Position
+        required: true
+        type: string
+      - description: device list
+        in: formData
+        name: DeviceList
+        required: true
+        type: string
+      - description: duration
+        in: formData
+        name: Duration
+        required: true
+        type: string
+      - description: coordinate
+        in: formData
+        name: Coordinate
+        required: true
+        type: string
+      - description: name of fence
+        in: formData
+        name: Name
+        required: true
+        type: string
+      - description: parent id
+        in: formData
+        name: ParentId
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Fence
+  /fence/get_active_list:
+    get:
+      consumes:
+      - application/json
+      description: get active fence list by company id
+      parameters:
+      - description: company id
+        in: query
+        name: CompanyId
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Fence
+  /fence/get_status:
+    get:
+      consumes:
+      - application/json
+      description: get fence status
+      parameters:
+      - description: fence id
+        in: query
+        name: FenceId
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Fence
+  /fence/stop:
+    delete:
+      consumes:
+      - application/json
+      description: fence stop
+      parameters:
+      - description: fence id
+        in: query
+        name: FenceId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Fence
+  /monitorCentor/connect:
+    get:
+      consumes:
+      - application/json
+      description: connect with monitor centor
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - MonitorCentor
+  /monitorCentor/disconnect:
+    delete:
+      consumes:
+      - application/json
+      description: disconnect with monitor centor
+      parameters:
+      - description: company id
+        in: query
+        name: CompanyId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - MonitorCentor
   /user/info:
     get:
       consumes:
       - application/json
-      description: get user informations
+      description: get user information
       parameters:
-      - description: username
+      - description: Id
         in: query
-        name: name
+        name: Id
         required: true
         type: string
       - description: token
@@ -91,71 +1219,79 @@ paths:
         "200":
           description: 查询成功
           schema:
-            $ref: '#/definitions/swagResponse.SuccessResponse200'
+            $ref: '#/definitions/server.SuccessResponse200'
         "400":
           description: 用户信息不存在
           schema:
-            $ref: '#/definitions/swagResponse.FailureResponse400'
+            $ref: '#/definitions/server.FailureResponse400'
         "401":
           description: 权限不足
           schema:
-            $ref: '#/definitions/swagResponse.FailureResponse401'
+            $ref: '#/definitions/server.FailureResponse401'
       summary: API of golang gin backend
       tags:
       - User
   /user/login:
     post:
       consumes:
-      - application/json
+      - multipart/form-data
       description: user login
       parameters:
-      - description: userinfo
-        in: body
-        name: user
+      - description: username
+        in: formData
+        name: Name
         required: true
-        schema:
-          type: string
+        type: string
+      - description: password
+        in: formData
+        name: Password
+        required: true
+        type: string
       responses:
         "200":
           description: 登录成功
           schema:
-            $ref: '#/definitions/swagResponse.SuccessResponse200'
+            $ref: '#/definitions/server.SuccessResponse200'
         "422":
           description: 输入参数错误
           schema:
-            $ref: '#/definitions/swagResponse.FailureResponse422'
+            $ref: '#/definitions/server.FailureResponse422'
         "500":
           description: 系统异常
           schema:
-            $ref: '#/definitions/swagResponse.FailureResponse500'
+            $ref: '#/definitions/server.FailureResponse500'
       summary: API of golang gin backend
       tags:
       - User
   /user/register:
     post:
       consumes:
-      - application/json
+      - multipart/form-data
       description: user register
       parameters:
-      - description: userinfo
-        in: body
-        name: user
+      - description: username
+        in: formData
+        name: Name
         required: true
-        schema:
-          type: string
+        type: string
+      - description: password
+        in: formData
+        name: Password
+        required: true
+        type: string
       responses:
         "200":
           description: 注册成功
           schema:
-            $ref: '#/definitions/swagResponse.SuccessResponse200'
+            $ref: '#/definitions/server.SuccessResponse200'
         "422":
           description: 输入参数错误
           schema:
-            $ref: '#/definitions/swagResponse.FailureResponse422'
+            $ref: '#/definitions/server.FailureResponse422'
         "500":
           description: 系统异常
           schema:
-            $ref: '#/definitions/swagResponse.FailureResponse500'
+            $ref: '#/definitions/server.FailureResponse500'
       summary: API of golang gin backend
       tags:
       - User

@@ -2,16 +2,16 @@ package common
 
 import (
 	"fmt"
-	"go-backend/model"
+	"go-backend/entity"
 	"net/url"
-	
+
 	"github.com/jinzhu/gorm"
 	"github.com/spf13/viper"
 )
 
 var DB *gorm.DB
 
-func InitDB() * gorm.DB {
+func InitDB() *gorm.DB {
 	driverName := viper.GetString("datasource.driverName")
 	host := viper.GetString("datasource.host")
 	port := viper.GetString("datasource.port")
@@ -30,11 +30,24 @@ func InitDB() * gorm.DB {
 		url.QueryEscape(loc))
 	// fmt.Printf(args)
 	db, err := gorm.Open(driverName, args)
+	// db 使用 golang 原生 sql.Open 自带连接池
 	if err != nil {
 		panic("fail to connect database, err: " + err.Error())
 	}
-	db.AutoMigrate(&model.User{})
-
+	db.AutoMigrate(&entity.User{})
+	db.AutoMigrate(&entity.Company{})
+	db.AutoMigrate(&entity.CompanyUser{})
+	db.AutoMigrate(&entity.Biology{})
+	db.AutoMigrate(&entity.BiologyType{})
+	db.AutoMigrate(&entity.FixedDevice{})
+	db.AutoMigrate(&entity.PortableDevice{})
+	db.AutoMigrate(&entity.FixedDeviceType{})
+	db.AutoMigrate(&entity.PortableDeviceType{})
+	db.AutoMigrate(&entity.FenceRecord{})
+	db.AutoMigrate(&entity.EpidemicPrevention{})
+	db.AutoMigrate(&entity.MedicalHistory{})
+	db.AutoMigrate(&entity.OperationHistory{})
+	
 	DB = db
 	return db
 }

@@ -1,7 +1,6 @@
 package common
 
 import (
-	"go-backend/model"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -15,10 +14,10 @@ type Claims struct {
 }
 
 // use in login & register service
-func ReleaseToken(user model.User) (string, error) {
+func ReleaseToken(userId uint) (string, error) {
 	expirationTime := time.Now().Add(7 * 24 * time.Hour)
 	claims := &Claims{
-		UserId: user.ID,
+		UserId: userId,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 			IssuedAt:  time.Now().Unix(),

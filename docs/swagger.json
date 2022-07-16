@@ -14,12 +14,1692 @@
         },
         "version": "version(1.0)"
     },
-    "host": "localhost:8081",
+    "host": "8.142.115.160:5930",
     "basePath": "/",
     "paths": {
+        "/biology/create": {
+            "post": {
+                "description": "create biology",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "biology name",
+                        "name": "BiologyName",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "biology type",
+                        "name": "BiologyType",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "company id(farmhouse id)",
+                        "name": "CompanyId",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/biology/create_epidemic_prevention_record": {
+            "post": {
+                "description": "create biology epidemic prevention record",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "biology id",
+                        "name": "BiologyId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "vaccine description",
+                        "name": "VaccineDescription",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "inoculation time",
+                        "name": "InoculationTime",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/biology/create_medical_record": {
+            "post": {
+                "description": "create biology medical record",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "biology id",
+                        "name": "BiologyId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "disease",
+                        "name": "Disease",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "illness time",
+                        "name": "IllnessTime",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "treatment plan",
+                        "name": "TreatmentPlan",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/biology/create_operation_record": {
+            "post": {
+                "description": "create biology operation record",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "biology id",
+                        "name": "BiologyId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "doctor",
+                        "name": "Doctor",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "operation time",
+                        "name": "OperationTime",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "process description",
+                        "name": "ProcessDescription",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "result",
+                        "name": "Result",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/biology/create_type": {
+            "post": {
+                "description": "create biology type",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "type name",
+                        "name": "BiologyTypeId",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/biology/delete": {
+            "delete": {
+                "description": "delete biology",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "Id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/biology/delete_type": {
+            "delete": {
+                "description": "delete biology type",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "type name",
+                        "name": "BiologyTypeId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/biology/get_epidemic_prevention_record_list": {
+            "get": {
+                "description": "get epidemic prevention record list of biology",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "biology id",
+                        "name": "BiologyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/biology/get_list": {
+            "get": {
+                "description": "get all biologies of farmhouse",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/biology/get_medical_record_list": {
+            "get": {
+                "description": "get medical record list of biology",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "biology id",
+                        "name": "BiologyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/biology/get_operation_record_list": {
+            "get": {
+                "description": "get operation record list of biology",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "biology id",
+                        "name": "BiologyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/biology/get_picture": {
+            "get": {
+                "description": "get picture of biology",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "biology id",
+                        "name": "BiologyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/biology/get_picture_path": {
+            "get": {
+                "description": "get static picture path of biology",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "biology id",
+                        "name": "BiologyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/biology/get_with_device_list": {
+            "get": {
+                "description": "get all biologies with devices of company",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/biology/update_farmhouse": {
+            "put": {
+                "description": "update biology farmhouse",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "biology id",
+                        "name": "BiologyId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "farmhouse id",
+                        "name": "FarmhouseId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/biology/update_picture": {
+            "post": {
+                "description": "update biology picture",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "biology id",
+                        "name": "BiologyId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "new picture",
+                        "name": "BiologyPicture",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/company/company_user/create": {
+            "post": {
+                "description": "add company auth to user",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "UserId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/company/company_user/delete": {
+            "delete": {
+                "description": "delete company auth of user",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "UserId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/company/create": {
+            "post": {
+                "description": "create company",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "company_name",
+                        "name": "Name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "parent id",
+                        "name": "ParentId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "location",
+                        "name": "Location",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/company/delete": {
+            "delete": {
+                "description": "delete company",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/company/get/employeelist": {
+            "get": {
+                "description": "get employee list of company",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/company/get/info": {
+            "get": {
+                "description": "get company information",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/company/get/treelist": {
+            "get": {
+                "description": "get user's company tree",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "UserId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/fixed/create": {
+            "post": {
+                "description": "create fixed device",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "Device-fixed"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "device id",
+                        "name": "DeviceId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "type name",
+                        "name": "TypeId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/fixed/create_type": {
+            "post": {
+                "description": "create fixed device type",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "Device-fixed"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "type name",
+                        "name": "FixedDeviceTypeId",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/fixed/delete": {
+            "delete": {
+                "description": "delete fixed device",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device-fixed"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "Id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/fixed/delete_type": {
+            "delete": {
+                "description": "delete fixed device type",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device-fixed"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "type name",
+                        "name": "FixedDeviceTypeId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/fixed/get_by_farmhouse": {
+            "get": {
+                "description": "get all fixed devices by farmhouse",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device-fixed"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/fixed/get_fio_latest": {
+            "get": {
+                "description": "get latest five-in-one device information",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device-fixed"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/fixed/get_fio_list_by_time": {
+            "get": {
+                "description": "get five-in-one information within time period",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device-fixed"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "Id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "start time",
+                        "name": "StartTime",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "end time",
+                        "name": "EndTime",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/fixed/get_monitor": {
+            "get": {
+                "description": "get monitor streaming address",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device-fixed"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "Id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/portable/create": {
+            "post": {
+                "description": "create portable device",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "Device-portable"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "biology id",
+                        "name": "BiologyId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "device id",
+                        "name": "DeviceId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "type name",
+                        "name": "TypeId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/portable/create_type": {
+            "post": {
+                "description": "create portable device type",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "Device-portable"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "type name",
+                        "name": "PortableDeviceTypeId",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/portable/delete": {
+            "delete": {
+                "description": "delete portable device",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device-portable"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "Id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/portable/delete_type": {
+            "delete": {
+                "description": "delete portable device type",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device-portable"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "type name",
+                        "name": "PortableDeviceTypeId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/portable/get_by_farmhouse": {
+            "get": {
+                "description": "get all portable devices by farmhouse",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device-portable"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/fence/create": {
+            "post": {
+                "description": "fence create",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "Fence"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "position",
+                        "name": "Position",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "device list",
+                        "name": "DeviceList",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "duration",
+                        "name": "Duration",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "coordinate",
+                        "name": "Coordinate",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "name of fence",
+                        "name": "Name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "parent id",
+                        "name": "ParentId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/fence/get_active_list": {
+            "get": {
+                "description": "get active fence list by company id",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Fence"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/fence/get_status": {
+            "get": {
+                "description": "get fence status",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Fence"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "fence id",
+                        "name": "FenceId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/fence/stop": {
+            "delete": {
+                "description": "fence stop",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Fence"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "fence id",
+                        "name": "FenceId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/monitorCentor/connect": {
+            "get": {
+                "description": "connect with monitor centor",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MonitorCentor"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/monitorCentor/disconnect": {
+            "delete": {
+                "description": "disconnect with monitor centor",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MonitorCentor"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
         "/user/info": {
             "get": {
-                "description": "get user informations",
+                "description": "get user information",
                 "consumes": [
                     "application/json"
                 ],
@@ -30,8 +1710,8 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "username",
-                        "name": "name",
+                        "description": "Id",
+                        "name": "Id",
                         "in": "query",
                         "required": true
                     },
@@ -47,19 +1727,19 @@
                     "200": {
                         "description": "查询成功",
                         "schema": {
-                            "$ref": "#/definitions/swagResponse.SuccessResponse200"
+                            "$ref": "#/definitions/server.SuccessResponse200"
                         }
                     },
                     "400": {
                         "description": "用户信息不存在",
                         "schema": {
-                            "$ref": "#/definitions/swagResponse.FailureResponse400"
+                            "$ref": "#/definitions/server.FailureResponse400"
                         }
                     },
                     "401": {
                         "description": "权限不足",
                         "schema": {
-                            "$ref": "#/definitions/swagResponse.FailureResponse401"
+                            "$ref": "#/definitions/server.FailureResponse401"
                         }
                     }
                 }
@@ -69,7 +1749,7 @@
             "post": {
                 "description": "user login",
                 "consumes": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "tags": [
                     "User"
@@ -77,32 +1757,37 @@
                 "summary": "API of golang gin backend",
                 "parameters": [
                     {
-                        "description": "userinfo",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
+                        "type": "string",
+                        "description": "username",
+                        "name": "Name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "password",
+                        "name": "Password",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "登录成功",
                         "schema": {
-                            "$ref": "#/definitions/swagResponse.SuccessResponse200"
+                            "$ref": "#/definitions/server.SuccessResponse200"
                         }
                     },
                     "422": {
                         "description": "输入参数错误",
                         "schema": {
-                            "$ref": "#/definitions/swagResponse.FailureResponse422"
+                            "$ref": "#/definitions/server.FailureResponse422"
                         }
                     },
                     "500": {
                         "description": "系统异常",
                         "schema": {
-                            "$ref": "#/definitions/swagResponse.FailureResponse500"
+                            "$ref": "#/definitions/server.FailureResponse500"
                         }
                     }
                 }
@@ -112,7 +1797,7 @@
             "post": {
                 "description": "user register",
                 "consumes": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "tags": [
                     "User"
@@ -120,32 +1805,37 @@
                 "summary": "API of golang gin backend",
                 "parameters": [
                     {
-                        "description": "userinfo",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
+                        "type": "string",
+                        "description": "username",
+                        "name": "Name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "password",
+                        "name": "Password",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "注册成功",
                         "schema": {
-                            "$ref": "#/definitions/swagResponse.SuccessResponse200"
+                            "$ref": "#/definitions/server.SuccessResponse200"
                         }
                     },
                     "422": {
                         "description": "输入参数错误",
                         "schema": {
-                            "$ref": "#/definitions/swagResponse.FailureResponse422"
+                            "$ref": "#/definitions/server.FailureResponse422"
                         }
                     },
                     "500": {
                         "description": "系统异常",
                         "schema": {
-                            "$ref": "#/definitions/swagResponse.FailureResponse500"
+                            "$ref": "#/definitions/server.FailureResponse500"
                         }
                     }
                 }
@@ -153,7 +1843,7 @@
         }
     },
     "definitions": {
-        "swagResponse.FailureResponse400": {
+        "server.FailureResponse400": {
             "type": "object",
             "properties": {
                 "code": {
@@ -166,11 +1856,11 @@
                 },
                 "msg": {
                     "type": "string",
-                    "example": "错误请求"
+                    "example": "语法无效"
                 }
             }
         },
-        "swagResponse.FailureResponse401": {
+        "server.FailureResponse401": {
             "type": "object",
             "properties": {
                 "code": {
@@ -187,7 +1877,7 @@
                 }
             }
         },
-        "swagResponse.FailureResponse422": {
+        "server.FailureResponse422": {
             "type": "object",
             "properties": {
                 "code": {
@@ -200,11 +1890,11 @@
                 },
                 "msg": {
                     "type": "string",
-                    "example": "语义错误"
+                    "example": "无法处理"
                 }
             }
         },
-        "swagResponse.FailureResponse500": {
+        "server.FailureResponse500": {
             "type": "object",
             "properties": {
                 "code": {
@@ -221,7 +1911,7 @@
                 }
             }
         },
-        "swagResponse.SuccessResponse200": {
+        "server.SuccessResponse200": {
             "type": "object",
             "properties": {
                 "code": {

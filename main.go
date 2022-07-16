@@ -2,16 +2,23 @@ package main
 
 import (
 	"go-backend/common"
-	"go-backend/controller"
-	"go-backend/model"
-	"os"
 	docs "go-backend/docs"
-	swaggerFiles "github.com/swaggo/files"
-	"github.com/swaggo/gin-swagger"
+	"go-backend/geocontainer"
+	"go-backend/middleware"
+	"go-backend/monitor"
+	"go-backend/router"
+	"go-backend/sensor"
+	"net/http"
+	"os"
+
 	"github.com/gin-gonic/gin"
+
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/spf13/viper"
+	swaggerFiles "github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
 )
+
 // @title Intelligent Pasture Backend APIs
 // @version version(1.0)
 // @description golang-backend interface
@@ -24,16 +31,28 @@ import (
 // @license.name license(Mandatory)
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host localhost:8081
+// @host 8.142.115.160:5930
 // @BasePath /
 func main () {
 	InitConfig()
 	db := common.InitDB()
+	deviceDb := common.InitDeviceDB()
+	sensor.InitCollections()
+	geocontainer.InitContainer()
+	monitor.InitMonitor()
 	defer db.Close()
-
-	db.AutoMigrate(&model.User{})
+	defer deviceDb.Client().Disconnect(common.Ctx)
+	
 	r := gin.Default()
-	r = controller.UserController(r)
+	r.Use(middleware.LoggerToFile())
+	r.Use(middleware.CORSMiddleware())
+	r = router.UserRouter(r)
+	r = router.CompanyRouter(r)
+	r = router.DeviceRouter(r)
+	r = router.BiologyRouter(r)
+	r = router.FenceRouter(r)
+	r = router.MonitorRouter(r)
+	r.StaticFS("/biology_pictures", http.Dir("./pictures"))
 	port := viper.GetString("server.port")
 
 	docs.SwaggerInfo.BasePath = ""

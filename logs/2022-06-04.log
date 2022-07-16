@@ -1,0 +1,8 @@
+time="2022-06-04 17:07:09" level=info msg="| 200 |     19.0061ms |             ::1 | GET | /company/get/employeelist?CompanyId=1 |"
+time="2022-06-04 17:07:53" level=info msg="| 200 |      13.503ms |             ::1 | GET | /company/get/employeelist?CompanyId=1 |"
+time="2022-06-04 17:08:51" level=info msg="| 200 |     11.0018ms |             ::1 | GET | /company/get/employeelist?CompanyId=1 |"
+time="2022-06-04 17:47:26" level=info msg="| 200 |     10.0008ms |             ::1 | GET | /company/get/employeelist?CompanyId=1 |"
+time="2022-06-04 18:59:17" level=info msg="| 200 |      64.511ms |             ::1 | POST | /user/login |"
+time="2022-06-04 19:04:42" level=info msg="| 200 |     11.5037ms |             ::1 | POST | /device/fixed/create_type |"
+time="2022-06-04 19:05:05" level=info msg="| 200 |     17.0042ms |             ::1 | POST | /device/fixed/create |"
+time="2022-06-04 19:11:02" level=info msg="| 200 |     14.0016ms |             ::1 | GET | /device/fixed/get_fio_latest?Id=4 |"

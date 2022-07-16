@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 5930
 datasource:
   driverName: mysql
   host: 127.0.0.1
@@ -9,3 +9,20 @@ datasource:
   password: 123456
   charset: utf8
   loc: Asia/Shanghai
+monitor:
+  AppKey: a4d8bacae29c4924a68eb65433ac6f1c
+  Secret: 4c7f917e151d1b40c9376527dff32354
+  AccessMonitorTokenUrl: https://open.ys7.com/api/lapp/token/get
+  GetStreamAddressUrl: https://open.ys7.com/api/lapp/v2/live/address/get
+mongodb:
+  host: 192.168.222.145
+  port: 27017
+  database: IOT-sensor-data
+  collar: electronic-collar
+  fio: FIO-sensor
+fence:
+  spec: 10s
+geo:
+  coordinates: GCJ-02
+biology:
+  picturedir: G:\go-backend\pictures\
