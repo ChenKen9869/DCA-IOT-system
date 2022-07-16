@@ -33,5 +33,3 @@ go build .
 ### see more detail of api : (after run the server)
 
 swagger api : http://localhost:5930/swagger/index.html
-
-2022/7/15 on the train -- ppppp
