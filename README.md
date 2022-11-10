@@ -2,8 +2,6 @@
 
 write by :
 
-**golang**
-
 ​**gin framwork**
 
 ​**gorm**
