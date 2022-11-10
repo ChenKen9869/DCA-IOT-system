@@ -43,13 +43,13 @@ func ExistBiologyType(biologyTypeId string) bool {
 
 func GetBiologyInfoById(biologyId uint) entity.Biology {
 	var biology entity.Biology
-	common.GetDB().Where("id = ?", biologyId).First(&biology)
+	common.GetDB().Table("biologies").Where("id = ?", biologyId).First(&biology)
 	return biology
 }
 
 func GetBiologyListByFarmhouse(farmhouseId uint) []entity.Biology {
 	var biologyList []entity.Biology
-	common.GetDB().Where("farmhouse_id = ?", farmhouseId).Find(&biologyList)
+	common.GetDB().Table("biologies").Where("farmhouse_id = ?", farmhouseId).Find(&biologyList)
 	return biologyList
 }
 
@@ -67,7 +67,7 @@ func CreateEpidemicPreventionRecord(record entity.EpidemicPrevention) {
 
 func GetEpidemicPreventionRecordListByBiology(biologyId uint) []entity.EpidemicPrevention {
 	var recordList []entity.EpidemicPrevention
-	common.GetDB().Where("biology_id = ?", biologyId).Find(&recordList)
+	common.GetDB().Table("epidemic_preventions").Where("biology_id = ?", biologyId).Find(&recordList)
 	return recordList
 }
 
@@ -77,7 +77,7 @@ func CreateOperationRecord(record entity.OperationHistory) {
 
 func GetOperationRecordListByBiology(biologyId uint) []entity.OperationHistory {
 	var recordList []entity.OperationHistory
-	common.GetDB().Where("biology_id = ?", biologyId).Find(&recordList)
+	common.GetDB().Table("operation_histories").Where("biology_id = ?", biologyId).Find(&recordList)
 	return recordList
 }
 
@@ -87,6 +87,10 @@ func CreateMedicalRecord(record entity.MedicalHistory) {
 
 func GetMedicalRecordListByBiology(biologyId uint) []entity.MedicalHistory {
 	var recordList []entity.MedicalHistory
-	common.GetDB().Where("biology_id = ?", biologyId).Find(&recordList)
+	common.GetDB().Table("medical_histories").Where("biology_id = ?", biologyId).Find(&recordList)
 	return recordList
+}
+
+func CreateBiologyChangeRecord(record entity.BiologyChange) {
+	common.GetDB().Create(&record)
 }

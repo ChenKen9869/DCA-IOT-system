@@ -43,25 +43,26 @@ func CreateCompanyController(ctx *gin.Context) {
 
 
 func GetCompanyTreeListController(ctx *gin.Context) {
-	userId := ctx.Query("UserId")
+	// userId := ctx.Query("UserId")
 	userInfo, exists := ctx.Get("user")
 	if !exists {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user infromation does not exists in application context")
 		return
 	}
 	user := userInfo.(entity.User)
-	uid, err := strconv.Atoi(userId)
-	if err != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi error")
-		return
-	}
-	if user.ID != uint(uid) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
-		return
-	}
-	treeList := service.GetCompanyTreeListService(uint(uid))
+	// uid, err := strconv.Atoi(userId)
+	// if err != nil {
+	// 	server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi error")
+	// 	return
+	// }
+	// if user.ID != uint(uid) {
+	// 	server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+	// 	return
+	// }
+	treeList, companyList := service.GetCompanyTreeListService(user.ID)
 	companyTreeList := gin.H{
 		"mechanism": treeList,
+		"company_list": companyList,
 	}
 	server.ResponseSuccess(ctx, companyTreeList, server.Success)
 }
@@ -84,7 +85,7 @@ func DeleteCompanyController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足啦")
 		return
 	}
-	err := service.DeleteCompanyService(uint(companyId))
+	err := service.DeleteCompanyService(uint(companyId), user)
 	if err != nil {
 		if msg := err.Error(); msg == server.CompanyNotExist {
 			server.Response(ctx, http.StatusBadRequest, 400, nil, msg)
@@ -175,7 +176,7 @@ func GetEmployeeListController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	// 权限验证
-	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
+	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
@@ -187,6 +188,8 @@ func GetEmployeeListController(ctx *gin.Context) {
 			"id" : employee.ID,
 			"name" : employee.Name,
 			"authCompany" : employeeList[employee],
+			"telephone_number" : employee.Telephone,
+			"email" : employee.Email,
 		})
 	}
 	
@@ -206,7 +209,7 @@ func GetCompanyInfoController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	// 权限验证
-	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
+	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}

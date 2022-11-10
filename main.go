@@ -52,6 +52,7 @@ func main () {
 	r = router.BiologyRouter(r)
 	r = router.FenceRouter(r)
 	r = router.MonitorRouter(r)
+	r = router.RoleRouter(r)
 	r.StaticFS("/biology_pictures", http.Dir("./pictures"))
 	port := viper.GetString("server.port")
 

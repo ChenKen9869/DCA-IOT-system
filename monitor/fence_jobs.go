@@ -17,7 +17,7 @@ var ActiveFenceList map[uint]ActiveFence
 
 // @Summary API of golang gin backend
 // @Tags Fence
-// @description fence create
+// @description fence create : 创建围栏任务 参数列表：[围栏地理位置、监控的设备列表（设备ID组成）、围栏任务的持续时间、坐标系、围栏任务名、围栏任务所属公司ID] 访问携带token
 // @version 1.0
 // @accept mpfd
 // @param Position formData string true "position"
@@ -63,7 +63,7 @@ func StartFenceJob(userId uint, position string, deviceList string, duration int
 
 // @Summary API of golang gin backend
 // @Tags Fence
-// @description fence stop
+// @description fence stop : 终止围栏任务 参数列表：[围栏ID] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param FenceId query int true "fence id"

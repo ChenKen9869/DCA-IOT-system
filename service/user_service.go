@@ -13,18 +13,18 @@ import (
 
 // @Summary API of golang gin backend
 // @Tags User
-// @description user register
+// @description user register : 用户注册 参数列表：[用户名、密码、电话号码、邮箱地址] 
 // @version 1.0
 // @accept mpfd
 // @param Name formData string true "username"
 // @param Password formData string true "password"
+// @param Telephone formData string true "telephone"
+// @param Email formData string true "email"
 // @Success 200 {object} server.SuccessResponse200 "注册成功"
 // @Failure 422 {object} server.FailureResponse422 "输入参数错误"
 // @Failure 500 {object} server.FailureResponse500 "系统异常"
 // @router /user/register [post]
-func RegisterService(user entity.User) (uint, string, error) {
-	name := user.Name
-	password := user.Password
+func RegisterService(name string, password string, telephone string, email string) (uint, string, error) {
 	// 数据验证
 	if len(name) < 2 {
 		err := errors.New(server.NameTooShort)
@@ -48,12 +48,17 @@ func RegisterService(user entity.User) (uint, string, error) {
 		err := errors.New(server.PasswordEncryptionFailed)
 		return 0, "", err
 	}
-	user.Password = string(hasePassword)
+	password = string(hasePassword)
 	// 写入数据库, 调用 dao
-	id := dao.CreateUser(user)
+	id := dao.CreateUser(entity.User{
+		Name: name,
+		Password: password,
+		Telephone: telephone,
+		Email: email,
+	})
 
 	// 发放 token
-	token, errReleaseToken := common.ReleaseToken(user.ID)
+	token, errReleaseToken := common.ReleaseToken(id)
 	if errReleaseToken != nil {
 		err := errors.New(server.TokenGenerateFailed)
 		return 0, "", err
@@ -65,7 +70,7 @@ func RegisterService(user entity.User) (uint, string, error) {
 
 // @Summary API of golang gin backend
 // @Tags User
-// @description user login
+// @description user login : 用户登录 参数列表：[用户名、密码] 
 // @version 1.0
 // @accept mpfd
 // @param Name formData string true "username"
@@ -107,7 +112,7 @@ func LoginService(name string, password string) (uint, string, error) {
 
 // @Summary API of golang gin backend
 // @Tags User
-// @description get user information
+// @description get user information : 获取当前用户的详细信息 参数列表：[] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param Id query string true "Id"
@@ -128,6 +133,8 @@ func InfoService(id uint) (*gin.H, error) {
 		"id":          user.ID,
 		"create_time": user.CreatedAt,
 		"update_time": user.UpdatedAt,
+		"telephone":   user.Telephone,
+		"email":	   user.Email,
 	}
 	return &infoMap, nil
 }

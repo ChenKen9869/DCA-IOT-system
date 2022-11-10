@@ -162,17 +162,62 @@ func GetMonitorStreamController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	companyId := dao.GetFixedDeviceInfoById(uint(deviceIdInt)).FarmhouseID
-	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
+	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
-	resultUrl, resultExpireTime, id:= service.GetMonitorStreamByDeviceIdService(uint(deviceIdInt))
+	deviceType := dao.GetFixedDeviceInfoById(uint(deviceIdInt)).FixedDeviceTypeID
+	if deviceType != "摄像头" {
+		server.Response(ctx, http.StatusUnauthorized, 403, nil, "设备类型错误")
+		return	
+	}
+	resultUrl, resultExpireTime, id, msg, accessToken:= service.GetMonitorStreamByDeviceIdService(uint(deviceIdInt))
 	payload := gin.H{
 		"id" : id,
 		"url" : resultUrl,
 		"expireTime" : resultExpireTime,
+		"msg" : msg, 
+		"accessToken": accessToken,
 	}
 	server.ResponseSuccess(ctx, payload, server.Success)
+}
+
+func GetNewCollarRealtimeController(ctx *gin.Context) {
+	deviceId := ctx.Query("Id")
+	deviceIdInt, _ := strconv.Atoi(deviceId)
+	if len(deviceId) < 1 {
+		server.Response(ctx, http.StatusBadRequest, 400, nil, "monitorId is empty")
+		return
+	}
+	// 权限验证
+	userInfo, exists := ctx.Get("user") 
+	if !exists {
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user information does not exists in application context")
+		return
+	}
+	user := userInfo.(entity.User)
+	deviceInfo := dao.GetPortableDeviceInfoById(uint(deviceIdInt))
+	biologyId := deviceInfo.BiologyID
+	companyId := dao.GetBiologyInfoById(biologyId).FarmhouseID
+	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		return
+	}
+	deviceType := deviceInfo.PortableDeviceTypeID
+	if deviceType != "中农智联耳标" {
+		server.Response(ctx, http.StatusUnauthorized, 403, nil, "设备类型错误")
+		return	
+	}
+	data, msg:= service.GetNewCollarRealtimeByDeviceIdService(uint(deviceIdInt))
+	payload := gin.H{
+		"data": data,
+		"msg": msg,
+	}
+	server.ResponseSuccess(ctx, payload, server.Success)
+}
+
+func GetNewCollarHistoryController(ctx *gin.Context) {
+
 }
 
 func GetLatestFioController(ctx *gin.Context) {
@@ -186,7 +231,7 @@ func GetLatestFioController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	companyId := dao.GetFixedDeviceInfoById(uint(fioId)).FarmhouseID
-	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
+	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
@@ -207,7 +252,7 @@ func GetFioListByTime(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	companyId := dao.GetFixedDeviceInfoById(uint(fioId)).FarmhouseID
-	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
+	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
@@ -228,7 +273,7 @@ func GetFixedDeviceListByFarmhouseController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	// 权限验证
-	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
+	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
@@ -249,7 +294,7 @@ func GetPortableDeviceListByFarmhouseController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	// 权限验证
-	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
+	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}

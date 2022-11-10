@@ -39,7 +39,7 @@ func GetLatestDataListFio(deviceId string, nums int64) []FiveInOneMessage {
 	filter := bson.D{primitive.E{Key: "deviceid", Value: deviceId}}
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	opts := options.Find().SetSort(bson.D{primitive.E{Key: "session", Value: -1}}).SetLimit(nums)
+	opts := options.Find().SetSort(bson.D{primitive.E{Key: "_id", Value: -1}}).SetLimit(nums)
 	cursor, err := common.GetDeviceDB().Collection(fioCollection).Find(ctx, filter, opts)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -61,13 +61,15 @@ func GetRecordListByTimeFio(deviceId string, startTime string, endTime string) [
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	opts := options.Find().SetSort(bson.D{primitive.E{Key: "session", Value: 1}})
+	opts := options.Find().SetSort(bson.D{primitive.E{Key: "_id", Value: -1}})
 	var results []FiveInOneMessage
 	cursor, err := common.GetDeviceDB().Collection(fioCollection).Find(ctx, filter, opts)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	cursor.All(context.TODO(), &results)
+	if err = cursor.All(context.TODO(), &results); err != nil {
+		panic(err.Error())
+	}
 	return results
 }
 

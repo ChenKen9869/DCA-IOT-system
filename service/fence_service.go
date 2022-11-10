@@ -47,7 +47,7 @@ func CreateFenceService(position string, deviceList string, duration int, parent
 // 获取围栏的当前详细情况
 // @Summary API of golang gin backend
 // @Tags Fence
-// @description get fence status
+// @description get fence status : 获取围栏任务的执行状态 参数列表：[围栏ID] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param FenceId query string true "fence id"
@@ -139,7 +139,7 @@ func monitorVitalSigns(deviceList []uint) []uint {
 // 通过companyId获取活跃的围栏列表
 // @Summary API of golang gin backend
 // @Tags Fence
-// @description get active fence list by company id
+// @description get active fence list by company id : 获取牧场中所有处于活跃状态的围栏 参数列表：[牧场ID] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param CompanyId query string true "company id"

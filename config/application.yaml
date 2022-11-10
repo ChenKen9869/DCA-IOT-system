@@ -14,9 +14,17 @@ monitor:
   Secret: 4c7f917e151d1b40c9376527dff32354
   AccessMonitorTokenUrl: https://open.ys7.com/api/lapp/token/get
   GetStreamAddressUrl: https://open.ys7.com/api/lapp/v2/live/address/get
+newcollar:
+  login-url: http://lora.yimaiiot.com:59000/app/login
+  get-realtime-url: http://lora.yimaiiot.com:59000/app/realtime/getDeviceData
+  get-history-url: http://lora.yimaiiot.com:59000/app/realtime/getTimeData
+  uname: scnd
+  psw: 123456
 mongodb:
   host: 192.168.222.145
   port: 27017
+  username: root
+  password: 123456
   database: IOT-sensor-data
   collar: electronic-collar
   fio: FIO-sensor

@@ -15,7 +15,7 @@ type CollarMessage struct {
 	Edition       string
 	DeviceId      string
 	Session       string
-	Commond       string
+	Command       string
 	MessageLength string
 	Behavior      string
 	Temperature   float32

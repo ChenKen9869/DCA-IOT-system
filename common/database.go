@@ -47,7 +47,8 @@ func InitDB() *gorm.DB {
 	db.AutoMigrate(&entity.EpidemicPrevention{})
 	db.AutoMigrate(&entity.MedicalHistory{})
 	db.AutoMigrate(&entity.OperationHistory{})
-	
+	db.AutoMigrate(&entity.BiologyChange{})
+	db.AutoMigrate(&entity.Visitor{})
 	DB = db
 	return db
 }

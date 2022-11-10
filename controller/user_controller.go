@@ -1,11 +1,11 @@
 package controller
 
 import (
+	"fmt"
 	"go-backend/entity"
 	"go-backend/server"
 	"go-backend/service"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,13 +13,15 @@ import (
 func UserRegisterController(ctx *gin.Context) {
 	name := ctx.PostForm("Name")
 	password := ctx.PostForm("Password")
+	telephone := ctx.PostForm("Telephone")
+	email := ctx.PostForm("Email")
 
-	user := entity.User{
-		Name: name,
-		Password: password,
-	}
+	fmt.Println(name)
+	fmt.Println(password)
+	fmt.Println(telephone)
+	fmt.Println(email)
 
-	id, token, err := service.RegisterService(user)
+	id, token, err := service.RegisterService(name, password, telephone, email)
 	if err != nil {
 		if msg := err.Error(); msg == server.NameTooShort ||
 			msg == server.PasswordTooShort ||
@@ -61,14 +63,13 @@ func UserLoginController(ctx *gin.Context) {
 }
 
 func UserInfoController(ctx *gin.Context) {
-	idString := ctx.Query("Id")
-
-	id, err:= strconv.Atoi(idString)
-	if err != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "server inter failed")
-		return
+	user, exists := ctx.Get("user")
+	if !exists {
+		panic("error: user information does not exists in application context")
 	}
-	userInfo, err := service.InfoService(uint(id))
+
+	user_info := user.(entity.User)
+	userInfo, err := service.InfoService(user_info.ID)
 	if err != nil {
 		if msg := err.Error(); msg == server.UserNotExist {
 			server.Response(ctx, http.StatusBadRequest, 400, nil, server.UserNotExist)

@@ -2,21 +2,24 @@
 
 write by :
 
-​	**golang**
+**golang**
+$$
 
-​	**gin**
+$$
 
-​	**gorm**
+​**gin fra**
+
+​**gorm**
 
 server port : 5930
 
-database: 
+database:
 
-​	**mysql** for management information. 
+​**mysql** for management information.
 
-​	**mongodb** for sensor data.
+​**mongodb** for sensor data.
 
-### run the server
+## run the server
 
 ```go
 go run .
@@ -32,4 +35,10 @@ go build .
 
 ### see more detail of api : (after run the server)
 
+<<<<<<< HEAD
  http://localhost:5930/swagger/index.html
+=======
+swagger api : <http://localhost:5930/swagger/index.html>
+
+2022/7/15 on the train -- ppppp
+>>>>>>> 3eeaa9a... 	modified:   README.md

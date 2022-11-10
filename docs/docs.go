@@ -26,7 +26,7 @@ const docTemplate = `{
     "paths": {
         "/biology/create": {
             "post": {
-                "description": "create biology",
+                "description": "create biology : 创建一个生物 参数列表：[生物名称、生物类别、该生物所在的牧舍ID、出生日期、性别] 访问携带token",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -53,7 +53,21 @@ const docTemplate = `{
                         "type": "string",
                         "description": "company id(farmhouse id)",
                         "name": "CompanyId",
-                        "in": "header",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "biology birthday",
+                        "name": "Birthday",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "biology gender",
+                        "name": "Gender",
+                        "in": "formData",
                         "required": true
                     },
                     {
@@ -76,7 +90,7 @@ const docTemplate = `{
         },
         "/biology/create_epidemic_prevention_record": {
             "post": {
-                "description": "create biology epidemic prevention record",
+                "description": "create biology epidemic prevention record : 新增生物的防疫记录 参数列表：[生物ID、本次使用的疫苗信息记录（疫苗描述信息）、注射时间] 访问携带token",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -126,7 +140,7 @@ const docTemplate = `{
         },
         "/biology/create_medical_record": {
             "post": {
-                "description": "create biology medical record",
+                "description": "create biology medical record : 新增生物的用药记录（新增病历） 参数列表：[生物ID、疾病描述、患病时间、治疗方案] 访问携带token",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -183,7 +197,7 @@ const docTemplate = `{
         },
         "/biology/create_operation_record": {
             "post": {
-                "description": "create biology operation record",
+                "description": "create biology operation record : 新增生物的手术记录 参数列表：[生物ID、手术医生、手术时间、过程记录、手术结果] 访问携带token",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -247,7 +261,7 @@ const docTemplate = `{
         },
         "/biology/create_type": {
             "post": {
-                "description": "create biology type",
+                "description": "create biology type : 创建生物类型 参数列表：[生物类型名称]",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -276,7 +290,7 @@ const docTemplate = `{
         },
         "/biology/delete": {
             "delete": {
-                "description": "delete biology",
+                "description": "delete biology : 删除一个生物 参数列表：[本次删除的操作人员姓名，操作人员的联系方式，生物的去处（病死，屠宰场。卖出 等），生物ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -286,7 +300,28 @@ const docTemplate = `{
                 "summary": "API of golang gin backend",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
+                        "description": "name of operator",
+                        "name": "Operator",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "telephone number of operator",
+                        "name": "TelephonNumber",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "leave place",
+                        "name": "LeavePlace",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "id",
                         "name": "Id",
                         "in": "query",
@@ -312,7 +347,7 @@ const docTemplate = `{
         },
         "/biology/delete_type": {
             "delete": {
-                "description": "delete biology type",
+                "description": "delete biology type : 删除生物类型 参数列表：[生物类型名称] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -348,7 +383,43 @@ const docTemplate = `{
         },
         "/biology/get_epidemic_prevention_record_list": {
             "get": {
-                "description": "get epidemic prevention record list of biology",
+                "description": "get epidemic prevention record list of biology : 获取生物的防疫信息记录列表 参数列表：[生物ID] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "biology id",
+                        "name": "BiologyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/biology/get_info": {
+            "get": {
+                "description": "get picture of biology : 获取生物的详细信息 参数列表：[生物ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -384,7 +455,7 @@ const docTemplate = `{
         },
         "/biology/get_list": {
             "get": {
-                "description": "get all biologies of farmhouse",
+                "description": "get all biologies of farmhouse : 通过牧舍ID获取其中的所有生物组成的列表 参数列表：[牧舍ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -420,7 +491,7 @@ const docTemplate = `{
         },
         "/biology/get_medical_record_list": {
             "get": {
-                "description": "get medical record list of biology",
+                "description": "get medical record list of biology : 获取生物的病历列表 参数列表：[生物ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -456,7 +527,7 @@ const docTemplate = `{
         },
         "/biology/get_operation_record_list": {
             "get": {
-                "description": "get operation record list of biology",
+                "description": "get operation record list of biology : 获取生物的手术记录列表 参数列表：[生物ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -492,7 +563,7 @@ const docTemplate = `{
         },
         "/biology/get_picture": {
             "get": {
-                "description": "get picture of biology",
+                "description": "get picture of biology : 获取生物的照片（获取生物照片的 bytes 形式）参数列表：[生物ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -528,7 +599,7 @@ const docTemplate = `{
         },
         "/biology/get_picture_path": {
             "get": {
-                "description": "get static picture path of biology",
+                "description": "get static picture path of biology : 获取生物的照片（获取生物照片在服务器中的静态资源地址） 参数列表：[生物ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -564,7 +635,7 @@ const docTemplate = `{
         },
         "/biology/get_with_device_list": {
             "get": {
-                "description": "get all biologies with devices of company",
+                "description": "get all biologies with devices of company : 根据农牧场ID获取其中所有携带有便携式设备的生物所组成的列表（包括每个生物对应的设备信息） 参数列表：[农牧场ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -600,7 +671,7 @@ const docTemplate = `{
         },
         "/biology/update_farmhouse": {
             "put": {
-                "description": "update biology farmhouse",
+                "description": "update biology farmhouse : 更新生物所属的牧舍（转舍） 参数列表：[本次转舍的操作人员姓名、操作人员联系方式、生物ID、生物的目的牧舍ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -609,6 +680,20 @@ const docTemplate = `{
                 ],
                 "summary": "API of golang gin backend",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "name of operator",
+                        "name": "Operator",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "telephone number of operator",
+                        "name": "TelephonNumber",
+                        "in": "formData",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "biology id",
@@ -643,7 +728,7 @@ const docTemplate = `{
         },
         "/biology/update_picture": {
             "post": {
-                "description": "update biology picture",
+                "description": "update biology picture : 上传（更新）生物的照片 参数列表：[生物ID、照片文件] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -686,7 +771,7 @@ const docTemplate = `{
         },
         "/company/company_user/create": {
             "post": {
-                "description": "add company auth to user",
+                "description": "add company auth to user : 为指定用户分配指定公司的权限（接口访问者需要事先拥有该公司的权限） 参数列表：[公司ID、用户ID] 访问携带token",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -729,7 +814,7 @@ const docTemplate = `{
         },
         "/company/company_user/delete": {
             "delete": {
-                "description": "delete company auth of user",
+                "description": "delete company auth of user : 从指定用户处收回指定公司的权限 参数列表：[公司ID、用户ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -772,7 +857,7 @@ const docTemplate = `{
         },
         "/company/create": {
             "post": {
-                "description": "create company",
+                "description": "create company : 创建一个公司 参数列表：[公司名称、该公司的父公司ID（root公司的父公司ID填写0）、该公司的地理位置信息描述（前端自己决定格式，具体看第三方天气定位等服务的接口要求，后端只负责保存地理信息，不做其他处理）] 访问携带token",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -822,7 +907,7 @@ const docTemplate = `{
         },
         "/company/delete": {
             "delete": {
-                "description": "delete company",
+                "description": "delete company : 删除一个公司 参数列表：[公司ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -858,7 +943,7 @@ const docTemplate = `{
         },
         "/company/get/employeelist": {
             "get": {
-                "description": "get employee list of company",
+                "description": "get employee list of company : 获取公司的员工列表 参数列表：[公司ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -894,7 +979,7 @@ const docTemplate = `{
         },
         "/company/get/info": {
             "get": {
-                "description": "get company information",
+                "description": "get company information : 获取公司的详细信息 参数列表：[公司ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -930,7 +1015,7 @@ const docTemplate = `{
         },
         "/company/get/treelist": {
             "get": {
-                "description": "get user's company tree",
+                "description": "get user's company tree : 获取当前用户有权限的所有公司信息（以树形结构返回） 参数列表：[] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -939,13 +1024,6 @@ const docTemplate = `{
                 ],
                 "summary": "API of golang gin backend",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "user id",
-                        "name": "UserId",
-                        "in": "query",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "token",
@@ -966,7 +1044,7 @@ const docTemplate = `{
         },
         "/device/fixed/create": {
             "post": {
-                "description": "create fixed device",
+                "description": "create fixed device  : 创建固定式设备 参数列表：[设备所在的牧舍ID、厂家提供的设备编号、设备类型] 访问携带token",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -1016,7 +1094,7 @@ const docTemplate = `{
         },
         "/device/fixed/create_type": {
             "post": {
-                "description": "create fixed device type",
+                "description": "create fixed device type : 新增固定式设备类型 参数列表：[设备类型]",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -1045,7 +1123,7 @@ const docTemplate = `{
         },
         "/device/fixed/delete": {
             "delete": {
-                "description": "delete fixed device",
+                "description": "delete fixed device : 删除固定式设备 参数列表：[设备ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -1081,7 +1159,7 @@ const docTemplate = `{
         },
         "/device/fixed/delete_type": {
             "delete": {
-                "description": "delete fixed device type",
+                "description": "delete fixed device type : 删除固定式设备类型 参数列表：[设备类型ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -1117,7 +1195,7 @@ const docTemplate = `{
         },
         "/device/fixed/get_by_farmhouse": {
             "get": {
-                "description": "get all fixed devices by farmhouse",
+                "description": "get all fixed devices by farmhouse : 获取一个牧舍下的所有固定式设备 参数列表：[牧舍ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -1153,7 +1231,7 @@ const docTemplate = `{
         },
         "/device/fixed/get_fio_latest": {
             "get": {
-                "description": "get latest five-in-one device information",
+                "description": "get latest five-in-one device information : 获取五合一传感器的最新数据 参数列表：[五合一传感器的设备ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -1189,7 +1267,7 @@ const docTemplate = `{
         },
         "/device/fixed/get_fio_list_by_time": {
             "get": {
-                "description": "get five-in-one information within time period",
+                "description": "get five-in-one information within time period : 以时间段作为参数获取五合一传感器的数据列表 参数列表：[五合一传感器的设备ID、开始时间、结束时间] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -1239,7 +1317,7 @@ const docTemplate = `{
         },
         "/device/fixed/get_monitor": {
             "get": {
-                "description": "get monitor streaming address",
+                "description": "get monitor streaming address : 获取摄像头的直播地址 参数列表：[摄像头设备ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -1275,7 +1353,7 @@ const docTemplate = `{
         },
         "/device/portable/create": {
             "post": {
-                "description": "create portable device",
+                "description": "create portable device : 创建便携式设备 参数列表：[设备绑定的生物ID、厂家提供的设备编号、设备类型] 访问携带token",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -1325,7 +1403,7 @@ const docTemplate = `{
         },
         "/device/portable/create_type": {
             "post": {
-                "description": "create portable device type",
+                "description": "create portable device type : 新增便携式设备类型 参数列表：[设备类型]",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -1354,7 +1432,7 @@ const docTemplate = `{
         },
         "/device/portable/delete": {
             "delete": {
-                "description": "delete portable device",
+                "description": "delete portable device : 删除便携式设备 参数列表：[设备ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -1390,7 +1468,7 @@ const docTemplate = `{
         },
         "/device/portable/delete_type": {
             "delete": {
-                "description": "delete portable device type",
+                "description": "delete portable device type : 删除便携式设备类型 参数列表：[设备类型ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -1426,7 +1504,7 @@ const docTemplate = `{
         },
         "/device/portable/get_by_farmhouse": {
             "get": {
-                "description": "get all portable devices by farmhouse",
+                "description": "get all portable devices by farmhouse : 获取一个牧舍下的所有便携式设备 参数列表：[牧舍ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -1460,9 +1538,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/device/portable/get_new_collar": {
+            "get": {
+                "description": "get new-type collar realtime data by device id : 获取中农智联项圈的最新数据 参数列表：[设备ID] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device-portable"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "Id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
         "/fence/create": {
             "post": {
-                "description": "fence create",
+                "description": "fence create : 创建围栏任务 参数列表：[围栏地理位置、监控的设备列表（设备ID组成）、围栏任务的持续时间、坐标系、围栏任务名、围栏任务所属公司ID] 访问携带token",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -1533,7 +1647,7 @@ const docTemplate = `{
         },
         "/fence/get_active_list": {
             "get": {
-                "description": "get active fence list by company id",
+                "description": "get active fence list by company id : 获取牧场中所有处于活跃状态的围栏 参数列表：[牧场ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -1569,7 +1683,7 @@ const docTemplate = `{
         },
         "/fence/get_status": {
             "get": {
-                "description": "get fence status",
+                "description": "get fence status : 获取围栏任务的执行状态 参数列表：[围栏ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -1605,7 +1719,7 @@ const docTemplate = `{
         },
         "/fence/stop": {
             "delete": {
-                "description": "fence stop",
+                "description": "fence stop : 终止围栏任务 参数列表：[围栏ID] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -1641,7 +1755,7 @@ const docTemplate = `{
         },
         "/monitorCentor/connect": {
             "get": {
-                "description": "connect with monitor centor",
+                "description": "connect with monitor centor : 连接到监控中心以接受推送 参数列表：[] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -1670,7 +1784,7 @@ const docTemplate = `{
         },
         "/monitorCentor/disconnect": {
             "delete": {
-                "description": "disconnect with monitor centor",
+                "description": "disconnect with monitor centor : 从监控中心断开连接 参数列表：[] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -1680,7 +1794,151 @@ const docTemplate = `{
                 "summary": "API of golang gin backend",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/role/visitor/create": {
+            "post": {
+                "description": "add company visitor auth to user : 给指定用户赋予指定公司的访客权限 参数列表：[公司ID、用户ID] 访问携带token",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "UserId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/role/visitor/delete": {
+            "delete": {
+                "description": "delete company visitor auth of user : 指定用户的访客权限 参数列表：[公司ID、用户ID] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
                         "type": "integer",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "UserId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/role/visitor/get_company_list": {
+            "get": {
+                "description": "get user's visitor company list : 获取当前用户具有访客权限的所有公司 参数列表：[] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/role/visitor/get_list": {
+            "get": {
+                "description": "get visitor list of company : 获取公司的所有访客 参数列表：[公司ID] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
                         "description": "company id",
                         "name": "CompanyId",
                         "in": "query",
@@ -1706,7 +1964,7 @@ const docTemplate = `{
         },
         "/user/info": {
             "get": {
-                "description": "get user information",
+                "description": "get user information : 获取当前用户的详细信息 参数列表：[] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
@@ -1754,7 +2012,7 @@ const docTemplate = `{
         },
         "/user/login": {
             "post": {
-                "description": "user login",
+                "description": "user login : 用户登录 参数列表：[用户名、密码]",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -1802,7 +2060,7 @@ const docTemplate = `{
         },
         "/user/register": {
             "post": {
-                "description": "user register",
+                "description": "user register : 用户注册 参数列表：[用户名、密码、电话号码、邮箱地址]",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -1822,6 +2080,20 @@ const docTemplate = `{
                         "type": "string",
                         "description": "password",
                         "name": "Password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "telephone",
+                        "name": "Telephone",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "email",
+                        "name": "Email",
                         "in": "formData",
                         "required": true
                     }

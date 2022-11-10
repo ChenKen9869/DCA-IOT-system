@@ -6,6 +6,10 @@ type BiologyInfo struct {
 	Id   uint   `json:"id"`
 	Name string `json:"name"`
 	Type string `json:"type"`
+	Gender string `json:"gender"`
+	Birthday time.Time `json:"birthday"`
+	// InGroup bool `json:"in_group"`
+	CreateTime time.Time `json:"create_time"`
 }
 
 type EpidemicPreventionRecord struct {

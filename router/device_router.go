@@ -27,7 +27,8 @@ func DeviceRouter(r *gin.Engine) *gin.Engine {
 	portableDevice.DELETE("/delete", controller.DeletePortableDeviceController)
 	portableDevice.POST("/create_type", controller.CreatePortableDeviceTypeController)
 	portableDevice.DELETE("/delete_type", controller.DeletePortableDeviceTypeController)
-	
+	portableDevice.GET("get_new_collar", controller.GetNewCollarRealtimeController)
+
 	portableDevice.GET("/get_by_farmhouse", controller.GetPortableDeviceListByFarmhouseController)
 
 	return r

@@ -104,7 +104,7 @@ func GetActiveFenceByCompanyIdController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	// 权限验证
-	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
+	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
@@ -125,8 +125,9 @@ func GetActiveFenceStat(ctx *gin.Context) {
 		return
 	}
 	user := userInfo.(entity.User)
+	
 	// 权限验证
-	if !service.AuthCompanyUser(user.ID, dao.GetFenceRecordById(uint(fenceId)).ParentId) {
+	if (!service.AuthCompanyUser(user.ID, dao.GetFenceRecordById(uint(fenceId)).ParentId)) && (!service.AuthVisitor(user.ID, dao.GetFenceRecordById(uint(fenceId)).ParentId)) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}

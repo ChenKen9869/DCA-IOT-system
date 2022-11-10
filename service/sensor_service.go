@@ -27,7 +27,7 @@ func GetFioHistoryService(fioId uint, startTime string, endTime string) []vo.Fio
 
 // @Summary API of golang gin backend
 // @Tags Device-fixed
-// @description get latest five-in-one device information
+// @description get latest five-in-one device information : 获取五合一传感器的最新数据 参数列表：[五合一传感器的设备ID] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param Id query string true "Id"
@@ -51,7 +51,7 @@ func GetLatestFioService(fioId uint) vo.FioData {
 
 // @Summary API of golang gin backend
 // @Tags Device-fixed
-// @description get five-in-one information within time period
+// @description get five-in-one information within time period : 以时间段作为参数获取五合一传感器的数据列表 参数列表：[五合一传感器的设备ID、开始时间、结束时间] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param Id query string true "id"

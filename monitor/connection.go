@@ -25,7 +25,7 @@ var upGrader = websocket.Upgrader{
 
 // @Summary API of golang gin backend
 // @Tags MonitorCentor
-// @description connect with monitor centor
+// @description connect with monitor centor : 连接到监控中心以接受推送 参数列表：[] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param Authorization header string true "token"
@@ -90,10 +90,9 @@ func ConnectToMonitorCentor(ctx *gin.Context) {
 
 // @Summary API of golang gin backend
 // @Tags MonitorCentor
-// @description disconnect with monitor centor
+// @description disconnect with monitor centor : 从监控中心断开连接 参数列表：[] 访问携带token
 // @version 1.0
 // @accept application/json
-// @param CompanyId query int true "company id"
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /monitorCentor/disconnect  [delete]

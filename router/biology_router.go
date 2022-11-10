@@ -21,6 +21,7 @@ func BiologyRouter(r *gin.Engine) *gin.Engine {
 	biology.GET("/get_with_device_list", controller.GetBiologyWithDeviceListController)
 	biology.GET("/get_picture", controller.GetBiologyPictureController)
 	biology.GET("/get_picture_path", controller.GetBiologyPicturePathController)
+	biology.GET("/get_info", controller.GetBiologyInfoController)
 
 	biology.PUT("/update_farmhouse", controller.UpdateBiologyFarmhouseController)
 	biology.POST("/update_picture", controller.UpdateBiologyPictureController)

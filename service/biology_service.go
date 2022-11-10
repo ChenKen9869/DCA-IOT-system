@@ -7,25 +7,30 @@ import (
 	"go-backend/vo"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description create biology
+// @description create biology : 创建一个生物 参数列表：[生物名称、生物类别、该生物所在的牧舍ID、出生日期、性别] 访问携带token
 // @version 1.0
 // @accept mpfd
 // @param BiologyName formData string true "biology name"
 // @param BiologyType formData string true "biology type"
-// @param CompanyId header string true "company id(farmhouse id)"
+// @param CompanyId formData string true "company id(farmhouse id)"
+// @param Birthday formData string true "biology birthday"
+// @param Gender formData string true "biology gender"
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /biology/create [post]
-func CreateBiologyService(biologyName string, farmhouseId uint, biologyTypeId string, owner uint) uint {
+func CreateBiologyService(biologyName string, farmhouseId uint, biologyTypeId string, birthday time.Time, gender string, owner uint) uint {
 	biology := entity.Biology{
 		Name: biologyName,
 		FarmhouseID: farmhouseId,
 		BiologyTypeID: biologyTypeId,
 		Owner: owner,
+		Birthday: birthday,
+		Gender: gender,
 	}
 	id := dao.CreateBiology(biology)
 	// 判断 type 是否在服务器中注册过
@@ -40,20 +45,34 @@ func CreateBiologyService(biologyName string, farmhouseId uint, biologyTypeId st
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description delete biology
+// @description delete biology : 删除一个生物 参数列表：[本次删除的操作人员姓名，操作人员的联系方式，生物的去处（病死，屠宰场。卖出 等），生物ID] 访问携带token
 // @version 1.0
 // @accept application/json
-// @param Id query int true "id"
+// @param Operator query string true "name of operator"
+// @param TelephonNumber query string true "telephone number of operator"
+// @param LeavePlace query string true "leave place"
+// @param Id query string true "id"
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router  /biology/delete [delete]
-func DeleteBiologyService(biologyId uint) {
+func DeleteBiologyService(operator string, telephoneNumber string, leavePlace string, biologyId uint) {
+	portableDevice := dao.GetPortableDeviceInfoByBiology(biologyId)
+	dao.DeletePortableDevice(portableDevice.ID)
 	dao.DeleteBiology(biologyId)
+	biologyChangeRecord := entity.BiologyChange {
+		BiologyId: biologyId,
+		FromCompany: int(dao.GetBiologyInfoById(biologyId).FarmhouseID),
+		ToCompany: -1,
+		Operator: operator,
+		TelephoneNumber: telephoneNumber,
+		LeavePlace: leavePlace,
+	}
+	dao.CreateBiologyChangeRecord(biologyChangeRecord)
 }
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description create biology type
+// @description create biology type : 创建生物类型 参数列表：[生物类型名称] 
 // @version 1.0
 // @accept mpfd
 // @param BiologyTypeId formData string true "type name"
@@ -68,7 +87,7 @@ func CreateBiologyTypeService(biologyTypeId string) {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description delete biology type
+// @description delete biology type : 删除生物类型 参数列表：[生物类型名称] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param BiologyTypeId query string true "type name"
@@ -81,7 +100,7 @@ func DeleteBiologyTypeService(biologyTypeId string) {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get all biologies of farmhouse
+// @description get all biologies of farmhouse : 通过牧舍ID获取其中的所有生物组成的列表 参数列表：[牧舍ID] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param CompanyId query int true "company id"
@@ -96,6 +115,9 @@ func GetBiologyListService(companyId uint) []vo.BiologyInfo {
 			Id: biology.ID,
 			Name: biology.Name,
 			Type: biology.BiologyTypeID,
+			Gender: biology.Gender,
+			Birthday: biology.Birthday,
+			// InGroup: biology.InGroup,
 		}
 		resultList = append(resultList, biologyInfo)
 	}
@@ -104,7 +126,7 @@ func GetBiologyListService(companyId uint) []vo.BiologyInfo {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get all biologies with devices of company
+// @description get all biologies with devices of company : 根据农牧场ID获取其中所有携带有便携式设备的生物所组成的列表（包括每个生物对应的设备信息） 参数列表：[农牧场ID] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param CompanyId query int true "company id"
@@ -135,24 +157,35 @@ func GetBiologyWithDeviceListService(companyId uint) []vo.BiologyDevice {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description update biology farmhouse
+// @description update biology farmhouse : 更新生物所属的牧舍（转舍） 参数列表：[本次转舍的操作人员姓名、操作人员联系方式、生物ID、生物的目的牧舍ID] 访问携带token
 // @version 1.0
 // @accept application/json
+// @param Operator formData string true "name of operator"
+// @param TelephonNumber formData string true "telephone number of operator"
 // @param BiologyId formData int true "biology id"
 // @param FarmhouseId formData string true "farmhouse id"
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /biology/update_farmhouse [put]
-func UpdateBiologyFarmhouseService(biologyId uint, farmhouseId uint) {
+func UpdateBiologyFarmhouseService(operator string, telephoneNumber string, biologyId uint, farmhouseId uint) {
 	if biologyId == farmhouseId {
 		return
 	}
 	dao.UpdateBiologyFarmhouse(biologyId, farmhouseId)
+	biologyChangeRecord := entity.BiologyChange {
+		BiologyId: biologyId,
+		FromCompany: int(dao.GetBiologyInfoById(biologyId).FarmhouseID),
+		ToCompany: int(farmhouseId),
+		Operator: operator,
+		TelephoneNumber: telephoneNumber,
+		LeavePlace: "null",
+	}
+	dao.CreateBiologyChangeRecord(biologyChangeRecord)
 }
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description create biology epidemic prevention record
+// @description create biology epidemic prevention record : 新增生物的防疫记录 参数列表：[生物ID、本次使用的疫苗信息记录（疫苗描述信息）、注射时间] 访问携带token
 // @version 1.0
 // @accept mpfd
 // @param BiologyId formData int true "biology id"
@@ -171,7 +204,7 @@ func CreateEpidemicPreventionRecordService(biologyId uint, vaccineDescription st
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get epidemic prevention record list of biology
+// @description get epidemic prevention record list of biology : 获取生物的防疫信息记录列表 参数列表：[生物ID] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param BiologyId query int true "biology id"
@@ -192,7 +225,7 @@ func GetEpidemicPreventionRecordListService(biologyId uint) []vo.EpidemicPrevent
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description create biology operation record
+// @description create biology operation record : 新增生物的手术记录 参数列表：[生物ID、手术医生、手术时间、过程记录、手术结果] 访问携带token
 // @version 1.0
 // @accept mpfd
 // @param BiologyId formData int true "biology id"
@@ -215,7 +248,7 @@ func CreateOperationRecordService(biologyId uint, doctor string, operationTime s
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get operation record list of biology
+// @description get operation record list of biology : 获取生物的手术记录列表 参数列表：[生物ID] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param BiologyId query int true "biology id"
@@ -238,7 +271,7 @@ func GetOperationRecordListService(biologyId uint) []vo.OperationRecord {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description create biology medical record
+// @description create biology medical record : 新增生物的用药记录（新增病历） 参数列表：[生物ID、疾病描述、患病时间、治疗方案] 访问携带token
 // @version 1.0
 // @accept mpfd
 // @param BiologyId formData int true "biology id"
@@ -259,7 +292,7 @@ func CreateMedicalRecordService(biologyId uint, disease string, illnessTime stri
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get medical record list of biology
+// @description get medical record list of biology : 获取生物的病历列表 参数列表：[生物ID] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param BiologyId query int true "biology id"
@@ -281,7 +314,7 @@ func GetMedicalRecordListService(biologyId uint) []vo.MedicalRecord {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description update biology picture
+// @description update biology picture : 上传（更新）生物的照片 参数列表：[生物ID、照片文件] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param BiologyId formData int true "biology id"
@@ -295,7 +328,7 @@ func UpdateBiologyPicturePathService(biologyId uint, picturePath string) {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get static picture path of biology
+// @description get static picture path of biology : 获取生物的照片（获取生物照片在服务器中的静态资源地址） 参数列表：[生物ID] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param BiologyId query int true "biology id"
@@ -311,7 +344,7 @@ func GetBiologyPicturePathService(biologyId uint) string {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get picture of biology
+// @description get picture of biology : 获取生物的照片（获取生物照片的 bytes 形式）参数列表：[生物ID] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param BiologyId query int true "biology id"
@@ -325,4 +358,29 @@ func GetBiologyPictureService(biologyId uint) []byte {
 		panic(errRead.Error())
 	}
 	return picture
+}
+
+// @Summary API of golang gin backend
+// @Tags Biology
+// @description get picture of biology : 获取生物的详细信息 参数列表：[生物ID] 访问携带token
+// @version 1.0
+// @accept application/json
+// @param BiologyId query int true "biology id"
+// @param Authorization header string true "token"
+// @Success 200 {object} server.SuccessResponse200 "成功"
+// @router /biology/get_info [get]
+func GetBiologyInfoService(biologyId uint) vo.BiologyInfo {
+	biology := dao.GetBiologyInfoById(biologyId)
+	if biology.ID == 0 {
+		panic("biology does not exist")
+	}
+	biologyInfo := vo.BiologyInfo {
+		Id: biology.ID,
+		Name: biology.Name,
+		Type: biology.BiologyTypeID,
+		Gender: biology.Gender,
+		Birthday: biology.Birthday,
+		CreateTime: biology.CreatedAt,
+	}
+	return biologyInfo
 }

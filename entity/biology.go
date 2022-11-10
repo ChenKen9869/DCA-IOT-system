@@ -13,6 +13,9 @@ type Biology struct {
 	BiologyTypeID string
 	Owner uint
 	PicturePath string
+	Gender string
+	Birthday time.Time
+	InGroup bool
 }
 
 type BiologyType struct {
@@ -41,4 +44,14 @@ type OperationHistory struct {
 	OperationTime time.Time
 	ProcessDescription string
 	Result string
+}
+
+type BiologyChange struct {
+	gorm.Model
+	BiologyId uint
+	FromCompany int
+	ToCompany int // -1, if biology leaves
+	Operator string
+	TelephoneNumber string
+	LeavePlace string // default null
 }
