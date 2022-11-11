@@ -2,11 +2,11 @@ server:
   port: 5930
 datasource:
   driverName: mysql
-  host: 127.0.0.1
+  host: 120.78.73.102
   port: 3306
-  database: go_backend
+  database: smartag
   username: root
-  password: 123456
+  password: 12312378945dhyDHY,
   charset: utf8
   loc: Asia/Shanghai
 monitor:
@@ -21,16 +21,16 @@ newcollar:
   uname: scnd
   psw: 123456
 mongodb:
-  host: 192.168.222.145
+  host: 120.78.73.102
   port: 27017
-  username: root
-  password: 123456
   database: IOT-sensor-data
   collar: electronic-collar
   fio: FIO-sensor
+  username: root
+  password: 123456
 fence:
   spec: 10s
 geo:
   coordinates: GCJ-02
 biology:
-  picturedir: G:\go-backend\pictures\
+  picturedir: /home/ck/backend/assets/biology_pictures/

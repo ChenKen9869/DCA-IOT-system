@@ -1,18 +1,16 @@
 package main
 
 import (
-	"go-backend/common"
+	"go-backend/api/common/common"
 	docs "go-backend/docs"
-	"go-backend/geocontainer"
-	"go-backend/middleware"
-	"go-backend/monitor"
-	"go-backend/router"
-	"go-backend/sensor"
+	"go-backend/api/sys/gis/geo/geocontainer"
+	"go-backend/api/common/middleware"
+	"go-backend/api/sys/iot/monitor"
+	"go-backend/api/server/router"
+	"go-backend/api/sys/iot/sensor"
 	"net/http"
 	"os"
-
 	"github.com/gin-gonic/gin"
-
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/spf13/viper"
 	swaggerFiles "github.com/swaggo/files"
