@@ -6,8 +6,6 @@ write by :
 
 ​**gorm**
 
-server port : 5930
-
 database:
 
 ​**mysql** for management information.
@@ -23,11 +21,10 @@ go run .
 ### or build to run on linux
 
 ```shel
-$ENV:GOOS="linux"
-go build .
-./go-backend
+cd ./scripts
+./build.bat
 ```
 
 ### see more detail of api : (after run the server)
 
-swagger api : <http://localhost:5930/swagger/index.html>
+swagger api : <http://localhost:xxxx/swagger/index.html>
