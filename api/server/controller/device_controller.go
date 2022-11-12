@@ -27,9 +27,7 @@ func CreateFixedDeviceController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
-
 	company := dao.GetCompanyInfoByID(uint(companyId))
-
 	owner := company.Owner
 	deviceId := ctx.PostForm("DeviceId")
 	typeId := ctx.PostForm("TypeId")
@@ -38,9 +36,7 @@ func CreateFixedDeviceController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusBadRequest, 400, nil, "不支持的固定设备类型")
 		return
 	}
-
 	id := service.CreateFixedDeviceService(deviceId, uint(companyId), typeId, owner)
-
 	server.ResponseSuccess(ctx, gin.H{"Id": id}, server.Success)
 }
 
@@ -299,5 +295,15 @@ func GetPortableDeviceListByFarmhouseController(ctx *gin.Context) {
 	}
 	result := service.GetPortableDeviceListByFarmhouseService(uint(companyId))
 	server.ResponseSuccess(ctx, gin.H{"portableDeviceList": result}, server.Success)
+}
+
+func GetFixedDeviceAuthListController(ctx *gin.Context) {
+	userInfo, exists := ctx.Get("user")
+	if !exists {
+		panic("error: user information does not exists in application context")
+	}
+	user := userInfo.(entity.User)
+	result := service.GetAuthFixedDeviceListService(user.ID)
+	server.ResponseSuccess(ctx, gin.H{"fixed_device_list": result}, server.Success)
 }
 

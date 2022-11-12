@@ -361,3 +361,34 @@ func GetPortableDeviceListByFarmhouseService(farmhouseId uint) []vo.BiologyDevic
 	return result
 }
 
+// @Summary API of golang gin backend
+// @Tags Device-fixed
+// @description get user's auth fixed device list : 获取当前用户有权限的所有固定式设备信息 参数列表：[] 访问携带token
+// @version 1.0
+// @accept application/json
+// @param Authorization header string true "token"
+// @Success 200 {object} server.SuccessResponse200 "成功"
+// @router /device/fixed/get_auth_list [get]
+func GetAuthFixedDeviceListService(userId uint) []vo.AuthFixedDevice {
+	companies := dao.GetCompanyListByUserID(userId)
+	var childNodeList []uint
+	for _, company := range companies {
+		getChildNodeRecursive(company.CompanyID, &childNodeList)
+	}
+	var result []vo.AuthFixedDevice
+	for _, node := range childNodeList {
+		currList := dao.GetFixedDeviceListByFarmhouse(node)
+		for _, curr := range currList {
+			result = append(result, vo.AuthFixedDevice{
+				DeviceId: curr.ID,
+				DeviceType: curr.FixedDeviceTypeID,
+				FarmhouseId: curr.FarmhouseID,
+				CreateDate: curr.CreatedAt,
+				BoughtDate: curr.BoughtTime,
+				InstallDate: curr.InstallTime,
+				Stat: curr.Stat,
+			})
+		}
+	}
+	return result
+}

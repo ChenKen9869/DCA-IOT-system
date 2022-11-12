@@ -381,6 +381,35 @@ const docTemplate = `{
                 }
             }
         },
+        "/biology/get_auth_list": {
+            "get": {
+                "description": "get user's auth biology list : 获取当前用户有权限的所有生物信息 参数列表：[] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
         "/biology/get_epidemic_prevention_record_list": {
             "get": {
                 "description": "get epidemic prevention record list of biology : 获取生物的防疫信息记录列表 参数列表：[生物ID] 访问携带token",
@@ -1175,6 +1204,35 @@ const docTemplate = `{
                         "in": "query",
                         "required": true
                     },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/fixed/get_auth_list": {
+            "get": {
+                "description": "get user's auth fixed device list : 获取当前用户有权限的所有固定式设备信息 参数列表：[] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device-fixed"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
                     {
                         "type": "string",
                         "description": "token",

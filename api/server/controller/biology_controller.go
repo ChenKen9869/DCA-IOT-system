@@ -4,21 +4,22 @@ import (
 	"fmt"
 	"go-backend/api/server/dao"
 	"go-backend/api/server/entity"
-	"go-backend/api/server/tools/server"
 	"go-backend/api/server/service"
+	"go-backend/api/server/tools/server"
 	"go-backend/api/server/tools/util"
 	"net/http"
 	"os"
 	"path"
 	"strconv"
 	"strings"
+
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
 
 func CreateBiologyController(ctx *gin.Context) {
 	// 创建 biology 需要：从前端传入的 biology name，该生物的类型，该生物的牧舍（存放在上下文中）
-	userInfo, exists:= ctx.Get("user")
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
@@ -30,7 +31,7 @@ func CreateBiologyController(ctx *gin.Context) {
 	gender := ctx.PostForm("Gender")
 
 	birthday := util.ParseDate(birth)
-	companyId, err:= strconv.Atoi(farmhouseIdString)
+	companyId, err := strconv.Atoi(farmhouseIdString)
 	if err != nil {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "server inter failed")
 		return
@@ -94,7 +95,7 @@ func GetBiologyListController(ctx *gin.Context) {
 		return
 	}
 	// 验证权限
-	userInfo, exists:= ctx.Get("user")
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
@@ -122,7 +123,7 @@ func GetBiologyInfoController(ctx *gin.Context) {
 	}
 	companyId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
 	// 验证权限
-	userInfo, exists:= ctx.Get("user")
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
@@ -136,7 +137,7 @@ func GetBiologyInfoController(ctx *gin.Context) {
 	biologyInfo := service.GetBiologyInfoService(uint(biologyId))
 	// 返回
 	server.ResponseSuccess(ctx, gin.H{"biology_info": biologyInfo}, server.Success)
-} 
+}
 
 func CreateBiologyTypeController(ctx *gin.Context) {
 	biologyTypeId := ctx.PostForm("BiologyTypeId")
@@ -160,7 +161,7 @@ func GetBiologyWithDeviceListController(ctx *gin.Context) {
 		return
 	}
 	// 验证权限
-	userInfo, exists:= ctx.Get("user")
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
@@ -170,7 +171,7 @@ func GetBiologyWithDeviceListController(ctx *gin.Context) {
 		return
 	}
 	biologyWithDeviceList := service.GetBiologyWithDeviceListService(uint(companyId))
-	server.ResponseSuccess(ctx, gin.H{"biologyWithDevice" : biologyWithDeviceList}, server.Success)
+	server.ResponseSuccess(ctx, gin.H{"biologyWithDevice": biologyWithDeviceList}, server.Success)
 }
 
 func UpdateBiologyFarmhouseController(ctx *gin.Context) {
@@ -189,7 +190,7 @@ func UpdateBiologyFarmhouseController(ctx *gin.Context) {
 		return
 	}
 	currentFarmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
-	userInfo, exists:= ctx.Get("user")
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
@@ -198,9 +199,9 @@ func UpdateBiologyFarmhouseController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
-	
+
 	service.UpdateBiologyFarmhouseService(operator, telephoneNumber, uint(biologyId), uint(farmhouseId))
-	
+
 	server.ResponseSuccess(ctx, nil, server.Success)
 }
 
@@ -215,7 +216,7 @@ func CreateEpidemicPreventionRecordController(ctx *gin.Context) {
 	}
 	// auth
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
-	userInfo, exists:= ctx.Get("user")
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
@@ -238,7 +239,7 @@ func GetEpidemicPreventRecordListController(ctx *gin.Context) {
 	}
 	// auth
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
-	userInfo, exists:= ctx.Get("user")
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
@@ -267,7 +268,7 @@ func CreateOperationRecordController(ctx *gin.Context) {
 	}
 	// auth
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
-	userInfo, exists:= ctx.Get("user")
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
@@ -290,7 +291,7 @@ func GetOperationRecordListController(ctx *gin.Context) {
 	}
 	// auth
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
-	userInfo, exists:= ctx.Get("user")
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
@@ -318,7 +319,7 @@ func CreateMedicalRecordController(ctx *gin.Context) {
 	}
 	// auth
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
-	userInfo, exists:= ctx.Get("user")
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
@@ -341,7 +342,7 @@ func GetMedicalRecordListController(ctx *gin.Context) {
 	}
 	// auth
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
-	userInfo, exists:= ctx.Get("user")
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
@@ -366,7 +367,7 @@ func UpdateBiologyPictureController(ctx *gin.Context) {
 	}
 	// auth
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
-	userInfo, exists:= ctx.Get("user")
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
@@ -407,7 +408,7 @@ func GetBiologyPictureController(ctx *gin.Context) {
 	// auth
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
 	fmt.Println(farmhouseId)
-	userInfo, exists:= ctx.Get("user")
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
@@ -416,9 +417,7 @@ func GetBiologyPictureController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
-
 	picture := service.GetBiologyPictureService(uint(biologyId))
-	
 	server.ResponseSuccess(ctx, gin.H{"picture": picture}, server.Success)
 }
 
@@ -431,7 +430,7 @@ func GetBiologyPicturePathController(ctx *gin.Context) {
 	}
 	// auth
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
-	userInfo, exists:= ctx.Get("user")
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
@@ -443,4 +442,14 @@ func GetBiologyPicturePathController(ctx *gin.Context) {
 
 	picturePath := service.GetBiologyPicturePathService(uint(biologyId))
 	server.ResponseSuccess(ctx, gin.H{"picture_path": picturePath}, server.Success)
+}
+
+func GetBiologyAuthListController(ctx *gin.Context) {
+	userInfo, exists := ctx.Get("user")
+	if !exists {
+		panic("error: user information does not exists in application context")
+	}
+	user := userInfo.(entity.User)
+	result := service.GetAuthBiologyListService(user.ID)
+	server.ResponseSuccess(ctx, gin.H{"biology_list": result}, server.Success)
 }

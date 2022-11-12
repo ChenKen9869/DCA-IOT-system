@@ -318,6 +318,25 @@ paths:
       summary: API of golang gin backend
       tags:
       - Biology
+  /biology/get_auth_list:
+    get:
+      consumes:
+      - application/json
+      description: 'get user''s auth biology list : 获取当前用户有权限的所有生物信息 参数列表：[] 访问携带token'
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
   /biology/get_epidemic_prevention_record_list:
     get:
       consumes:
@@ -860,6 +879,26 @@ paths:
         name: FixedDeviceTypeId
         required: true
         type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-fixed
+  /device/fixed/get_auth_list:
+    get:
+      consumes:
+      - application/json
+      description: 'get user''s auth fixed device list : 获取当前用户有权限的所有固定式设备信息 参数列表：[]
+        访问携带token'
+      parameters:
       - description: token
         in: header
         name: Authorization

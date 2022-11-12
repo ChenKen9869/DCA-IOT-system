@@ -384,3 +384,47 @@ func GetBiologyInfoService(biologyId uint) vo.BiologyInfo {
 	}
 	return biologyInfo
 }
+
+func getChildNodeRecursive(currentId uint, nodeList *[]uint) {
+	chidrenList := dao.GetCompanyListByParent(currentId)
+	if len(chidrenList) == 0 {
+		*nodeList = append(*nodeList, currentId)
+		return
+	} else {
+		for _, child := range chidrenList {
+			getChildNodeRecursive(child.ID, nodeList)
+		}
+	}
+}
+
+// @Summary API of golang gin backend
+// @Tags Biology
+// @description get user's auth biology list : 获取当前用户有权限的所有生物信息 参数列表：[] 访问携带token
+// @version 1.0
+// @accept application/json
+// @param Authorization header string true "token"
+// @Success 200 {object} server.SuccessResponse200 "成功"
+// @router /biology/get_auth_list [get]
+func GetAuthBiologyListService(userId uint) []vo.AuthBology {
+	companies := dao.GetCompanyListByUserID(userId)
+	var childNodeList []uint
+	for _, company := range companies {
+		getChildNodeRecursive(company.CompanyID, &childNodeList)
+	}
+	var result []vo.AuthBology
+	for _, node := range childNodeList {
+		currList := dao.GetBiologyListByFarmhouse(node)
+		for _, curr := range currList {
+			result = append(result, vo.AuthBology{
+				BiologyId: curr.ID,
+				BiologyName: curr.Name,
+				BiologyType: curr.BiologyTypeID,
+				Gender: curr.Gender,
+				FarmhouseId: curr.FarmhouseID,
+				Birthday: curr.Birthday,
+				CreateDate: curr.CreatedAt,
+			})
+		}
+	}
+	return result
+}

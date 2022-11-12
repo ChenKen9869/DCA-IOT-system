@@ -20,6 +20,7 @@ func DeviceRouter(r *gin.Engine) *gin.Engine {
 	fixedDevice.GET("/get_fio_latest", controller.GetLatestFioController)
 	fixedDevice.GET("/get_by_farmhouse", controller.GetFixedDeviceListByFarmhouseController)
 	fixedDevice.GET("/get_fio_list_by_time", controller.GetFioListByTime)
+	fixedDevice.GET("/get_auth_list", controller.GetFixedDeviceAuthListController)
 
 	portableDevice := device.Group("/portable")
 	portableDevice.POST("/create", controller.CreatePortableDeviceController)

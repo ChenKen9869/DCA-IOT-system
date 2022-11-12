@@ -29,3 +29,13 @@ type OperationRecord struct {
 	ProcessDescription	string		`json:"process_description"`
 	Result				string		`json:"result"`
 }
+
+type AuthBology struct {
+	BiologyId	uint	`json:"biology_id"`
+	BiologyName	string	`json:"biology_name"`
+	BiologyType string	`json:"biology_type"`
+	Gender	string	`json:"gender"`
+	FarmhouseId	uint	`json:"farmhouse_id"`
+	Birthday	time.Time	`json:"birthday"`
+	CreateDate	time.Time	`json:"create_date"`
+}
