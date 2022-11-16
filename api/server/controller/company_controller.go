@@ -14,28 +14,40 @@ func CreateCompanyController(ctx *gin.Context) {
 	name := ctx.PostForm("Name")
 	parentId := ctx.PostForm("ParentId")
 	location := ctx.PostForm("Location")
-	leaderInfo, exists := ctx.Get("user")
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
-	leaderId := leaderInfo.(entity.User).ID
+	user := userInfo.(entity.User)
 	parent, err := strconv.Atoi(parentId)
 	if err != nil {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi error")
 		return
 	}
-	id, errService := service.CreateCompanyService(uint(parent), name, leaderId, location)
+	// 如果是新公司，则需要将新企业与用户名关系写入到关系表
+	if parent == 0 {
+		id, errService := service.CreateCompanyService(uint(parent), name, user.ID, location)
+		if errService != nil {
+			server.Response(ctx, http.StatusUnprocessableEntity, 422, nil, "param error")
+			return
+		}
+		companyUser := entity.CompanyUser{
+			CompanyID: id,
+			UserID: user.ID,
+		}
+		dao.CreateCompanyUser(companyUser)
+		server.ResponseSuccess(ctx, gin.H{"CompanyId": id}, server.Success)
+		return
+	}
+	// 如果不是新公司，则要对该公司的父公司进行权限验证
+	if user.ID != dao.GetCompanyInfoByID(uint(parent)).Owner {
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		return
+	}
+	id, errService := service.CreateCompanyService(uint(parent), name, user.ID, location)
 	if errService != nil {
 		server.Response(ctx, http.StatusUnprocessableEntity, 422, nil, "param error")
 		return
-	}
-	// 如果是新公司，则需要将新企业与用户名关系写入到关系表
-	if parent == 0 {
-		companyUser := entity.CompanyUser{
-			CompanyID: id,
-			UserID: leaderId,
-		}
-		dao.CreateCompanyUser(companyUser)
 	}
 	server.ResponseSuccess(ctx, gin.H{"CompanyId": id}, server.Success)
 }
@@ -71,10 +83,14 @@ func DeleteCompanyController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	// 权限验证
-	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
+	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
+	// if !service.AuthCompanyUser(user.ID, uint(companyId)) {
+	// 	server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+	// 	return
+	// }
 	err := service.DeleteCompanyService(uint(companyId), user)
 	if err != nil {
 		if msg := err.Error(); msg == server.CompanyNotExist {
