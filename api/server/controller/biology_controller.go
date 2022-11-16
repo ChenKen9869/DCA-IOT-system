@@ -107,9 +107,24 @@ func GetBiologyListController(ctx *gin.Context) {
 
 	// 查询
 	biologyList := service.GetBiologyListService(uint(companyId))
-	// 返回
+	// 构造返回结构
+	var result []gin.H
+	// 查找每个生物绑定的设备数量
+	for _, biologyInfo := range biologyList {
+		devices := dao.GetPortableDeviceListByBiology(biologyInfo.ID)
+		result = append(result, gin.H{
+			"id": biologyInfo.ID,
+			"name": biologyInfo.Name,
+			"type": biologyInfo.BiologyTypeID,
+			"farmhouse_id": biologyInfo.FarmhouseID,
+			"device_nums": len(devices),
+			"gender": biologyInfo.Gender,
+			"birthday": biologyInfo.Birthday,
+			"create_date": biologyInfo.CreatedAt,
+		})
+	}
 	resultList := gin.H{
-		"biologyList": biologyList,
+		"biologyList": result,
 	}
 	server.ResponseSuccess(ctx, resultList, server.Success)
 }

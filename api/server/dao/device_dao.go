@@ -71,10 +71,10 @@ func ExistPortableDeviceType(portableDeviceTypeId string) bool {
 	return len(portableType.PortableDeviceTypeID) != 0
 }
 
-func GetPortableDeviceInfoByBiology(biologyId uint) entity.PortableDevice {
-	var portableDevice entity.PortableDevice
-	common.GetDB().Where("biology_id = ?", biologyId).First(&portableDevice)
-	return portableDevice
+func GetPortableDeviceListByBiology(biologyId uint) []entity.PortableDevice {
+	var portableDeviceList []entity.PortableDevice
+	common.GetDB().Where("biology_id = ?", biologyId).Find(&portableDeviceList)
+	return portableDeviceList
 }
 
 func GetFixedDeviceListByFarmhouse(farmhouseId uint) []entity.FixedDevice {

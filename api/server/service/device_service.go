@@ -322,16 +322,18 @@ func GetNewCollarRealtimeByDeviceIdService(deviceId uint) (vo.NewCollar, string)
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /device/fixed/get_by_farmhouse [get]
-func GetFixedDeviceListByFarmhouseService(farmhouseId uint) []vo.FixedDeviceVo {
-	var fixedDeviceVoList []vo.FixedDeviceVo
-	fixedDeviceList := dao.GetFixedDeviceListByFarmhouse(farmhouseId)
-	for _, fixedDevice := range fixedDeviceList {
-		fixedDeviceVoList = append(fixedDeviceVoList, vo.FixedDeviceVo{
-			Id: fixedDevice.ID,
-			Type: fixedDevice.FixedDeviceTypeID,
-		})
+func GetFixedDeviceListByFarmhouseService(farmhouseId uint) []entity.FixedDevice {
+	var fixedDeviceList []entity.FixedDevice
+	GetFixedDeviceRecursive(farmhouseId, fixedDeviceList)
+	return fixedDeviceList
+}
+func GetFixedDeviceRecursive(companyId uint, fixedDeviceList []entity.FixedDevice) {
+	fixedList := dao.GetFixedDeviceListByFarmhouse(companyId)
+	fixedDeviceList = append(fixedDeviceList, fixedList...)
+	childrenList := dao.GetCompanyListByParent(companyId)
+	for _, subCompany := range childrenList {
+		GetFixedDeviceRecursive(subCompany.ID, fixedDeviceList)
 	}
-	return fixedDeviceVoList
 }
 
 // @Summary API of golang gin backend
@@ -347,15 +349,17 @@ func GetPortableDeviceListByFarmhouseService(farmhouseId uint) []vo.BiologyDevic
 	var result []vo.BiologyDevice
 	biologyList := dao.GetBiologyListByFarmhouse(farmhouseId)
 	for _, biology := range biologyList {
-		device := dao.GetPortableDeviceInfoByBiology(biology.ID)
-		if device.ID != 0 {
-			result = append(result, vo.BiologyDevice{
-				BiologyId: biology.ID,
-				BiologyName: biology.Name,
-				BiologyType: biology.BiologyTypeID,
-				DeviceId: device.ID,
-				DeviceType: device.PortableDeviceTypeID,
-			})
+		deviceList := dao.GetPortableDeviceListByBiology(biology.ID)
+		for _, device := range deviceList {
+			if device.ID != 0 {
+				result = append(result, vo.BiologyDevice{
+					BiologyId: biology.ID,
+					BiologyName: biology.Name,
+					BiologyType: biology.BiologyTypeID,
+					DeviceId: device.ID,
+					DeviceType: device.PortableDeviceTypeID,
+				})
+			}
 		}
 	}
 	return result

@@ -327,8 +327,8 @@ func DeleteCompanyUserService(companyId uint, userId uint) {
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /company/get/employeelist [get]
-func GetEmployeeListService(companyId uint) map[entity.User]([]uint) {
-	employeeList := make(map[entity.User]([]uint))
+func GetEmployeeListService(companyId uint) map[entity.User][]uint {
+	employeeList := make(map[entity.User][]uint)
 	// 找到公司的所有子公司
 	// 遍历该公司，以及该公司的所有子公司，在公司-员工表中找到匹配的信息，将信息填入雇员表
 	// 雇员表： key：雇员id，value：该雇员有操作权的公司id	
@@ -336,7 +336,7 @@ func GetEmployeeListService(companyId uint) map[entity.User]([]uint) {
 	return employeeList
 }
 
-func GetEmployeeRecursive(companyId uint, employeeList map[entity.User]([]uint)) {
+func GetEmployeeRecursive(companyId uint, employeeList map[entity.User][]uint) {
 	userList := dao.GetUserListByCompanyId(companyId)
 	for _, user := range userList {
 		employee := dao.GetUserInfoById(user.UserID)

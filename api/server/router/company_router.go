@@ -16,6 +16,7 @@ func CompanyRouter(r *gin.Engine) *gin.Engine {
 	companyGet.GET("/treelist", controller.GetCompanyTreeListController)
 	companyGet.GET("/employeelist", controller.GetEmployeeListController)
 	companyGet.GET("/info", controller.GetCompanyInfoController)
+	companyGet.GET("/own_company_list", )
 
 	companyUser := company.Group("/company_user")
 	companyUser.POST("/create", controller.CreateCompanyUserController)

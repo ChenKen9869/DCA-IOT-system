@@ -56,8 +56,10 @@ func CreateBiologyService(biologyName string, farmhouseId uint, biologyTypeId st
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router  /biology/delete [delete]
 func DeleteBiologyService(operator string, telephoneNumber string, leavePlace string, biologyId uint) {
-	portableDevice := dao.GetPortableDeviceInfoByBiology(biologyId)
-	dao.DeletePortableDevice(portableDevice.ID)
+	portableDeviceList := dao.GetPortableDeviceListByBiology(biologyId)
+	for _, portableDevice := range portableDeviceList {	
+		dao.DeletePortableDevice(portableDevice.ID)
+	}
 	dao.DeleteBiology(biologyId)
 	biologyChangeRecord := entity.BiologyChange {
 		BiologyId: biologyId,
@@ -107,21 +109,19 @@ func DeleteBiologyTypeService(biologyTypeId string) {
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /biology/get_list [get]
-func GetBiologyListService(companyId uint) []vo.BiologyInfo {
-	biologyList := dao.GetBiologyListByFarmhouse(companyId)
-	var resultList []vo.BiologyInfo
-	for _, biology := range biologyList {
-		biologyInfo := vo.BiologyInfo{
-			Id: biology.ID,
-			Name: biology.Name,
-			Type: biology.BiologyTypeID,
-			Gender: biology.Gender,
-			Birthday: biology.Birthday,
-			// InGroup: biology.InGroup,
-		}
-		resultList = append(resultList, biologyInfo)
+func GetBiologyListService(companyId uint) []entity.Biology {
+	var biologyList []entity.Biology
+	GetBiologyRecursive(companyId, biologyList)
+	return biologyList
+}
+
+func GetBiologyRecursive(companyId uint, biologyList []entity.Biology) {
+	biologies := dao.GetBiologyListByFarmhouse(companyId)
+	biologyList = append(biologyList, biologies...)
+	childrenList := dao.GetCompanyListByParent(companyId)
+	for _, subCompany := range childrenList {
+		GetBiologyRecursive(subCompany.ID, biologyList)
 	}
-	return resultList
 }
 
 // @Summary API of golang gin backend
@@ -140,15 +140,17 @@ func GetBiologyWithDeviceListService(companyId uint) []vo.BiologyDevice {
 	for _, farmhouse := range farmhouseList {
 		biologyList := dao.GetBiologyListByFarmhouse(farmhouse.ID)
 		for _, biology := range biologyList {
-			device := dao.GetPortableDeviceInfoByBiology(biology.ID)
-			if device.ID != 0 {
-				result = append(result, vo.BiologyDevice{
-					BiologyId: biology.ID,
-					BiologyName: biology.Name,
-					BiologyType: biology.BiologyTypeID,
-					DeviceId: device.ID,
-					DeviceType: device.PortableDeviceTypeID,
-				})
+			deviceList := dao.GetPortableDeviceListByBiology(biology.ID)
+			for _, device := range deviceList {
+				if device.ID != 0 {
+					result = append(result, vo.BiologyDevice{
+						BiologyId: biology.ID,
+						BiologyName: biology.Name,
+						BiologyType: biology.BiologyTypeID,
+						DeviceId: device.ID,
+						DeviceType: device.PortableDeviceTypeID,
+					})
+				}
 			}
 		}
 	}

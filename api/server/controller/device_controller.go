@@ -272,7 +272,22 @@ func GetFixedDeviceListByFarmhouseController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
-	result := service.GetFixedDeviceListByFarmhouseService(uint(companyId))
+	fixedDeviceList := service.GetFixedDeviceListByFarmhouseService(uint(companyId))
+	// 构造返回结构
+	var result []gin.H
+	// 查找每个生物绑定的设备数量
+	for _, deviceInfo := range fixedDeviceList {
+		result = append(result, gin.H{
+			"id": deviceInfo.ID,
+			"type": deviceInfo.FixedDeviceTypeID,
+			"farmhouse_id": deviceInfo.FarmhouseID,
+			"create_date": deviceInfo.CreatedAt,
+			"device_id": deviceInfo.DeviceID,
+			"bought_time": deviceInfo.BoughtTime,
+			"install_time": deviceInfo.InstallTime,
+			"stat": deviceInfo.Stat,
+		})
+	}
 	server.ResponseSuccess(ctx, gin.H{"fixedDeviceList": result}, server.Success)
 }
 
