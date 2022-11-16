@@ -1,11 +1,13 @@
 package controller
 
 import (
+	"go-backend/api/server/dao"
 	"go-backend/api/server/entity"
-	"go-backend/api/server/tools/server"
 	"go-backend/api/server/service"
+	"go-backend/api/server/tools/server"
 	"net/http"
 	"strconv"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,10 +26,15 @@ func CreateVisitorController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	// 权限验证
-	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
+	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
+	
+	// if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
+	// 	server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+	// 	return
+	// }
 	service.CreateVisitorService(uint(companyId), uint(userId))
 
 	server.ResponseSuccess(ctx,
@@ -50,10 +57,14 @@ func DeleteVisitorController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	// 权限验证
-	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
+	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
+	// if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
+	// 	server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+	// 	return
+	// }
 	service.DeleteVisitorService(uint(companyId), uint(userId))
 	server.ResponseSuccess(ctx,
 		gin.H{"companyId": companyId, "userId": userId},
@@ -73,10 +84,14 @@ func GetVisitorListController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	// 权限验证
-	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
+	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
+	// if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
+	// 	server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+	// 	return
+	// }
 	visitorList := service.GetVisitorListService(uint(companyId))
 
 	result := []gin.H{}

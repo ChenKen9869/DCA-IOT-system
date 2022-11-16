@@ -77,6 +77,14 @@ func DeleteCompanyService(companyId uint, operator entity.User) error {
 	for _, fixedDevice := range fixedDeviceList {
 		dao.DeleteFixedDevice(fixedDevice.ID)
 	}
+	managerList := dao.GetUserListByCompanyId(companyId)
+	visitorList := dao.GetVisitorListByCompanyId(companyId)
+	for _, manager := range managerList {
+		dao.DeleteCompanyUser(manager.ID)
+	}
+	for _, visitor := range visitorList {
+		dao.DeleteVisitorById(visitor.ID)
+	}
 	dao.DeleteCompanyByID(companyId)
 	return nil
 }

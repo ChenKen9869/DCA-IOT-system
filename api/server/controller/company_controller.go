@@ -49,15 +49,6 @@ func GetCompanyTreeListController(ctx *gin.Context) {
 		return
 	}
 	user := userInfo.(entity.User)
-	// uid, err := strconv.Atoi(userId)
-	// if err != nil {
-	// 	server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi error")
-	// 	return
-	// }
-	// if user.ID != uint(uid) {
-	// 	server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
-	// 	return
-	// }
 	treeList, companyList := service.GetCompanyTreeListService(user.ID)
 	companyTreeList := gin.H{
 		"mechanism": treeList,
@@ -81,7 +72,7 @@ func DeleteCompanyController(ctx *gin.Context) {
 	user := userInfo.(entity.User)
 	// 权限验证
 	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足啦")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
 	err := service.DeleteCompanyService(uint(companyId), user)
@@ -115,10 +106,14 @@ func CreateCompanyUserController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	// 权限验证
-	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
+	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
+	// if !service.AuthCompanyUser(user.ID, uint(companyId)) {
+	// 	server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+	// 	return
+	// }
 	err := service.CreateCompanyUserService(uint(companyId), uint(userId))
 	if err != nil {
 		if msg := err.Error(); msg == server.CompanyNotExist {
@@ -152,10 +147,14 @@ func DeleteCompanyUserController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	// 权限验证
-	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
+	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
+	// if !service.AuthCompanyUser(user.ID, uint(companyId)) {
+	// 	server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+	// 	return
+	// }
 	service.DeleteCompanyUserService(uint(companyId), uint(userId))
 	server.ResponseSuccess(ctx, 
 		gin.H{"companyId" : companyId, "userId" : userId,}, 
@@ -175,12 +174,15 @@ func GetEmployeeListController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	// 权限验证
-	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
+	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
+	// if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
+	// 	server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+	// 	return
+	// }
 	employeeList := service.GetEmployeeListService(uint(companyId))
-	
 	result := []gin.H{}
 	for employee := range employeeList {
 		result = append(result, gin.H{
