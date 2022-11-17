@@ -383,6 +383,7 @@ func GetBiologyInfoService(biologyId uint) vo.BiologyInfo {
 		Gender: biology.Gender,
 		Birthday: biology.Birthday,
 		CreateTime: biology.CreatedAt,
+		FarmhouseId: biology.FarmhouseID,
 	}
 	return biologyInfo
 }
@@ -429,4 +430,29 @@ func GetAuthBiologyListService(userId uint) []vo.AuthBology {
 		}
 	}
 	return result
+}
+
+// @Summary API of golang gin backend
+// @Tags Biology
+// @description get own biology list : 获取当前用户拥有的所有生物信息 参数列表：[] 访问携带token
+// @version 1.0
+// @accept application/json
+// @param Authorization header string true "token"
+// @Success 200 {object} server.SuccessResponse200 "成功"
+// @router /biology/own_list [get]
+func GetOwnBiologyListService(userId uint) []vo.OwnBiology {
+	var biologyInfoList []vo.OwnBiology
+	biologyList := dao.GetOwnBiologyList(userId)
+	for _, biology := range biologyList {
+		biologyInfoList = append(biologyInfoList, vo.OwnBiology{
+			Id: biology.ID,
+			Name: biology.Name,
+			Type: biology.BiologyTypeID,
+			Gender: biology.Gender,
+			Birthday: biology.Birthday,
+			CreateTime: biology.CreatedAt,
+			FarmhouseId: biology.FarmhouseID,
+		})
+	}
+	return biologyInfoList
 }

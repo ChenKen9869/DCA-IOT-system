@@ -535,6 +535,25 @@ paths:
       summary: API of golang gin backend
       tags:
       - Biology
+  /biology/own_list:
+    get:
+      consumes:
+      - application/json
+      description: 'get own biology list : 获取当前用户拥有的所有生物信息 参数列表：[] 访问携带token'
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
   /biology/update_farmhouse:
     put:
       consumes:
@@ -758,6 +777,25 @@ paths:
         name: CompanyId
         required: true
         type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Company
+  /company/get/own_list:
+    get:
+      consumes:
+      - application/json
+      description: 'get own company list : 获取当前用户拥有的公司列表 参数列表：[] 访问携带token'
+      parameters:
       - description: token
         in: header
         name: Authorization
@@ -1021,6 +1059,25 @@ paths:
       summary: API of golang gin backend
       tags:
       - Device-fixed
+  /device/fixed/own_list:
+    get:
+      consumes:
+      - application/json
+      description: 'get own fixed device list : 获取当前用户拥有的所有固定式设备信息 参数列表：[] 访问携带token'
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device_fixed
   /device/portable/create:
     post:
       consumes:
@@ -1173,6 +1230,25 @@ paths:
       summary: API of golang gin backend
       tags:
       - Device-portable
+  /device/portable/own_list:
+    get:
+      consumes:
+      - application/json
+      description: 'get own portable device list : 获取当前用户拥有的所有便携式设备信息 参数列表：[] 访问携带token'
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device_portable
   /fence/create:
     post:
       consumes:

@@ -396,3 +396,53 @@ func GetAuthFixedDeviceListService(userId uint) []vo.AuthFixedDevice {
 	}
 	return result
 }
+
+// @Summary API of golang gin backend
+// @Tags Device_fixed
+// @description get own fixed device list : 获取当前用户拥有的所有固定式设备信息 参数列表：[] 访问携带token
+// @version 1.0
+// @accept application/json
+// @param Authorization header string true "token"
+// @Success 200 {object} server.SuccessResponse200 "成功"
+// @router /device/fixed/own_list [get]
+func GetOwnFixedDeviceListService(userId uint) []vo.OwnFixedDevice {
+	var fixedDeviceInfoList []vo.OwnFixedDevice
+	fixedDeviceList := dao.GetOwnFixedDeviceList(userId)
+	for _, fixedDevice := range fixedDeviceList {
+		fixedDeviceInfoList = append(fixedDeviceInfoList, vo.OwnFixedDevice{
+			Id: fixedDevice.ID,
+			Type: fixedDevice.FixedDeviceTypeID,
+			DeviceId: fixedDevice.DeviceID,
+			InstallTime: fixedDevice.InstallTime,
+			CreateTime: fixedDevice.CreatedAt,
+			FarmhouseId: fixedDevice.FarmhouseID,
+			BoughtTime: fixedDevice.BoughtTime,
+		})
+	}
+	return fixedDeviceInfoList
+}
+
+// @Summary API of golang gin backend
+// @Tags Device_portable
+// @description get own portable device list : 获取当前用户拥有的所有便携式设备信息 参数列表：[] 访问携带token
+// @version 1.0
+// @accept application/json
+// @param Authorization header string true "token"
+// @Success 200 {object} server.SuccessResponse200 "成功"
+// @router /device/portable/own_list [get]
+func GetOwnPortableDeviceListService(userId uint) []vo.OwnPortableDevice {
+	var portableDeviceInfoList []vo.OwnPortableDevice
+	portableDeviceList := dao.GetOwnPortableDeviceList(userId)
+	for _, portableDevice := range portableDeviceList {
+		portableDeviceInfoList = append(portableDeviceInfoList, vo.OwnPortableDevice{
+			Id: portableDevice.ID,
+			Type: portableDevice.PortableDeviceTypeID,
+			DeviceId: portableDevice.DeviceID,
+			InstallTime: portableDevice.InstallTime,
+			CreateTime: portableDevice.CreatedAt,
+			BiologyId: portableDevice.BiologyID,
+			BoughtTime: portableDevice.BoughtTime,
+		})
+	}
+	return portableDeviceInfoList
+}

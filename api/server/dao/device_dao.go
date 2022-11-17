@@ -96,3 +96,14 @@ func GetPortableDeviceInfoById(portableDeviceId uint) entity.PortableDevice {
 	return portableDevice
 }
 
+func GetOwnFixedDeviceList(userId uint) []entity.FixedDevice {
+	var fixedDeviceList []entity.FixedDevice
+	common.GetDB().Table("fixed_devices").Where("owner = ?", userId).Find(&fixedDeviceList)
+	return fixedDeviceList
+}
+
+func GetOwnPortableDeviceList(userId uint) []entity.PortableDevice {
+	var portableDeviceList []entity.PortableDevice
+	common.GetDB().Table("portable_devices").Where("owner = ?", userId).Find(&portableDeviceList)
+	return portableDeviceList
+}

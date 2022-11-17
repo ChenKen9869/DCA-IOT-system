@@ -275,7 +275,6 @@ func GetFixedDeviceListByFarmhouseController(ctx *gin.Context) {
 	fixedDeviceList := service.GetFixedDeviceListByFarmhouseService(uint(companyId))
 	// 构造返回结构
 	var result []gin.H
-	// 查找每个生物绑定的设备数量
 	for _, deviceInfo := range fixedDeviceList {
 		result = append(result, gin.H{
 			"id": deviceInfo.ID,
@@ -322,3 +321,24 @@ func GetFixedDeviceAuthListController(ctx *gin.Context) {
 	server.ResponseSuccess(ctx, gin.H{"fixed_device_list": result}, server.Success)
 }
 
+func GetOwnFixedDeviceListController(ctx *gin.Context) {
+	userInfo, exists := ctx.Get("user")
+	if !exists {
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user infromation does not exists in application context")
+		return
+	}
+	user := userInfo.(entity.User)
+	fixedDeviceList := service.GetOwnFixedDeviceListService(user.ID)
+	server.ResponseSuccess(ctx, gin.H{"fixed_device_list": fixedDeviceList}, server.Success)
+}
+
+func GetOwnPortableListController(ctx *gin.Context) {
+	userInfo, exists := ctx.Get("user")
+	if !exists {
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user infromation does not exists in application context")
+		return
+	}
+	user := userInfo.(entity.User)
+	portableDeviceList := service.GetOwnPortableDeviceListService(user.ID)
+	server.ResponseSuccess(ctx, gin.H{"portable_device_list": portableDeviceList}, server.Success)
+}

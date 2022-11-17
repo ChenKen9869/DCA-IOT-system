@@ -8,8 +8,8 @@ type BiologyInfo struct {
 	Type string `json:"type"`
 	Gender string `json:"gender"`
 	Birthday time.Time `json:"birthday"`
-	// InGroup bool `json:"in_group"`
 	CreateTime time.Time `json:"create_time"`
+	FarmhouseId uint `json:"farmhouse_id"`
 }
 
 type EpidemicPreventionRecord struct {
@@ -39,3 +39,4 @@ type AuthBology struct {
 	Birthday	time.Time	`json:"birthday"`
 	CreateDate	time.Time	`json:"create_date"`
 }
+

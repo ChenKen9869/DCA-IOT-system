@@ -94,3 +94,9 @@ func GetMedicalRecordListByBiology(biologyId uint) []entity.MedicalHistory {
 func CreateBiologyChangeRecord(record entity.BiologyChange) {
 	common.GetDB().Create(&record)
 }
+
+func GetOwnBiologyList(userId uint) []entity.Biology {
+	var biologyList []entity.Biology
+	common.GetDB().Table("biologies").Where("owner = ?", userId).Find(&biologyList)
+	return biologyList
+}

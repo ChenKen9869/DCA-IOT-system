@@ -468,3 +468,14 @@ func GetBiologyAuthListController(ctx *gin.Context) {
 	result := service.GetAuthBiologyListService(user.ID)
 	server.ResponseSuccess(ctx, gin.H{"biology_list": result}, server.Success)
 }
+
+func GetOwnBiologyListController(ctx *gin.Context) {
+	userInfo, exists := ctx.Get("user")
+	if !exists {
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user infromation does not exists in application context")
+		return
+	}
+	user := userInfo.(entity.User)
+	biologyList := service.GetOwnBiologyListService(user.ID)
+	server.ResponseSuccess(ctx, gin.H{"biology_list": biologyList}, server.Success)
+}

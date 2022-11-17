@@ -698,6 +698,35 @@ const docTemplate = `{
                 }
             }
         },
+        "/biology/own_list": {
+            "get": {
+                "description": "get own biology list : 获取当前用户拥有的所有生物信息 参数列表：[] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
         "/biology/update_farmhouse": {
             "put": {
                 "description": "update biology farmhouse : 更新生物所属的牧舍（转舍） 参数列表：[本次转舍的操作人员姓名、操作人员联系方式、生物ID、生物的目的牧舍ID] 访问携带token",
@@ -1024,6 +1053,35 @@ const docTemplate = `{
                         "in": "query",
                         "required": true
                     },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/company/get/own_list": {
+            "get": {
+                "description": "get own company list : 获取当前用户拥有的公司列表 参数列表：[] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
                     {
                         "type": "string",
                         "description": "token",
@@ -1409,6 +1467,35 @@ const docTemplate = `{
                 }
             }
         },
+        "/device/fixed/own_list": {
+            "get": {
+                "description": "get own fixed device list : 获取当前用户拥有的所有固定式设备信息 参数列表：[] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device_fixed"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
         "/device/portable/create": {
             "post": {
                 "description": "create portable device : 创建便携式设备 参数列表：[设备绑定的生物ID、厂家提供的设备编号、设备类型] 访问携带token",
@@ -1614,6 +1701,35 @@ const docTemplate = `{
                         "in": "query",
                         "required": true
                     },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/portable/own_list": {
+            "get": {
+                "description": "get own portable device list : 获取当前用户拥有的所有便携式设备信息 参数列表：[] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device_portable"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
                     {
                         "type": "string",
                         "description": "token",

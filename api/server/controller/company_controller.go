@@ -233,3 +233,14 @@ func GetCompanyInfoController(ctx *gin.Context) {
 	result := service.GetCompanyInfoService(uint(companyId))
 	server.ResponseSuccess(ctx, gin.H{"companyInfo": result}, server.Success)
 }
+
+func GetOwnCompanyListController(ctx *gin.Context) {
+	userInfo, exists := ctx.Get("user")
+	if !exists {
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user infromation does not exists in application context")
+		return
+	}
+	user := userInfo.(entity.User)
+	companyList := service.GetOwnCompanyListService(user.ID)
+	server.ResponseSuccess(ctx, gin.H{"company_list": companyList}, server.Success)
+}

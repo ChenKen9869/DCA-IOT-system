@@ -61,3 +61,9 @@ func GetUserListByCompanyId(companyId uint) []entity.CompanyUser {
 	common.GetDB().Table("company_users").Where("company_id = ?", companyId).Find(&userList)
 	return userList
 }
+
+func GetOwnCompanyList(userId uint) []entity.Company {
+	var companyList []entity.Company
+	common.GetDB().Table("companies").Where("owner = ? and parent_id = 0", userId).Find(&companyList)
+	return companyList
+}

@@ -3,7 +3,6 @@ package router
 import (
 	"go-backend/api/common/middleware"
 	"go-backend/api/server/controller"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,7 +22,7 @@ func DeviceRouter(r *gin.Engine) *gin.Engine {
 	fixedDevice.GET("/get_fio_list_by_time", controller.GetFioListByTime)
 	fixedDevice.GET("/get_auth_list", controller.GetFixedDeviceAuthListController)
 
-	fixedDevice.GET("/own_fixed_device_list")
+	fixedDevice.GET("/own_fixed_device_list", controller.GetOwnFixedDeviceListController)
 
 	portableDevice := device.Group("/portable")
 	portableDevice.POST("/create", controller.CreatePortableDeviceController)
@@ -34,7 +33,7 @@ func DeviceRouter(r *gin.Engine) *gin.Engine {
 
 	portableDevice.GET("/get_by_farmhouse", controller.GetPortableDeviceListByFarmhouseController)
 
-	portableDevice.GET("/own_portable_device_list")
+	portableDevice.GET("/own_list", controller.GetOwnPortableListController)
 
 	return r
 }

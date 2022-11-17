@@ -366,3 +366,24 @@ func GetCompanyInfoService(companyId uint) vo.CompanyInfo {
 	}
 	return companyInfo
 }
+
+// @Summary API of golang gin backend
+// @Tags Company
+// @description get own company list : 获取当前用户拥有的公司列表 参数列表：[] 访问携带token
+// @version 1.0
+// @accept application/json
+// @param Authorization header string true "token"
+// @Success 200 {object} server.SuccessResponse200 "成功"
+// @router /company/get/own_list [get]
+func GetOwnCompanyListService(userId uint) []vo.CompanyTreeNode {
+	companyList := dao.GetOwnCompanyList(userId)
+	// 构造 tree list
+	var treeList []vo.CompanyTreeNode
+
+	// 遍历 company list ，得到每颗树，并加入 tree list
+	for _, company := range companyList {
+		root := makeTreeByCompanyId(company.ID)
+		treeList = append(treeList, root)
+	}
+	return treeList
+}
