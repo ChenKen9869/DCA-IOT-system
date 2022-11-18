@@ -170,9 +170,7 @@ func GetBiologyWithDeviceListService(companyId uint) []vo.BiologyDevice {
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /biology/update_farmhouse [put]
 func UpdateBiologyFarmhouseService(operator string, telephoneNumber string, biologyId uint, farmhouseId uint) {
-	if biologyId == farmhouseId {
-		return
-	}
+
 	dao.UpdateBiologyFarmhouse(biologyId, farmhouseId)
 	biologyChangeRecord := entity.BiologyChange {
 		BiologyId: biologyId,

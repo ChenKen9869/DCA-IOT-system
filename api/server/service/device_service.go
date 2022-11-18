@@ -398,7 +398,7 @@ func GetAuthFixedDeviceListService(userId uint) []vo.AuthFixedDevice {
 }
 
 // @Summary API of golang gin backend
-// @Tags Device_fixed
+// @Tags Device-fixed
 // @description get own fixed device list : 获取当前用户拥有的所有固定式设备信息 参数列表：[] 访问携带token
 // @version 1.0
 // @accept application/json
@@ -423,7 +423,7 @@ func GetOwnFixedDeviceListService(userId uint) []vo.OwnFixedDevice {
 }
 
 // @Summary API of golang gin backend
-// @Tags Device_portable
+// @Tags Device-portable
 // @description get own portable device list : 获取当前用户拥有的所有便携式设备信息 参数列表：[] 访问携带token
 // @version 1.0
 // @accept application/json

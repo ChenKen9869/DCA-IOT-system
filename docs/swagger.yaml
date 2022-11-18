@@ -1077,7 +1077,7 @@ paths:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
       tags:
-      - Device_fixed
+      - Device-fixed
   /device/portable/create:
     post:
       consumes:
@@ -1248,7 +1248,7 @@ paths:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
       tags:
-      - Device_portable
+      - Device-portable
   /fence/create:
     post:
       consumes:

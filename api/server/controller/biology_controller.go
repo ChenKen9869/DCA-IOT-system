@@ -204,17 +204,24 @@ func UpdateBiologyFarmhouseController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "farmhouseId atoi error")
 		return
 	}
-	currentFarmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
+	currentBiology := dao.GetBiologyInfoById(uint(biologyId))
 	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
 	user := userInfo.(entity.User)
-	if !(service.AuthCompanyUser(user.ID, currentFarmhouseId) && service.AuthCompanyUser(user.ID, uint(farmhouseId))) {
+	if !(service.AuthCompanyUser(user.ID, currentBiology.FarmhouseID) && service.AuthCompanyUser(user.ID, uint(farmhouseId))) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
-
+	if int(currentBiology.FarmhouseID) == farmhouseId {
+		server.Response(ctx, http.StatusBadRequest, 400, nil, "转入转出地 id 相同")
+		return
+	}
+	if dao.GetCompanyInfoByID(uint(farmhouseId)).Owner != currentBiology.Owner {
+		server.Response(ctx, http.StatusBadRequest, 400, nil, "不允许跨集团转舍")
+		return	
+	}
 	service.UpdateBiologyFarmhouseService(operator, telephoneNumber, uint(biologyId), uint(farmhouseId))
 
 	server.ResponseSuccess(ctx, nil, server.Success)

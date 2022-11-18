@@ -1474,7 +1474,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Device_fixed"
+                    "Device-fixed"
                 ],
                 "summary": "API of golang gin backend",
                 "parameters": [
@@ -1726,7 +1726,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Device_portable"
+                    "Device-portable"
                 ],
                 "summary": "API of golang gin backend",
                 "parameters": [

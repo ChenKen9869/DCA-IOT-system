@@ -54,11 +54,6 @@ func DeleteFixedDeviceType(fixedDeviceTypeId string) entity.FixedDeviceType {
 	return fixedDeviceType
 }
 
-// 修改携带设备（修改绑定的生物 / 属主公司等）
-
-// 修改固定设备（修改绑定的农舍 / 属主等）
-
-
 func ExistFixedDeviceType(fixedDeviceTypeId string) bool {
 	var fixedType entity.FixedDeviceType
 	common.GetDB().Table("fixed_device_types").Where("fixed_device_type_id = ?", fixedDeviceTypeId).First(&fixedType)
