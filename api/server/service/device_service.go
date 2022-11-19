@@ -324,12 +324,12 @@ func GetNewCollarRealtimeByDeviceIdService(deviceId uint) (vo.NewCollar, string)
 // @router /device/fixed/get_by_farmhouse [get]
 func GetFixedDeviceListByFarmhouseService(farmhouseId uint) []entity.FixedDevice {
 	var fixedDeviceList []entity.FixedDevice
-	GetFixedDeviceRecursive(farmhouseId, fixedDeviceList)
+	GetFixedDeviceRecursive(farmhouseId, &fixedDeviceList)
 	return fixedDeviceList
 }
-func GetFixedDeviceRecursive(companyId uint, fixedDeviceList []entity.FixedDevice) {
+func GetFixedDeviceRecursive(companyId uint, fixedDeviceList *[]entity.FixedDevice) {
 	fixedList := dao.GetFixedDeviceListByFarmhouse(companyId)
-	fixedDeviceList = append(fixedDeviceList, fixedList...)
+	*fixedDeviceList = append(*fixedDeviceList, fixedList...)
 	childrenList := dao.GetCompanyListByParent(companyId)
 	for _, subCompany := range childrenList {
 		GetFixedDeviceRecursive(subCompany.ID, fixedDeviceList)
@@ -347,7 +347,7 @@ func GetFixedDeviceRecursive(companyId uint, fixedDeviceList []entity.FixedDevic
 // @router /device/portable/get_by_farmhouse [get]
 func GetPortableDeviceListByFarmhouseService(farmhouseId uint) []vo.BiologyDevice {
 	var result []vo.BiologyDevice
-	biologyList := dao.GetBiologyListByFarmhouse(farmhouseId)
+	biologyList := GetBiologyListService(farmhouseId)
 	for _, biology := range biologyList {
 		deviceList := dao.GetPortableDeviceListByBiology(biology.ID)
 		for _, device := range deviceList {

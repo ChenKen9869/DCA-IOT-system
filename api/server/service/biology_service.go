@@ -111,13 +111,13 @@ func DeleteBiologyTypeService(biologyTypeId string) {
 // @router /biology/get_list [get]
 func GetBiologyListService(companyId uint) []entity.Biology {
 	var biologyList []entity.Biology
-	GetBiologyRecursive(companyId, biologyList)
+	GetBiologyRecursive(companyId, &biologyList)
 	return biologyList
 }
 
-func GetBiologyRecursive(companyId uint, biologyList []entity.Biology) {
+func GetBiologyRecursive(companyId uint, biologyList *[]entity.Biology) {
 	biologies := dao.GetBiologyListByFarmhouse(companyId)
-	biologyList = append(biologyList, biologies...)
+	*biologyList = append(*biologyList, biologies...)
 	childrenList := dao.GetCompanyListByParent(companyId)
 	for _, subCompany := range childrenList {
 		GetBiologyRecursive(subCompany.ID, biologyList)
