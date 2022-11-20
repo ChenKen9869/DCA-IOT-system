@@ -25,7 +25,6 @@ import (
 // @Failure 500 {object} server.FailureResponse500 "系统异常"
 // @router /user/register [post]
 func RegisterService(name string, password string, telephone string, email string) (uint, string, error) {
-	// 数据验证
 	if len(name) < 2 {
 		err := errors.New(server.NameTooShort)
 		return 0, "", err
@@ -34,37 +33,27 @@ func RegisterService(name string, password string, telephone string, email strin
 		err := errors.New(server.PasswordTooShort)
 		return 0, "", err
 	}
-	// 判断用户是否存在
-	// 调用根据用户名查找用户的dao接口，然后与 name 对比
 	if user := dao.GetUserInfoByName(name); user.ID != 0 {
 		err := errors.New(server.UsernameAlreadyExist)
 		return 0, "", err
 	}
-
-	// 创建用户
-	// 密码加密
 	hasePassword, errEncryp := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if errEncryp != nil {
 		err := errors.New(server.PasswordEncryptionFailed)
 		return 0, "", err
 	}
 	password = string(hasePassword)
-	// 写入数据库, 调用 dao
 	id := dao.CreateUser(entity.User{
 		Name: name,
 		Password: password,
 		Telephone: telephone,
 		Email: email,
 	})
-
-	// 发放 token
 	token, errReleaseToken := common.ReleaseToken(id)
 	if errReleaseToken != nil {
 		err := errors.New(server.TokenGenerateFailed)
 		return 0, "", err
 	}
-
-	// 返回结果
 	return id, token, nil
 }
 
@@ -88,7 +77,6 @@ func LoginService(name string, password string) (uint, string, error) {
 		err := errors.New(server.PasswordTooShort)
 		return 0, "", err
 	}
-	// 判断用户名与密码是否正确
 	user := dao.GetUserInfoByName(name)
 	if user.ID == 0 {
 		err := errors.New(server.UserNotExist)
@@ -98,15 +86,11 @@ func LoginService(name string, password string) (uint, string, error) {
 		err := errors.New(server.WrongPassword)
 		return 0, "", err
 	}
-
-	// 发放 token
 	token, errToken := common.ReleaseToken(user.ID)
 	if errToken != nil {
 		err := errors.New(server.TokenGenerateFailed)
 		return 0, "", err
 	}
-
-	// 返回结果
 	return user.ID, token, nil
 }
 
@@ -122,7 +106,6 @@ func LoginService(name string, password string) (uint, string, error) {
 // @Failure 401 {object} server.FailureResponse401 "权限不足"
 // @router /user/info [get]
 func InfoService(id uint) (*gin.H, error) {
-	// 执行查询
 	user := dao.GetUserInfoById(id)
 	if user.ID == 0 {
 		err := errors.New(server.UserNotExist)

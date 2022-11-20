@@ -309,7 +309,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "telephone number of operator",
-                        "name": "TelephonNumber",
+                        "name": "TelephoneNumber",
                         "in": "query",
                         "required": true
                     },
@@ -748,7 +748,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "telephone number of operator",
-                        "name": "TelephonNumber",
+                        "name": "TelephoneNumber",
                         "in": "formData",
                         "required": true
                     },
@@ -1163,6 +1163,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "install time",
+                        "name": "InstallTime",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "bought time",
+                        "name": "BoughtTime",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "token",
                         "name": "Authorization",
                         "in": "header",
@@ -1530,6 +1544,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "install time",
+                        "name": "InstallTime",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "bought time",
+                        "name": "BoughtTime",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "token",
                         "name": "Authorization",
                         "in": "header",
@@ -1626,6 +1654,42 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "type name",
                         "name": "PortableDeviceTypeId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/portable/get_by_biology": {
+            "get": {
+                "description": "get biology portable device list : 获取指定生物绑定的所有便携式设备信息 参数列表：[生物id] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device-portable"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "biology id",
+                        "name": "BiologyId",
                         "in": "query",
                         "required": true
                     },

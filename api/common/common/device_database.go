@@ -9,7 +9,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-
 var DeivceDB *mongo.Database
 var Ctx context.Context
 
@@ -27,11 +26,7 @@ func InitDeviceDB() *mongo.Database {
 	deviceDBPassword = viper.GetString("mongodb.password")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	
 	opt := options.Client().ApplyURI("mongodb://" + deviceDBUserName + ":" + deviceDBPassword + "@" + deviceDBHost + ":" + deviceDBPort)
-	// 自带连接池，默认值 100
-	// opt.SetMaxPoolSize()
-	
 	Ctx = ctx
 	client, err := mongo.Connect(ctx, opt)
 	if err != nil {

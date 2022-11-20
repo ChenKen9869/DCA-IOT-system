@@ -14,6 +14,7 @@ func CreateCompanyController(ctx *gin.Context) {
 	name := ctx.PostForm("Name")
 	parentId := ctx.PostForm("ParentId")
 	location := ctx.PostForm("Location")
+
 	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
@@ -24,7 +25,6 @@ func CreateCompanyController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi error")
 		return
 	}
-	// 如果是新公司，则需要将新企业与用户名关系写入到关系表
 	if parent == 0 {
 		id, errService := service.CreateCompanyService(uint(parent), name, user.ID, location)
 		if errService != nil {
@@ -39,7 +39,6 @@ func CreateCompanyController(ctx *gin.Context) {
 		server.ResponseSuccess(ctx, gin.H{"CompanyId": id}, server.Success)
 		return
 	}
-	// 如果不是新公司，则要对该公司的父公司进行权限验证
 	if user.ID != dao.GetCompanyInfoByID(uint(parent)).Owner {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
@@ -52,9 +51,7 @@ func CreateCompanyController(ctx *gin.Context) {
 	server.ResponseSuccess(ctx, gin.H{"CompanyId": id}, server.Success)
 }
 
-
 func GetCompanyTreeListController(ctx *gin.Context) {
-	// userId := ctx.Query("UserId")
 	userInfo, exists := ctx.Get("user")
 	if !exists {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user infromation does not exists in application context")
@@ -69,9 +66,9 @@ func GetCompanyTreeListController(ctx *gin.Context) {
 	server.ResponseSuccess(ctx, companyTreeList, server.Success)
 }
 
-// 删除应该同时删除权限表中的企业
 func DeleteCompanyController(ctx *gin.Context) {
 	companyIdString := ctx.Query("CompanyId")
+
 	companyId, errAtoi := strconv.Atoi(companyIdString)
 	if errAtoi != nil {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "服务器内部错误")
@@ -82,15 +79,10 @@ func DeleteCompanyController(ctx *gin.Context) {
 		return
 	}
 	user := userInfo.(entity.User)
-	// 权限验证
 	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
-	// if !service.AuthCompanyUser(user.ID, uint(companyId)) {
-	// 	server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
-	// 	return
-	// }
 	err := service.DeleteCompanyService(uint(companyId), user)
 	if err != nil {
 		if msg := err.Error(); msg == server.CompanyNotExist {
@@ -110,6 +102,7 @@ func DeleteCompanyController(ctx *gin.Context) {
 func CreateCompanyUserController(ctx *gin.Context) {
 	companyIdString := ctx.PostForm("CompanyId")
 	userIdString := ctx.PostForm("UserId")
+
 	companyId, errAtoiComanyId := strconv.Atoi(companyIdString)
 	userId, errAtoiUserId := strconv.Atoi(userIdString)
 	if errAtoiComanyId != nil || errAtoiUserId != nil {
@@ -121,15 +114,10 @@ func CreateCompanyUserController(ctx *gin.Context) {
 		return
 	}
 	user := userInfo.(entity.User)
-	// 权限验证
 	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
-	// if !service.AuthCompanyUser(user.ID, uint(companyId)) {
-	// 	server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
-	// 	return
-	// }
 	err := service.CreateCompanyUserService(uint(companyId), uint(userId))
 	if err != nil {
 		if msg := err.Error(); msg == server.CompanyNotExist {
@@ -143,14 +131,13 @@ func CreateCompanyUserController(ctx *gin.Context) {
 			return
 		}
 	}
-	server.ResponseSuccess(ctx, 
-		gin.H{"companyId" : companyId, "userId" : userId,}, 
-		server.Success)
+	server.ResponseSuccess(ctx, gin.H{"companyId" : companyId, "userId" : userId,}, server.Success)
 }
 
 func DeleteCompanyUserController(ctx *gin.Context) {
 	companyIdString := ctx.Query("CompanyId")
 	userIdString := ctx.Query("UserId")
+
 	companyId, errAtoiComanyId := strconv.Atoi(companyIdString)
 	userId, errAtoiUserId := strconv.Atoi(userIdString)
 	if errAtoiComanyId != nil || errAtoiUserId != nil {
@@ -162,15 +149,10 @@ func DeleteCompanyUserController(ctx *gin.Context) {
 		return
 	}
 	user := userInfo.(entity.User)
-	// 权限验证
 	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
-	// if !service.AuthCompanyUser(user.ID, uint(companyId)) {
-	// 	server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
-	// 	return
-	// }
 	service.DeleteCompanyUserService(uint(companyId), uint(userId))
 	server.ResponseSuccess(ctx, 
 		gin.H{"companyId" : companyId, "userId" : userId,}, 
@@ -179,6 +161,7 @@ func DeleteCompanyUserController(ctx *gin.Context) {
 
 func GetEmployeeListController(ctx *gin.Context) {
 	companyIdString := ctx.Query("CompanyId")
+
 	companyId, errAtoiComanyId := strconv.Atoi(companyIdString)
 	if errAtoiComanyId != nil {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "服务器内部错误")
@@ -189,15 +172,10 @@ func GetEmployeeListController(ctx *gin.Context) {
 		return
 	}
 	user := userInfo.(entity.User)
-	// 权限验证
 	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
-	// if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-	// 	server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
-	// 	return
-	// }
 	employeeList := service.GetEmployeeListService(uint(companyId))
 	result := []gin.H{}
 	for employee := range employeeList {
@@ -209,12 +187,12 @@ func GetEmployeeListController(ctx *gin.Context) {
 			"email" : employee.Email,
 		})
 	}
-	
 	server.ResponseSuccess(ctx, gin.H{"employeeList":result}, server.Success)
 }
 
 func GetCompanyInfoController(ctx *gin.Context) {
 	companyIdString := ctx.Query("CompanyId")
+
 	companyId, errAtoiComanyId := strconv.Atoi(companyIdString)
 	if errAtoiComanyId != nil {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "服务器内部错误")
@@ -225,7 +203,6 @@ func GetCompanyInfoController(ctx *gin.Context) {
 		return
 	}
 	user := userInfo.(entity.User)
-	// 权限验证
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return

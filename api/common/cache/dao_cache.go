@@ -20,7 +20,6 @@ type CacheUnit struct {
 var ctx = context.Background()
 
 func (cacheUnit *CacheUnit)Set(key string, value interface{}) {
-	// set redis的 key value
 	common.GetRedis().Set(ctx, key, value, getRandomExpireTime())
 }
 

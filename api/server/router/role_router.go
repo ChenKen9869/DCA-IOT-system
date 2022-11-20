@@ -12,8 +12,11 @@ func RoleRouter(r *gin.Engine) *gin.Engine {
 
 	visitor := role.Group("/visitor")
 	visitor.POST("/create", controller.CreateVisitorController)
-	visitor.DELETE("/delete", controller.DeleteVisitorController)
+	
 	visitor.GET("/get_list", controller.GetVisitorListController)
 	visitor.GET("/get_company_list", controller.GetVisitorCompanyListController)
+
+	visitor.DELETE("/delete", controller.DeleteVisitorController)
+
 	return r
 }

@@ -49,7 +49,7 @@ func CreateBiologyService(biologyName string, farmhouseId uint, biologyTypeId st
 // @version 1.0
 // @accept application/json
 // @param Operator query string true "name of operator"
-// @param TelephonNumber query string true "telephone number of operator"
+// @param TelephoneNumber query string true "telephone number of operator"
 // @param LeavePlace query string true "leave place"
 // @param Id query string true "id"
 // @param Authorization header string true "token"
@@ -100,6 +100,15 @@ func DeleteBiologyTypeService(biologyTypeId string) {
 	dao.DeleteBiologyType(biologyTypeId)
 }
 
+func getBiologyRecursive(companyId uint, biologyList *[]entity.Biology) {
+	biologies := dao.GetBiologyListByFarmhouse(companyId)
+	*biologyList = append(*biologyList, biologies...)
+	childrenList := dao.GetCompanyListByParent(companyId)
+	for _, subCompany := range childrenList {
+		getBiologyRecursive(subCompany.ID, biologyList)
+	}
+}
+
 // @Summary API of golang gin backend
 // @Tags Biology
 // @description get all biologies of farmhouse : 通过牧舍ID获取其中的所有生物组成的列表 参数列表：[牧舍ID] 访问携带token
@@ -111,17 +120,8 @@ func DeleteBiologyTypeService(biologyTypeId string) {
 // @router /biology/get_list [get]
 func GetBiologyListService(companyId uint) []entity.Biology {
 	var biologyList []entity.Biology
-	GetBiologyRecursive(companyId, &biologyList)
+	getBiologyRecursive(companyId, &biologyList)
 	return biologyList
-}
-
-func GetBiologyRecursive(companyId uint, biologyList *[]entity.Biology) {
-	biologies := dao.GetBiologyListByFarmhouse(companyId)
-	*biologyList = append(*biologyList, biologies...)
-	childrenList := dao.GetCompanyListByParent(companyId)
-	for _, subCompany := range childrenList {
-		GetBiologyRecursive(subCompany.ID, biologyList)
-	}
 }
 
 // @Summary API of golang gin backend
@@ -163,14 +163,13 @@ func GetBiologyWithDeviceListService(companyId uint) []vo.BiologyDevice {
 // @version 1.0
 // @accept application/json
 // @param Operator formData string true "name of operator"
-// @param TelephonNumber formData string true "telephone number of operator"
+// @param TelephoneNumber formData string true "telephone number of operator"
 // @param BiologyId formData int true "biology id"
 // @param FarmhouseId formData string true "farmhouse id"
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /biology/update_farmhouse [put]
 func UpdateBiologyFarmhouseService(operator string, telephoneNumber string, biologyId uint, farmhouseId uint) {
-
 	dao.UpdateBiologyFarmhouse(biologyId, farmhouseId)
 	biologyChangeRecord := entity.BiologyChange {
 		BiologyId: biologyId,

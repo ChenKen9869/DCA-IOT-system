@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"go-backend/api/server/dao"
 	"go-backend/api/server/entity"
 	"go-backend/api/server/tools/server"
@@ -21,15 +20,20 @@ import (
 // @param CompanyId formData string true "company id"
 // @param DeviceId formData string true "device id"
 // @param TypeId formData string true "type name"
+// @param InstallTime formData string true "install time"
+// @param BoughtTime formData string true "bought time"
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /device/fixed/create [post]
-func CreateFixedDeviceService(deviceId string, farmhouseId uint, fixedDeviceTypeId string, owner uint) uint {
+func CreateFixedDeviceService(deviceId string, farmhouseId uint, fixedDeviceTypeId string, owner uint, installTime time.Time, boughtTime time.Time) uint {
 	fixedDevice := entity.FixedDevice{
 		DeviceID: deviceId,
 		FarmhouseID: farmhouseId,
 		FixedDeviceTypeID: fixedDeviceTypeId,
 		Owner: owner,
+		BoughtTime: boughtTime,
+		InstallTime: installTime,
+		Stat: "normal",
 	}
 	id := dao.CreateFixedDevice(fixedDevice)
 	return id
@@ -48,10 +52,6 @@ func DeleteFixedDeviceService(fixedDeviceId uint) {
 	dao.DeleteFixedDevice(fixedDeviceId)
 }
 
-func UpdateFixedDeviceService(deviceId string){
-
-}
-
 // @Summary API of golang gin backend
 // @Tags Device-portable
 // @description create portable device : 创建便携式设备 参数列表：[设备绑定的生物ID、厂家提供的设备编号、设备类型] 访问携带token
@@ -60,10 +60,12 @@ func UpdateFixedDeviceService(deviceId string){
 // @param BiologyId formData string true "biology id"
 // @param DeviceId formData string true "device id"
 // @param TypeId formData string true "type name"
+// @param InstallTime formData string true "install time"
+// @param BoughtTime formData string true "bought time"
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /device/portable/create [post]
-func CreatePortableDeviceService(portableDeviceId string, biologyId uint, portableDeviceTypeId string) uint {
+func CreatePortableDeviceService(portableDeviceId string, biologyId uint, portableDeviceTypeId string, installTime time.Time, boughtTime time.Time) uint {
 	biology := dao.GetBiologyInfoById(biologyId)
 	if biology.ID == 0 {
 		panic("biology id does not exists")
@@ -74,6 +76,9 @@ func CreatePortableDeviceService(portableDeviceId string, biologyId uint, portab
 		BiologyID: biologyId,
 		PortableDeviceTypeID: portableDeviceTypeId,
 		Owner: owner,
+		BoughtTime: boughtTime,
+		InstallTime: installTime,
+		Stat: "normal",
 	}
 	id := dao.CreatePortableDevice(portableDevice)
 	return id
@@ -148,7 +153,7 @@ func DeletePortableDeviceTypeService(fixedDeviceTypeId string) {
 	dao.DeleteFixedDeviceType(fixedDeviceTypeId)
 }
 
-var StreamAccessToken = map[string]interface{} {
+var streamAccessToken = map[string]interface{} {
 	"accessToken" : "null",
 	"expireTime" : time.Now().AddDate(0, 0, -2),
 }
@@ -156,7 +161,6 @@ var StreamAccessToken = map[string]interface{} {
 func updateMonitorStreamToken() {
 	appKey := viper.GetString("monitor.AppKey")
 	secret := viper.GetString("monitor.Secret")
-	// url := accessMonitorTokenUrl
 	url := viper.GetString("monitor.AccessMonitorTokenUrl")
 	contentType := "application/x-www-form-urlencoded"
 	payload := strings.NewReader("appKey=" + appKey + "&appSecret=" + secret)
@@ -165,15 +169,13 @@ func updateMonitorStreamToken() {
 		panic(err.Error())
 	}
 	defer response.Body.Close()
-	// code := responseBody["code"]
 	if response.StatusCode != 200 {
 		panic("getStreamFailed")
 	}
 	responseBody := server.GetResponseAccessMonitor(response)
 	data := responseBody
-	// fmt.Println(responseBody.AccessToken)
-	StreamAccessToken["accessToken"] = data.AccessToken
-	StreamAccessToken["expireTime"] = time.Now()
+	streamAccessToken["accessToken"] = data.AccessToken
+	streamAccessToken["expireTime"] = time.Now()
 }
 
 // @Summary API of golang gin backend
@@ -186,18 +188,16 @@ func updateMonitorStreamToken() {
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /device/fixed/get_monitor [get]
 func GetMonitorStreamByDeviceIdService(deviceId uint) (string, int64, string, string, string){
-	accessToken := StreamAccessToken["accessToken"].(string)
-	expireTime := StreamAccessToken["expireTime"].(time.Time)
+	accessToken := streamAccessToken["accessToken"].(string)
+	expireTime := streamAccessToken["expireTime"].(time.Time)
 	if accessToken == "null" || 
 		time.Since(expireTime) >= 24 * time.Hour {
 			updateMonitorStreamToken()
 		}
-	accessToken = StreamAccessToken["accessToken"].(string)
+	accessToken = streamAccessToken["accessToken"].(string)
 	monitorDeviceId := dao.GetFixedDeviceInfoById(deviceId).DeviceID
-	// serverUrl := getStreamAddressUrl
 	serverUrl := viper.GetString("monitoR.GetStreamAddressUrl")
 	contentType := "application/x-www-form-urlencoded"
-	// fmt.Println("token: " + accessToken)
 	payload := strings.NewReader("accessToken=" + accessToken + "&deviceSerial=" + monitorDeviceId)
 	response, err := http.Post(serverUrl, contentType, payload)
 	if err != nil {
@@ -205,14 +205,10 @@ func GetMonitorStreamByDeviceIdService(deviceId uint) (string, int64, string, st
 	}
 	code := response.StatusCode
 	defer response.Body.Close()
-	// responseBody := server.GetResponseBody(response)
-	// code := responseBody["code"].(string)
 	if code != 200 {
 		panic("error occurs during get streaming address from server by deviceID ")
 	}
-	// data := responseBody["data"].(map[string]interface{})
 	responseBody := server.GetResponseBodyMonitor(response)
-	// fmt.Println(responseBody.Msg)
 	msg := responseBody.Msg
 	data := responseBody.Data
 	resultUrl := data.Url
@@ -221,7 +217,7 @@ func GetMonitorStreamByDeviceIdService(deviceId uint) (string, int64, string, st
 	return resultUrl, resultExpireTime, id, msg, accessToken
 }
 
-var NewCollarAccessToken = map[string]interface{} {
+var newCollarAccessToken = map[string]interface{} {
 	"accessToken" : "null",
 	"expireTime" : time.Now().AddDate(0, 0, -2),
 }
@@ -229,7 +225,6 @@ var NewCollarAccessToken = map[string]interface{} {
 func updateNewCollarToken() {
 	userName := viper.GetString("newcollar.uname")
 	password := viper.GetString("newcollar.psw")
-	// url := accessMonitorTokenUrl
 	url := viper.GetString("newcollar.login-url")
 	contentType := "application/x-www-form-urlencoded"
 	payload := strings.NewReader("username=" + userName + "&password=" + password)
@@ -238,14 +233,12 @@ func updateNewCollarToken() {
 		panic(err.Error())
 	}
 	defer response.Body.Close()
-	// code := responseBody["code"]
 	if response.StatusCode != 200 {
 		panic("getNewCollarAccessTokenFailed")
 	}
 	token := server.GetResponseNewCollarAccessToken(response)
-	// fmt.Println(responseBody.AccessToken)
-	NewCollarAccessToken["accessToken"] = "Bearer " + token
-	NewCollarAccessToken["expireTime"] = time.Now()
+	newCollarAccessToken["accessToken"] = "Bearer " + token
+	newCollarAccessToken["expireTime"] = time.Now()
 }
 
 // @Summary API of golang gin backend
@@ -258,17 +251,14 @@ func updateNewCollarToken() {
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /device/portable/get_new_collar [get]
 func GetNewCollarRealtimeByDeviceIdService(deviceId uint) (vo.NewCollar, string){
-	accessToken := NewCollarAccessToken["accessToken"].(string)
-	expireTime := NewCollarAccessToken["expireTime"].(time.Time)
-	if accessToken == "null" || 
-		time.Since(expireTime) >= 24 * time.Hour {
+	accessToken := newCollarAccessToken["accessToken"].(string)
+	expireTime := newCollarAccessToken["expireTime"].(time.Time)
+	if accessToken == "null" || time.Since(expireTime) >= 24 * time.Hour {
 			updateNewCollarToken()
-		}
-	accessToken = NewCollarAccessToken["accessToken"].(string)
+	}
+	accessToken = newCollarAccessToken["accessToken"].(string)
 	collarDeviceId := dao.GetPortableDeviceInfoById(deviceId).DeviceID
-	// serverUrl := getStreamAddressUrl
 	serverUrl := viper.GetString("newcollar.get-realtime-url")
-	// contentType := "application/x-www-form-urlencoded"
 	payload := url.Values{}
 	payload.Set("Iccid", collarDeviceId)
 	req, errReq := http.NewRequest("POST", serverUrl, strings.NewReader(payload.Encode()))
@@ -277,25 +267,17 @@ func GetNewCollarRealtimeByDeviceIdService(deviceId uint) (vo.NewCollar, string)
 		panic(errReq.Error())
 	}
 	req.Header.Set("Authorization", accessToken)
-	// req.Header.Set("Content-Type", "application/json;charset=UTF-8")
 	response, err := (&http.Client{}).Do(req)
 	if err != nil {
 		panic(err.Error())
 	}
-	// defer req.Body.Close()
 	code := response.StatusCode
 	defer response.Body.Close()
-	// responseBody := server.GetResponseBody(response)
-	// code := responseBody["code"].(string)
 	if code != 200 {
 		panic("error occurs during get streaming address from server by deviceID ")
 	}
-	// fmt.Println(ioutil.ReadAll(response.Body))
-	// data := responseBody["data"].(map[string]interface{})
 	responseBody := server.GetResponseBodyNewCollarRealtime(response)
-	// fmt.Println(responseBody.Msg)
 	msg := responseBody.Msg
-	fmt.Println(msg)
 	data := (responseBody.Data)[0]
 	newCollarRealtimeData := vo.NewCollar {
 		Area: data.Area,
@@ -445,4 +427,30 @@ func GetOwnPortableDeviceListService(userId uint) []vo.OwnPortableDevice {
 		})
 	}
 	return portableDeviceInfoList
+}
+
+// @Summary API of golang gin backend
+// @Tags Device-portable
+// @description get biology portable device list : 获取指定生物绑定的所有便携式设备信息 参数列表：[生物id] 访问携带token
+// @version 1.0
+// @accept application/json
+// @param BiologyId query string true "biology id"
+// @param Authorization header string true "token"
+// @Success 200 {object} server.SuccessResponse200 "成功"
+// @router /device/portable/get_by_biology [get]
+func GetPortableDeviceListByBiologyService(biologyId uint) []vo.BiologyPortableDevice {
+	portableDeviceList := dao.GetPortableDeviceListByBiology(biologyId)
+	var result []vo.BiologyPortableDevice
+	for _, portableDevice := range portableDeviceList {
+		result = append(result, vo.BiologyPortableDevice{
+			Id: portableDevice.ID,
+			Type: portableDevice.PortableDeviceTypeID,
+			DeviceId: portableDevice.DeviceID,
+			InstallTime: portableDevice.InstallTime,
+			CreateTime: portableDevice.CreatedAt,
+			BoughtTime: portableDevice.BoughtTime,
+			Stat: portableDevice.Stat,
+		})
+	}
+	return result
 }

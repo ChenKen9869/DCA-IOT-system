@@ -9,11 +9,3 @@ type CollarTokenMessage struct {
 type CollarToken struct {
 	Token string
 }
-
-type CollarHttpMessage struct {
-
-}
-
-type CollarHttpCurrentMessage struct {
-
-}

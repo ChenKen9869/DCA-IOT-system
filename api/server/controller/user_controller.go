@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"go-backend/api/server/entity"
 	"go-backend/api/server/tools/server"
 	"go-backend/api/server/service"
@@ -14,11 +13,6 @@ func UserRegisterController(ctx *gin.Context) {
 	password := ctx.PostForm("Password")
 	telephone := ctx.PostForm("Telephone")
 	email := ctx.PostForm("Email")
-
-	fmt.Println(name)
-	fmt.Println(password)
-	fmt.Println(telephone)
-	fmt.Println(email)
 
 	id, token, err := service.RegisterService(name, password, telephone, email)
 	if err != nil {
@@ -33,12 +27,10 @@ func UserRegisterController(ctx *gin.Context) {
 			return
 		}
 	}
-
 	server.ResponseSuccess(ctx, gin.H{"token": token, "id": id}, server.Success)
 }
 
 func UserLoginController(ctx *gin.Context) {
-	// body, _:= util.ReadAll(ctx.Request.Body)
 	name := ctx.PostForm("Name")
 	password := ctx.PostForm("Password")
 
@@ -57,7 +49,6 @@ func UserLoginController(ctx *gin.Context) {
 			return
 		}
 	}
-
 	server.ResponseSuccess(ctx, gin.H{"token": token, "id": id}, server.Success)
 }
 
@@ -66,7 +57,6 @@ func UserInfoController(ctx *gin.Context) {
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
-
 	user_info := user.(entity.User)
 	userInfo, err := service.InfoService(user_info.ID)
 	if err != nil {

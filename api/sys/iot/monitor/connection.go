@@ -37,8 +37,6 @@ func ConnectToMonitorCentor(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	userId := user.ID
-	// 在监控中心注册管道前，先判断监控中心中是否已存在该用户的管道，如果存在则不要刷新管道，防止在掉线期间接收到的消息丢失
-	// userId := uint(0)
 	if _, exists := MonitorCentor[userId]; !exists {
 		MonitorCentor[userId] = MonitorConnection {
 			MessageChan: make(chan string),

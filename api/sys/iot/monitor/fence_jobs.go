@@ -38,7 +38,6 @@ func StartFenceJob(userId uint, position string, deviceList string, duration int
 			return
 		} else {
 			service.AddAlarmTimeService(fenceId, vitalAbnormalList, positionAbnormalList)
-			// 如果存在监控连接，则推送错误消息
 			if _, ok := MonitorCentor[userId]; ok {
 				message := "01" + vitalAbnormalList + "#" + positionAbnormalList
 				msg := MakeMessage(FenceJob, fenceId, message)
@@ -47,7 +46,6 @@ func StartFenceJob(userId uint, position string, deviceList string, duration int
 		}
 	})
 	timeout := time.AfterFunc(time.Duration(duration) * time.Minute, func ()  {
-		// 停止定时任务
 		c.Stop()
 		delete(ActiveFenceList, fenceId)
 		service.UpdateFenceToFinishedStat(fenceId)

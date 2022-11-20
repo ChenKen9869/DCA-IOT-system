@@ -14,6 +14,7 @@ import (
 func CreateVisitorController(ctx *gin.Context) {
 	companyIdString := ctx.PostForm("CompanyId")
 	userIdString := ctx.PostForm("UserId")
+
 	companyId, errAtoiComanyId := strconv.Atoi(companyIdString)
 	userId, errAtoiUserId := strconv.Atoi(userIdString)
 	if errAtoiComanyId != nil || errAtoiUserId != nil {
@@ -25,26 +26,18 @@ func CreateVisitorController(ctx *gin.Context) {
 		return
 	}
 	user := userInfo.(entity.User)
-	// 权限验证
 	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
-	
-	// if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-	// 	server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
-	// 	return
-	// }
 	service.CreateVisitorService(uint(companyId), uint(userId))
-
-	server.ResponseSuccess(ctx,
-		gin.H{"companyId": companyId, "userId": userId},
-		server.Success)
+	server.ResponseSuccess(ctx, gin.H{"companyId": companyId, "userId": userId}, server.Success)
 }
 
 func DeleteVisitorController(ctx *gin.Context) {
 	companyIdString := ctx.Query("CompanyId")
 	userIdString := ctx.Query("UserId")
+
 	companyId, errAtoiComanyId := strconv.Atoi(companyIdString)
 	userId, errAtoiUserId := strconv.Atoi(userIdString)
 	if errAtoiComanyId != nil || errAtoiUserId != nil {
@@ -56,23 +49,17 @@ func DeleteVisitorController(ctx *gin.Context) {
 		return
 	}
 	user := userInfo.(entity.User)
-	// 权限验证
 	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
-	// if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-	// 	server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
-	// 	return
-	// }
 	service.DeleteVisitorService(uint(companyId), uint(userId))
-	server.ResponseSuccess(ctx,
-		gin.H{"companyId": companyId, "userId": userId},
-		server.Success)
+	server.ResponseSuccess(ctx, gin.H{"companyId": companyId, "userId": userId}, server.Success)
 }
 
 func GetVisitorListController(ctx *gin.Context) {
 	companyIdString := ctx.Query("CompanyId")
+
 	companyId, errAtoiComanyId := strconv.Atoi(companyIdString)
 	if errAtoiComanyId != nil {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "服务器内部错误")
@@ -83,17 +70,11 @@ func GetVisitorListController(ctx *gin.Context) {
 		return
 	}
 	user := userInfo.(entity.User)
-	// 权限验证
 	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
-	// if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-	// 	server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
-	// 	return
-	// }
 	visitorList := service.GetVisitorListService(uint(companyId))
-
 	result := []gin.H{}
 	for visitor := range visitorList {
 		result = append(result, gin.H{
@@ -102,7 +83,6 @@ func GetVisitorListController(ctx *gin.Context) {
 			"authCompany": visitorList[visitor],
 		})
 	}
-
 	server.ResponseSuccess(ctx, gin.H{"visitorList": result}, server.Success)
 }
 
@@ -113,8 +93,6 @@ func GetVisitorCompanyListController(ctx *gin.Context) {
 		return
 	}
 	user := userInfo.(entity.User)
-
 	visitorCompanyList := service.GetVisitorCompanyListService(user.ID)
-
 	server.ResponseSuccess(ctx, gin.H{"visitorCompanyList": visitorCompanyList}, server.Success)
 }

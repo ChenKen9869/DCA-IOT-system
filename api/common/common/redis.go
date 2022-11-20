@@ -5,11 +5,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-// 连接 redis 服务器
 var RedisAddr string
 var RedisPassword string
 var RedisDB int
-
 var RedisClient *redis.Client
 
 func InitRedis() {
@@ -18,12 +16,10 @@ func InitRedis() {
 	RedisDB = viper.GetInt("")
 	rdb := redis.NewClient(&redis.Options{
         Addr:     RedisAddr,
-        Password: RedisPassword, // no password set
-        DB:       RedisDB,  // use default DB
+        Password: RedisPassword, 
+        DB:       RedisDB, 
     })
-
 	RedisClient = rdb
-
 }
 
 func GetRedis() *redis.Client {

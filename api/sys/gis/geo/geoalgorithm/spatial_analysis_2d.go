@@ -2,7 +2,6 @@ package geoalgorithm
 
 import "go-backend/api/sys/gis/geo/geocontainer"
 
-// 点面分析函数 : 引射线法
 func PolygonContainsPoint(polygon geocontainer.Polygon, point geocontainer.Point) bool {
 	longitude := point.Longitude
 	latitude := point.Latitude

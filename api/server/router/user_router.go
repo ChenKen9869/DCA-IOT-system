@@ -9,8 +9,10 @@ import (
 // 注册路由
 func UserRouter(r *gin.Engine) *gin.Engine {
 	user := r.Group("/user")
+	
 	user.POST("/register", controller.UserRegisterController)
 	user.POST("/login", controller.UserLoginController)
+	
 	user.GET("/info", middleware.AuthMiddleware(), controller.UserInfoController)
 
 	return r

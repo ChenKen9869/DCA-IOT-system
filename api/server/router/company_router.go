@@ -9,6 +9,7 @@ import (
 func CompanyRouter(r *gin.Engine) *gin.Engine {
 	company := r.Group("/company")
 	company.Use(middleware.AuthMiddleware())
+
 	company.POST("/create", controller.CreateCompanyController)
 	company.DELETE("/delete", controller.DeleteCompanyController)
 	
@@ -21,6 +22,7 @@ func CompanyRouter(r *gin.Engine) *gin.Engine {
 	companyUser := company.Group("/company_user")
 	companyUser.POST("/create", controller.CreateCompanyUserController)
 	companyUser.DELETE("/delete", controller.DeleteCompanyUserController)
+
 	return r
 }
 

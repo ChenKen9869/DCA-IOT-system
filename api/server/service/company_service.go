@@ -10,7 +10,19 @@ import (
 	"strings"
 )
 
-// 公司与用户的权限验证
+func GetAncestorsList(ancestors string) ([]uint, error) {
+	var ancestorList []uint
+	ancestorStringList := strings.Split(ancestors, ",")
+	for _, ancestorString := range ancestorStringList {
+		ancestor, err := strconv.Atoi(ancestorString)
+		if err != nil {
+			return ancestorList, err
+		}
+		ancestorList = append(ancestorList, uint(ancestor))
+	}
+	return ancestorList, nil
+}
+
 func AuthCompanyUser(userId uint, companyId uint) bool {
 	ancestorList, errAtoi := GetAncestorsList((dao.GetCompanyInfoByID(uint(companyId))).Ancestors)
 	if errAtoi != nil {
@@ -89,7 +101,24 @@ func DeleteCompanyService(companyId uint, operator entity.User) error {
 	return nil
 }
 
-// 用 id 获得 tree
+func makeChildrenTreeListRecursive(parentId uint) []vo.CompanyTreeNode {
+	childrenList := dao.GetCompanyListByParent(parentId)
+	if len(childrenList) == 0 {
+		return []vo.CompanyTreeNode{}
+	}
+	var children []vo.CompanyTreeNode
+	for _, child := range childrenList {
+		childNode := vo.CompanyTreeNode{
+			Id:        child.ID,
+			Name:      child.Name,
+			Ancestors: child.Ancestors,
+			Children:  makeChildrenTreeListRecursive(child.ID),
+		}
+		children = append(children, childNode)
+	}
+	return children
+}
+
 func makeTreeByCompanyId(currentId uint) vo.CompanyTreeNode {
 	root := vo.CompanyTreeNode{}
 	currentNode := dao.GetCompanyInfoByID(currentId)
@@ -99,14 +128,11 @@ func makeTreeByCompanyId(currentId uint) vo.CompanyTreeNode {
 	}
 	point := &root
 	if len(ancestorList) > 1 {
-		// len(ancestors) != 1, 则当前节点不是机构树的根节点
-		// 用 ancestor_list 的第二个元素初始化根节点（第一个元素是标识）
 		rootNode := dao.GetCompanyInfoByID(ancestorList[1])
 		root.Id = ancestorList[1]
 		root.Name = rootNode.Name
 		root.Ancestors = rootNode.Ancestors
 		root.Children = []vo.CompanyTreeNode{}
-		// 挂载其余的 ancestor
 		for i := 2; i < len(ancestorList); i++ {
 			ancestorNode := dao.GetCompanyInfoByID(ancestorList[i])
 			node := vo.CompanyTreeNode{
@@ -118,7 +144,6 @@ func makeTreeByCompanyId(currentId uint) vo.CompanyTreeNode {
 			(*point).Children = append((*point).Children, node)
 			point = &(((*point).Children)[0])
 		}
-		// 初始化并挂载当前节点
 		current := vo.CompanyTreeNode{
 			Id:        currentNode.ID,
 			Name:      currentNode.Name,
@@ -126,44 +151,15 @@ func makeTreeByCompanyId(currentId uint) vo.CompanyTreeNode {
 			Children:  nil,
 		}
 		(*point).Children = append((*point).Children, current)
-		// 让 point 指向当前节点
 		point = &(((*point).Children)[0])
 	} else {
-		// len(ancestors) == 1, 则当前节点是机构树的根节点
-		// 用当前节点初始化机构树根节点
 		root.Id = currentId
 		root.Name = currentNode.Name
 		root.Ancestors = currentNode.Ancestors
 		root.Children = nil
 	}
-	// 从当前节点开始构造孩子树，此时 point 指向当前节点
 	(*point).Children = makeChildrenTreeListRecursive((*point).Id)
 	return root
-}
-
-func makeChildrenTreeListRecursive(parentId uint) []vo.CompanyTreeNode {
-	// 查数据库，找到所有第一层的孩子节点
-	childrenList := dao.GetCompanyListByParent(parentId)
-	// 递归出口：已经没有孩子了
-	if len(childrenList) == 0 {
-		return []vo.CompanyTreeNode{}
-	}
-	// 初始化孩子列表
-	var children []vo.CompanyTreeNode
-	// 遍历孩子节点列表
-	for _, child := range childrenList {
-		// 初始化孩子
-		childNode := vo.CompanyTreeNode{
-			Id:        child.ID,
-			Name:      child.Name,
-			Ancestors: child.Ancestors,
-			Children:  makeChildrenTreeListRecursive(child.ID),
-		}
-		// 挂载孩子到孩子列表
-		children = append(children, childNode)
-	}
-	// 返回孩子列表
-	return children
 }
 
 // @Summary API of golang gin backend
@@ -175,39 +171,17 @@ func makeChildrenTreeListRecursive(parentId uint) []vo.CompanyTreeNode {
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /company/get/treelist [get]
 func GetCompanyTreeListService(userId uint) ([]vo.CompanyTreeNode, []uint) {
-	// 根据 user_id 获取 company list : dao
 	companies := dao.GetCompanyListByUserID(userId)
 	var companyList []uint
 	for _, company := range companies {
 		companyList = append(companyList, company.CompanyID)
 	}
-	// 构造 tree list
 	var treeList []vo.CompanyTreeNode
-
-	// 遍历 company list ，得到每颗树，并加入 tree list
 	for _, companyId := range companyList {
 		root := makeTreeByCompanyId(companyId)
 		treeList = append(treeList, root)
 	}
-	// 返回 tree list
-
 	return treeList, companyList
-	// 1. 使用 user_id 获取 comnpany list : dao
-	// 2. 使用 company_id 构造树
-
-}
-
-func GetAncestorsList(ancestors string) ([]uint, error) {
-	var ancestorList []uint
-	ancestorStringList := strings.Split(ancestors, ",")
-	for _, ancestorString := range ancestorStringList {
-		ancestor, err := strconv.Atoi(ancestorString)
-		if err != nil {
-			return ancestorList, err
-		}
-		ancestorList = append(ancestorList, uint(ancestor))
-	}
-	return ancestorList, nil
 }
 
 // @Summary API of golang gin backend
@@ -222,12 +196,10 @@ func GetAncestorsList(ancestors string) ([]uint, error) {
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /company/create [post]
 func CreateCompanyService(parentId uint, name string, owner uint, location string) (uint, error) {
-	// 判断名字是否为空
 	if len(name) == 0 {
 		err := errors.New("name is null")
 		return 0, err
 	}
-	// 如果 parent_id 是 0，说明是新机构
 	if parentId == 0 {
 		newCompany := entity.Company{
 			Ancestors: "0",
@@ -239,7 +211,6 @@ func CreateCompanyService(parentId uint, name string, owner uint, location strin
 		id := dao.CreateCompany(newCompany)
 		return id, nil
 	}
-	// 根据 parentID 去查表：GetCompanyByID，得到parent
 	parent := dao.GetCompanyInfoByID(parentId)
 	newCompany := entity.Company{
 		Ancestors: parent.Ancestors + "," + strconv.Itoa(int(parentId)),
@@ -263,7 +234,6 @@ func CreateCompanyService(parentId uint, name string, owner uint, location strin
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /company/company_user/create [post]
 func CreateCompanyUserService(companyId uint, userId uint) error {
-	// 查 companyId , 和 userId 是否存在
 	companyInfo := dao.GetCompanyInfoByID(companyId)
 	if companyInfo.ID == 0 {
 		err := errors.New(server.CompanyNotExist)
@@ -274,9 +244,6 @@ func CreateCompanyUserService(companyId uint, userId uint) error {
 		err := errors.New(server.UserNotExist)
 		return err
 	}
-
-	// 如果要创建的这个权限，用户已经拥有，则报错
-	// 查目标 company 是否在用户的权限列表中，以及目标company的祖先中是否有某个节点在用户的权限列表
 	companyList := dao.GetCompanyListByUserID(userId)
 	ancestorList, errAtoi := GetAncestorsList((dao.GetCompanyInfoByID(companyId)).Ancestors)
 	if errAtoi != nil {
@@ -294,7 +261,6 @@ func CreateCompanyUserService(companyId uint, userId uint) error {
 			}
 		}
 	}
-
 	companyUserInfo := entity.CompanyUser{
 		CompanyID: companyId,
 		UserID: userId,
@@ -329,9 +295,6 @@ func DeleteCompanyUserService(companyId uint, userId uint) {
 // @router /company/get/employeelist [get]
 func GetEmployeeListService(companyId uint) map[entity.User][]uint {
 	employeeList := make(map[entity.User][]uint)
-	// 找到公司的所有子公司
-	// 遍历该公司，以及该公司的所有子公司，在公司-员工表中找到匹配的信息，将信息填入雇员表
-	// 雇员表： key：雇员id，value：该雇员有操作权的公司id	
 	GetEmployeeRecursive(companyId, employeeList)
 	return employeeList
 }
@@ -377,10 +340,7 @@ func GetCompanyInfoService(companyId uint) vo.CompanyInfo {
 // @router /company/get/own_list [get]
 func GetOwnCompanyListService(userId uint) []vo.CompanyTreeNode {
 	companyList := dao.GetOwnCompanyList(userId)
-	// 构造 tree list
 	var treeList []vo.CompanyTreeNode
-
-	// 遍历 company list ，得到每颗树，并加入 tree list
 	for _, company := range companyList {
 		root := makeTreeByCompanyId(company.ID)
 		treeList = append(treeList, root)

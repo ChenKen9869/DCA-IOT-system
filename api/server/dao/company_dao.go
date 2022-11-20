@@ -5,7 +5,6 @@ import (
 	"go-backend/api/server/entity"
 )
 
-
 func CreateCompany(company entity.Company) uint {
 	common.GetDB().Create(&company)
 	return company.ID

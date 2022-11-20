@@ -25,8 +25,6 @@ func CreateVisitorService(companyId uint, userId uint) {
 	if userInfo.ID == 0 {
 		panic(server.UserNotExist)
 	}
-
-	// 要创建的这个访客用户不能是工作人员
 	companyList := dao.GetCompanyListByUserID(userId)
 	ancestorList, errAtoi := GetAncestorsList((dao.GetCompanyInfoByID(companyId)).Ancestors)
 	if errAtoi != nil {
@@ -42,8 +40,6 @@ func CreateVisitorService(companyId uint, userId uint) {
 			}
 		}
 	}
-
-	// 要创建的这个访客用户不能已经在表中有权限
 	visitorList := dao.GetVisitorListByCompanyId(userId)
 	ancestorList, errAtoi = GetAncestorsList((dao.GetCompanyInfoByID(companyId)).Ancestors)
 	if errAtoi != nil {
@@ -59,7 +55,6 @@ func CreateVisitorService(companyId uint, userId uint) {
 			}
 		}
 	}
-
 	dao.CreateVisitor(entity.Visitor{
 		CompanyId: companyId,
 		UserId:    userId,
@@ -92,9 +87,6 @@ func DeleteVisitorService(companyId uint, userId uint) {
 // @router /role/visitor/get_list [get]
 func GetVisitorListService(companyId uint) map[entity.User]([]uint) {
 	visitorList := make(map[entity.User]([]uint))
-	// 找到公司的所有子公司
-	// 遍历该公司，以及该公司的所有子公司，在公司-员工表中找到匹配的信息，将信息填入雇员表
-	// 雇员表： key：雇员id，value：该雇员有操作权的公司id
 	GetEmployeeRecursive(companyId, visitorList)
 	return visitorList
 }

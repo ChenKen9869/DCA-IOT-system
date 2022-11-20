@@ -31,21 +31,18 @@ func GetFenceRecordById(fenceId uint) entity.FenceRecord {
 	return fenceRecord
 }
 
-// 查看用户所有的活跃围栏
 func GetActiveFenceListByUserId(userId uint) []entity.FenceRecord {
 	var fenceRecordList []entity.FenceRecord
 	common.GetDB().Where("owner = ? and stat = ?", userId, entity.FenceRunning).Find(&fenceRecordList)
 	return fenceRecordList
 }
 
-// 查看农牧场所有的活跃围栏
 func GetActiveFenceListByCompanyId(companyId uint) []entity.FenceRecord {
 	var fenceRecordList []entity.FenceRecord
 	common.GetDB().Where("parent_id = ? and stat = ?", companyId, entity.FenceRunning).Find(&fenceRecordList)
 	return fenceRecordList
 }
 
-// 查看农牧场围栏任务历史记录
 func GetFenceRecordListByCompanyId(companyId uint) []entity.FenceRecord {
 	var fenceRecordList []entity.FenceRecord
 	common.GetDB().Where("parent_id = ? and stat = ?", companyId, entity.FenceFinished).Find(&fenceRecordList)

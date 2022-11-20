@@ -7,7 +7,6 @@ import (
 )
 
 func GetFioHistoryService(fioId uint, startTime string, endTime string) []vo.FioData   {
-	// 根据 fioId 查出deviceId，然后查 mongodb
 	deviceId := dao.GetFixedDeviceInfoById(fioId).DeviceID
 	messageList := sensor.GetRecordListByTimeFio(deviceId, startTime, endTime)
 	dataList := []vo.FioData{}

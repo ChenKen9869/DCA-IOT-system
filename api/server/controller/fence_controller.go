@@ -21,14 +21,13 @@ var upGrader = websocket.Upgrader{
 }
 
 func CreateFenceController(ctx *gin.Context) {
-	// 读取参数
 	position := ctx.PostForm("Position")
 	deviceList := ctx.PostForm("DeviceList")
 	duraString := ctx.PostForm("Duration")
 	coordinate := ctx.PostForm("Coordinate")
 	name := ctx.PostForm("Name")
 	parentIdString := ctx.PostForm("ParentId")
-	// 验证坐标系是否合法
+
 	allow, ok := geocontainer.Coordinates[coordinate]
 	if !ok {
 		server.Response(ctx, http.StatusBadRequest, 400, nil, "coordinate does not exists")
@@ -53,12 +52,10 @@ func CreateFenceController(ctx *gin.Context) {
 		return
 	}
 	user := userInfo.(entity.User)
-	// 验证 token 中的 user 是否有操作权限
 	if !service.AuthCompanyUser(user.ID, company.ID) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
-	// 验证 deviceList 权限
 	if !service.AuthFenceDeviceList(company.ID, deviceList) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
@@ -69,6 +66,7 @@ func CreateFenceController(ctx *gin.Context) {
 
 func StopFenceController(ctx *gin.Context) {
 	fenceIdString := ctx.Query("FenceId")
+
 	fenceId, errAtoi := strconv.Atoi(fenceIdString)
 	if errAtoi != nil {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi error")
@@ -80,7 +78,6 @@ func StopFenceController(ctx *gin.Context) {
 		return
 	}
 	user := userInfo.(entity.User)
-	// 权限验证
 	if !service.AuthCompanyUser(user.ID, dao.GetFenceRecordById(uint(fenceId)).ParentId) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
@@ -91,6 +88,7 @@ func StopFenceController(ctx *gin.Context) {
 
 func GetActiveFenceByCompanyIdController(ctx *gin.Context) {
 	companyIdString := ctx.Query("CompanyId")
+
 	companyId, errAtoi := strconv.Atoi(companyIdString)
 	if errAtoi != nil {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi error")
@@ -102,7 +100,6 @@ func GetActiveFenceByCompanyIdController(ctx *gin.Context) {
 		return
 	}
 	user := userInfo.(entity.User)
-	// 权限验证
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
@@ -113,6 +110,7 @@ func GetActiveFenceByCompanyIdController(ctx *gin.Context) {
 
 func GetActiveFenceStat(ctx *gin.Context) {
 	fenceIdString := ctx.Query("FenceId")
+
 	fenceId, errAtoi := strconv.Atoi(fenceIdString)
 	if errAtoi != nil {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi error")
@@ -124,8 +122,6 @@ func GetActiveFenceStat(ctx *gin.Context) {
 		return
 	}
 	user := userInfo.(entity.User)
-	
-	// 权限验证
 	if (!service.AuthCompanyUser(user.ID, dao.GetFenceRecordById(uint(fenceId)).ParentId)) && (!service.AuthVisitor(user.ID, dao.GetFenceRecordById(uint(fenceId)).ParentId)) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return

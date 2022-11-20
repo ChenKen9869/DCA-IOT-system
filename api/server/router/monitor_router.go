@@ -11,6 +11,7 @@ func MonitorRouter(r *gin.Engine) *gin.Engine {
 	monitorCentor.Use(middleware.AuthMiddleware())
 	
 	monitorCentor.GET("/connect", monitor.ConnectToMonitorCentor)
+
 	monitorCentor.DELETE("/disconnect", monitor.DisconnectMonitorCentor)
 
 	return r

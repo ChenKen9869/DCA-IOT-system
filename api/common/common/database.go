@@ -27,9 +27,7 @@ func InitDB() *gorm.DB {
 		database,
 		charset,
 		url.QueryEscape(loc))
-	// fmt.Printf(args)
 	db, err := gorm.Open(driverName, args)
-	// db 使用 golang 原生 sql.Open 自带连接池
 	if err != nil {
 		panic("fail to connect database, err: " + err.Error())
 	}

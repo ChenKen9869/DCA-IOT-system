@@ -268,7 +268,7 @@ paths:
         type: string
       - description: telephone number of operator
         in: query
-        name: TelephonNumber
+        name: TelephoneNumber
         required: true
         type: string
       - description: leave place
@@ -568,7 +568,7 @@ paths:
         type: string
       - description: telephone number of operator
         in: formData
-        name: TelephonNumber
+        name: TelephoneNumber
         required: true
         type: string
       - description: biology id
@@ -850,6 +850,16 @@ paths:
         name: TypeId
         required: true
         type: string
+      - description: install time
+        in: formData
+        name: InstallTime
+        required: true
+        type: string
+      - description: bought time
+        in: formData
+        name: BoughtTime
+        required: true
+        type: string
       - description: token
         in: header
         name: Authorization
@@ -1100,6 +1110,16 @@ paths:
         name: TypeId
         required: true
         type: string
+      - description: install time
+        in: formData
+        name: InstallTime
+        required: true
+        type: string
+      - description: bought time
+        in: formData
+        name: BoughtTime
+        required: true
+        type: string
       - description: token
         in: header
         name: Authorization
@@ -1167,6 +1187,31 @@ paths:
         name: PortableDeviceTypeId
         required: true
         type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-portable
+  /device/portable/get_by_biology:
+    get:
+      consumes:
+      - application/json
+      description: 'get biology portable device list : 获取指定生物绑定的所有便携式设备信息 参数列表：[生物id]
+        访问携带token'
+      parameters:
+      - description: biology id
+        in: query
+        name: BiologyId
+        required: true
+        type: string
       - description: token
         in: header
         name: Authorization

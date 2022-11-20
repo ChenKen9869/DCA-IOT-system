@@ -5,7 +5,6 @@ import (
 	"strings"
 )
 
-// 功能函数 : 将 position 字符串转换成可以被接口使用的地理图形格式
 func String2Float2D(str string) [][]float64 {
 	if len(str) == 0 {
 		panic("str empty")
@@ -30,7 +29,6 @@ func String2Float2D(str string) [][]float64 {
 	return result
 }
 
-// 功能函数 : 将坐标点字符串转为坐标点
 func String2Point(str string) (float64, float64) {
 	if len(str) == 0 {
 		panic("str empty")
@@ -51,7 +49,6 @@ func String2Point(str string) (float64, float64) {
 	return longitude, latitude
 }
 
-// 功能函数 : 将 idList 字符串转换成 []uint
 func String2ListUint(str string) []uint {
 	strList := strings.Split(str, ",")
 	result := []uint{}

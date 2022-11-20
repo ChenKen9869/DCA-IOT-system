@@ -11,9 +11,11 @@ func FenceRouter(r *gin.Engine) *gin.Engine {
 	fence.Use(middleware.AuthMiddleware())
 
 	fence.POST("/create", controller.CreateFenceController)
-	fence.DELETE("/stop", controller.StopFenceController)
+	
 	fence.GET("/get_active_list", controller.GetActiveFenceByCompanyIdController)
 	fence.GET("/get_status", controller.GetActiveFenceStat)
+
+	fence.DELETE("/stop", controller.StopFenceController)
 
 	return r
 }

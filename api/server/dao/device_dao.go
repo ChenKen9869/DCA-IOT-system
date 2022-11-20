@@ -5,18 +5,15 @@ import (
 	"go-backend/api/server/entity"
 )
 
-// 创建固定设备
 func CreateFixedDevice(fixedDevice entity.FixedDevice) uint {
 	common.GetDB().Create(&fixedDevice)
 	return fixedDevice.ID
 }
-// 创建携带设备
 func CreatePortableDevice(portableDevice entity.PortableDevice) uint {
 	common.GetDB().Create(&portableDevice)
 	return portableDevice.ID
 }
 
-// 新增便携式设备类型
 func CreateFixedDeviceType(fixedDeviceType entity.FixedDeviceType) {
 	common.GetDB().Create(fixedDeviceType)
 }
@@ -24,7 +21,7 @@ func CreateFixedDeviceType(fixedDeviceType entity.FixedDeviceType) {
 func CreatePortableDeviceType(portableDeviceType entity.PortableDeviceType) {
 	common.GetDB().Create(&portableDeviceType)
 }
-// 删除便携式设备与类型
+
 func DeletePortableDevice(portableDeviceId uint) entity.PortableDevice {
 	var portableDevice entity.PortableDevice
 	common.GetDB().Where("id = ?", portableDeviceId).First(&portableDevice)
@@ -39,7 +36,6 @@ func DeletePortableDeviceType(portableDeviceTypeId string) entity.PortableDevice
 	return portableDeviceType
 }
 
-// 删除固定式设备与类型
 func DeleteFixedDevice(fixedDeviceId uint) entity.FixedDevice {
 	var fixedDevice entity.FixedDevice
 	common.GetDB().Where("id = ?", fixedDeviceId).First(&fixedDevice)
@@ -78,7 +74,6 @@ func GetFixedDeviceListByFarmhouse(farmhouseId uint) []entity.FixedDevice {
 	return fixedDeviceList
 }
 
-// 通过 id 查看设备
 func GetFixedDeviceInfoById(fixedDeviceId uint) entity.FixedDevice {
 	var fixedDevice entity.FixedDevice
 	common.GetDB().Where("id = ?", fixedDeviceId).First(&fixedDevice)

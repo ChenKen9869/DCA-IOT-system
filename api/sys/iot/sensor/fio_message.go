@@ -28,7 +28,6 @@ type FiveInOneMessage struct {
 	Time time.Time `bson:"time"`
 }
 
-// 根据 设备id 和 消息数量 N，获得最新的 N 条数据
 func GetLatestDataListFio(deviceId string, nums int64) []FiveInOneMessage {
 	var results []FiveInOneMessage
 	if nums <= 0 {
@@ -46,7 +45,6 @@ func GetLatestDataListFio(deviceId string, nums int64) []FiveInOneMessage {
 	return results
 }
 
-// 根据 设备id 和 接收时间段， 获取全部记录， 按照 session 排序，从小到大
 func GetRecordListByTimeFio(deviceId string, startTime string, endTime string) []FiveInOneMessage {
 	startAt := util.ParseDate(startTime)
 	endAt := util.ParseDate(endTime)
@@ -71,7 +69,6 @@ func GetRecordListByTimeFio(deviceId string, startTime string, endTime string) [
 	return results
 }
 
-// 根据 设备id 获取最新记录
 func GetLatestDataFio(deviceId string) FiveInOneMessage {
 	var result FiveInOneMessage
 

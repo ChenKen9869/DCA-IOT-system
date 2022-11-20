@@ -26,7 +26,6 @@ type CollarMessage struct {
 	Time          time.Time `bson:"time"`
 }
 
-// 根据 设备id 和 消息数量 N，获得最新的 N 条数据
 func GetLatestDataListCollar(deviceId string, nums int64) []CollarMessage {
 	var results []CollarMessage
 	if nums <= 0 {
@@ -44,7 +43,6 @@ func GetLatestDataListCollar(deviceId string, nums int64) []CollarMessage {
 	return results
 }
 
-// 根据 设备id 和 接收时间段， 获取全部记录， 按照 session 排序，从小到大
 func GetRecordListByTimeCollar(deviceId string, startTime string, endTime string) []CollarMessage {
 	startAt := util.ParseDate(startTime)
 	endAt := util.ParseDate(endTime)
@@ -67,7 +65,6 @@ func GetRecordListByTimeCollar(deviceId string, startTime string, endTime string
 	return results
 }
 
-// 根据 设备id 获取最新记录
 func GetLatestDataCollar(deviceId string) CollarMessage {
 	var result CollarMessage
 

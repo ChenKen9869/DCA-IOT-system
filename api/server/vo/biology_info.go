@@ -3,12 +3,12 @@ package vo
 import "time"
 
 type BiologyInfo struct {
-	Id   uint   `json:"id"`
-	Name string `json:"name"`
-	Type string `json:"type"`
+	Id   uint   `json:"biology_id"`
+	Name string `json:"biology_name"`
+	Type string `json:"biology_type"`
 	Gender string `json:"gender"`
 	Birthday time.Time `json:"birthday"`
-	CreateTime time.Time `json:"create_time"`
+	CreateTime time.Time `json:"create_date"`
 	FarmhouseId uint `json:"farmhouse_id"`
 }
 

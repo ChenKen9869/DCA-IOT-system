@@ -5,12 +5,6 @@ import (
 	"go-backend/api/server/entity"
 )
 
-// func CountBiologyByUserId(userId uint) int {
-// 	var count int
-// 	common.GetDB().Table("biologies").Where("owner = ?", userId).Count(&count)
-// 	return count
-// }
-
 func CreateBiology(biology entity.Biology) uint {
 	common.GetDB().Create(&biology)
 	return biology.ID
@@ -33,7 +27,6 @@ func DeleteBiologyType(biologyTypeId string) entity.BiologyType {
 	common.GetDB().Delete(&biologyType)
 	return biologyType
 }
-
 
 func ExistBiologyType(biologyTypeId string) bool {
 	var biologyType entity.BiologyType
