@@ -53,7 +53,7 @@ func main () {
 	r = router.RoleRouter(r)
 	r.StaticFS("/biology_pictures", http.Dir("./pictures"))
 	port := viper.GetString("server.port")
-
+	
 	docs.SwaggerInfo.BasePath = ""
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

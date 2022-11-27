@@ -67,7 +67,7 @@ func CreateVisitorService(companyId uint, userId uint) {
 // @version 1.0
 // @accept application/json
 // @param CompanyId query int true "company id"
-// @param UserId formData string true "user id"
+// @param UserId query string true "user id"
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /role/visitor/delete [delete]
@@ -87,7 +87,7 @@ func DeleteVisitorService(companyId uint, userId uint) {
 // @router /role/visitor/get_list [get]
 func GetVisitorListService(companyId uint) map[entity.User]([]uint) {
 	visitorList := make(map[entity.User]([]uint))
-	GetEmployeeRecursive(companyId, visitorList)
+	GetVisitorRecursive(companyId, visitorList)
 	return visitorList
 }
 
@@ -99,7 +99,7 @@ func GetVisitorRecursive(companyId uint, visitorList map[entity.User]([]uint)) {
 	}
 	childrenList := dao.GetCompanyListByParent(companyId)
 	for _, subCompany := range childrenList {
-		GetEmployeeRecursive(subCompany.ID, visitorList)
+		GetVisitorRecursive(subCompany.ID, visitorList)
 	}
 }
 

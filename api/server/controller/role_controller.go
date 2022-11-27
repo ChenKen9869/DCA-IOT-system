@@ -42,6 +42,7 @@ func DeleteVisitorController(ctx *gin.Context) {
 	userId, errAtoiUserId := strconv.Atoi(userIdString)
 	if errAtoiComanyId != nil || errAtoiUserId != nil {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "服务器内部错误")
+		return
 	}
 	userInfo, exists := ctx.Get("user")
 	if !exists {
@@ -51,6 +52,10 @@ func DeleteVisitorController(ctx *gin.Context) {
 	user := userInfo.(entity.User)
 	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		return
+	}
+	if !dao.GetVisitorInfoExists(uint(companyId), uint(userId)) {
+		server.Response(ctx, http.StatusBadRequest, 400, nil, "权限信息不存在")
 		return
 	}
 	service.DeleteVisitorService(uint(companyId), uint(userId))

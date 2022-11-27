@@ -1,3 +1,0 @@
-time="2022-06-07 11:42:17" level=info msg="| 404 |            0s |             ::1 | GET | /fence/monitorCentor/connect |"
-time="2022-06-07 11:42:27" level=info msg="| 404 |            0s |             ::1 | GET | /monitorCentor/connect |"
-time="2022-06-07 11:44:43" level=info msg="| 404 |            0s |             ::1 | GET | /monitorcentor/connect |"

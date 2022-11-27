@@ -1498,7 +1498,7 @@ paths:
         required: true
         type: integer
       - description: user id
-        in: formData
+        in: query
         name: UserId
         required: true
         type: string

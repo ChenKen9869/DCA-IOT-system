@@ -2114,7 +2114,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "user id",
                         "name": "UserId",
-                        "in": "formData",
+                        "in": "query",
                         "required": true
                     },
                     {

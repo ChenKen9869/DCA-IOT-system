@@ -12,7 +12,7 @@ func CreateVisitor(visitor entity.Visitor) uint {
 
 func DeleteVisitorById(visitorId uint) entity.Visitor {
 	var visitor entity.Visitor
-	common.GetDB().Where("id = ?", visitorId).First(&visitor)
+	common.GetDB().Table("visitors").Where("id = ?", visitorId).First(&visitor)
 	common.GetDB().Delete(&visitor)
 	return visitor
 }

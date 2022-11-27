@@ -175,10 +175,10 @@ func GetBiologyWithDeviceListController(ctx *gin.Context) {
 }
 
 func UpdateBiologyFarmhouseController(ctx *gin.Context) {
-	operator := ctx.Query("Operator")
-	telephoneNumber := ctx.Query("TelephoneNumber")
-	biologyIdString := ctx.Query("BiologyId")
-	farmhouseIdString := ctx.Query("FarmhouseId")
+	operator := ctx.PostForm("Operator")
+	telephoneNumber := ctx.PostForm("TelephoneNumber")
+	biologyIdString := ctx.PostForm("BiologyId")
+	farmhouseIdString := ctx.PostForm("FarmhouseId")
 
 	biologyId, errBAtoi := strconv.Atoi(biologyIdString)
 	farmhouseId, errFAtoi := strconv.Atoi(farmhouseIdString)

@@ -111,6 +111,7 @@ func makeChildrenTreeListRecursive(parentId uint) []vo.CompanyTreeNode {
 		childNode := vo.CompanyTreeNode{
 			Id:        child.ID,
 			Name:      child.Name,
+			Owner:     child.Owner,
 			Ancestors: child.Ancestors,
 			Children:  makeChildrenTreeListRecursive(child.ID),
 		}
@@ -138,6 +139,7 @@ func makeTreeByCompanyId(currentId uint) vo.CompanyTreeNode {
 			node := vo.CompanyTreeNode{
 				Id:        ancestorNode.ID,
 				Name:      ancestorNode.Name,
+				Owner: 	   ancestorNode.Owner,
 				Ancestors: ancestorNode.Ancestors,
 				Children:  []vo.CompanyTreeNode{},
 			}
@@ -147,6 +149,7 @@ func makeTreeByCompanyId(currentId uint) vo.CompanyTreeNode {
 		current := vo.CompanyTreeNode{
 			Id:        currentNode.ID,
 			Name:      currentNode.Name,
+			Owner: 	   currentNode.Owner,
 			Ancestors: currentNode.Ancestors,
 			Children:  nil,
 		}
@@ -156,6 +159,7 @@ func makeTreeByCompanyId(currentId uint) vo.CompanyTreeNode {
 		root.Id = currentId
 		root.Name = currentNode.Name
 		root.Ancestors = currentNode.Ancestors
+		root.Owner = currentNode.Owner
 		root.Children = nil
 	}
 	(*point).Children = makeChildrenTreeListRecursive((*point).Id)
