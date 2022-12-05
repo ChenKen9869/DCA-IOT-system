@@ -1333,7 +1333,7 @@ paths:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
       tags:
-      - Device-fixed
+      - Device-portable
   /device/portable/own_list:
     get:
       consumes:

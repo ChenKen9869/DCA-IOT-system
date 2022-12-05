@@ -365,20 +365,21 @@ func GetOwnPortableListController(ctx *gin.Context) {
 }
 
 func GetLatestPosCollarController(ctx *gin.Context) {
-	fioIdString := ctx.Query("Id")
+	posCollarIdString := ctx.Query("Id")
 
-	fioId, _ := strconv.Atoi(fioIdString)
+	posCollarId, _ := strconv.Atoi(posCollarIdString)
 	userInfo, exists := ctx.Get("user") 
 	if !exists {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user information does not exists in application context")
 		return
 	}
 	user := userInfo.(entity.User)
-	companyId := dao.GetFixedDeviceInfoById(uint(fioId)).FarmhouseID
+	biologyId := dao.GetPortableDeviceInfoById(uint(posCollarId)).BiologyID
+	companyId := dao.GetBiologyInfoById(biologyId).FarmhouseID
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
-	data := service.GetLatestPosCollarService(uint(fioId))
+	data := service.GetLatestPosCollarService(uint(posCollarId))
 	server.ResponseSuccess(ctx, gin.H{"latest": data}, server.Success)
 }

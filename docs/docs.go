@@ -1840,7 +1840,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Device-fixed"
+                    "Device-portable"
                 ],
                 "summary": "API of golang gin backend",
                 "parameters": [

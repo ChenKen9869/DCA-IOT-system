@@ -28,11 +28,11 @@ func DeviceRouter(r *gin.Engine) *gin.Engine {
 	portableDevice.POST("/create", controller.CreatePortableDeviceController)
 	portableDevice.POST("/create_type", controller.CreatePortableDeviceTypeController)
 	
-	portableDevice.GET("get_new_collar", controller.GetNewCollarRealtimeController)
+	portableDevice.GET("/get_new_collar", controller.GetNewCollarRealtimeController)
 	portableDevice.GET("/get_by_farmhouse", controller.GetPortableDeviceListByFarmhouseController)
 	portableDevice.GET("/get_by_biology", controller.GetPortableDeviceListByBiologyController)
 	portableDevice.GET("/own_list", controller.GetOwnPortableListController)
-	portableDevice.GET("get_position_collar_latest", controller.GetLatestPosCollarController)
+	portableDevice.GET("/get_position_collar_latest", controller.GetLatestPosCollarController)
 
 	portableDevice.DELETE("/delete_type", controller.DeletePortableDeviceTypeController)
 	portableDevice.DELETE("/delete", controller.DeletePortableDeviceController)
