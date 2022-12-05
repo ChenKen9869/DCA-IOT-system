@@ -699,7 +699,7 @@ paths:
         in: formData
         name: ParentId
         required: true
-        type: string
+        type: integer
       - description: location
         in: formData
         name: Location
@@ -815,6 +815,40 @@ paths:
       - application/json
       description: 'get user''s company tree : 获取当前用户有权限的所有公司信息（以树形结构返回） 参数列表：[] 访问携带token'
       parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Company
+  /company/update:
+    put:
+      consumes:
+      - application/json
+      description: 'update company info : 更新公司信息 参数列表：[公司ID，新名字，新地址] 访问携带token'
+      parameters:
+      - description: company_name
+        in: query
+        name: Name
+        required: true
+        type: string
+      - description: location
+        in: query
+        name: Location
+        required: true
+        type: string
+      - description: company id
+        in: query
+        name: CompanyId
+        required: true
+        type: integer
       - description: token
         in: header
         name: Authorization
@@ -1275,6 +1309,31 @@ paths:
       summary: API of golang gin backend
       tags:
       - Device-portable
+  /device/portable/get_position_collar_latest:
+    get:
+      consumes:
+      - application/json
+      description: 'get latest position collar information : 获取定位项圈的最新数据 参数列表：[定位项圈的设备ID]
+        访问携带token'
+      parameters:
+      - description: Id
+        in: query
+        name: Id
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-fixed
   /device/portable/own_list:
     get:
       consumes:
@@ -1661,6 +1720,49 @@ paths:
           description: 系统异常
           schema:
             $ref: '#/definitions/server.FailureResponse500'
+      summary: API of golang gin backend
+      tags:
+      - User
+  /user/update:
+    put:
+      consumes:
+      - application/json
+      description: 'update user information : 更新当前用户的详细信息 参数列表：[] 访问携带token'
+      parameters:
+      - description: username
+        in: query
+        name: Name
+        required: true
+        type: string
+      - description: password
+        in: query
+        name: Password
+        required: true
+        type: string
+      - description: telephone
+        in: query
+        name: Telephone
+        required: true
+        type: string
+      - description: email
+        in: query
+        name: Email
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+        "401":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/server.FailureResponse401'
       summary: API of golang gin backend
       tags:
       - User

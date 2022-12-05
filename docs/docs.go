@@ -932,7 +932,7 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "parent id",
                         "name": "ParentId",
                         "in": "formData",
@@ -1111,6 +1111,56 @@ const docTemplate = `{
                 ],
                 "summary": "API of golang gin backend",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/company/update": {
+            "put": {
+                "description": "update company info : 更新公司信息 参数列表：[公司ID，新名字，新地址] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "company_name",
+                        "name": "Name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "location",
+                        "name": "Location",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "query",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "token",
@@ -1783,6 +1833,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/device/portable/get_position_collar_latest": {
+            "get": {
+                "description": "get latest position collar information : 获取定位项圈的最新数据 参数列表：[定位项圈的设备ID] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device-fixed"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id",
+                        "name": "Id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
         "/device/portable/own_list": {
             "get": {
                 "description": "get own portable device list : 获取当前用户拥有的所有便携式设备信息 参数列表：[] 访问携带token",
@@ -2353,6 +2439,69 @@ const docTemplate = `{
                         "description": "系统异常",
                         "schema": {
                             "$ref": "#/definitions/server.FailureResponse500"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/update": {
+            "put": {
+                "description": "update user information : 更新当前用户的详细信息 参数列表：[] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "username",
+                        "name": "Name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "password",
+                        "name": "Password",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "telephone",
+                        "name": "Telephone",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "email",
+                        "name": "Email",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    },
+                    "401": {
+                        "description": "权限不足",
+                        "schema": {
+                            "$ref": "#/definitions/server.FailureResponse401"
                         }
                     }
                 }

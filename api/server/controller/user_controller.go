@@ -52,7 +52,7 @@ func UserLoginController(ctx *gin.Context) {
 	server.ResponseSuccess(ctx, gin.H{"token": token, "id": id}, server.Success)
 }
 
-func UserInfoController(ctx *gin.Context) {
+func GetUserInfoController(ctx *gin.Context) {
 	user, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
@@ -66,4 +66,19 @@ func UserInfoController(ctx *gin.Context) {
 		}
 	}
 	server.ResponseSuccess(ctx, *userInfo, server.Success)
+}
+
+func UpdateUserInfoController(ctx *gin.Context) {
+	name := ctx.PostForm("Name")
+	password := ctx.PostForm("Password")
+	telephone := ctx.PostForm("Telephone")
+	email := ctx.PostForm("Email")
+	
+	user, exists := ctx.Get("user")
+	if !exists {
+		panic("error: user information does not exists in application context")
+	}
+	user_info := user.(entity.User)
+	service.UpdateUserInfoService(user_info.ID, name, password, telephone, email)
+	server.ResponseSuccess(ctx, nil, server.Success)
 }

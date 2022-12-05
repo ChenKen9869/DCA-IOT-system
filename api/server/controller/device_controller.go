@@ -92,7 +92,7 @@ func CreatePortableDeviceController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusBadRequest, 400, nil, "不支持的携带设备类型")
 		return
 	}
-	id := service.CreatePortableDeviceService(portableDeviceId, uint(biologyId), typeId, installDate, boughtDate)
+	id := service.CreatePortableDeviceService(uint(biologyId), portableDeviceId, typeId, installDate, boughtDate)
 	server.ResponseSuccess(ctx, gin.H{"Id": id}, server.Success)
 }
 
@@ -362,4 +362,23 @@ func GetOwnPortableListController(ctx *gin.Context) {
 	user := userInfo.(entity.User)
 	portableDeviceList := service.GetOwnPortableDeviceListService(user.ID)
 	server.ResponseSuccess(ctx, gin.H{"portable_device_list": portableDeviceList}, server.Success)
+}
+
+func GetLatestPosCollarController(ctx *gin.Context) {
+	fioIdString := ctx.Query("Id")
+
+	fioId, _ := strconv.Atoi(fioIdString)
+	userInfo, exists := ctx.Get("user") 
+	if !exists {
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user information does not exists in application context")
+		return
+	}
+	user := userInfo.(entity.User)
+	companyId := dao.GetFixedDeviceInfoById(uint(fioId)).FarmhouseID
+	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		return
+	}
+	data := service.GetLatestPosCollarService(uint(fioId))
+	server.ResponseSuccess(ctx, gin.H{"latest": data}, server.Success)
 }

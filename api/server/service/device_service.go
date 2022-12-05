@@ -65,7 +65,7 @@ func DeleteFixedDeviceService(fixedDeviceId uint) {
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /device/portable/create [post]
-func CreatePortableDeviceService(portableDeviceId string, biologyId uint, portableDeviceTypeId string, installTime time.Time, boughtTime time.Time) uint {
+func CreatePortableDeviceService(biologyId uint, portableDeviceId string, portableDeviceTypeId string, installTime time.Time, boughtTime time.Time) uint {
 	biology := dao.GetBiologyInfoById(biologyId)
 	if biology.ID == 0 {
 		panic("biology id does not exists")

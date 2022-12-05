@@ -121,3 +121,38 @@ func InfoService(id uint) (*gin.H, error) {
 	}
 	return &infoMap, nil
 }
+
+// @Summary API of golang gin backend
+// @Tags User
+// @description update user information : 更新当前用户的详细信息 参数列表：[] 访问携带token
+// @version 1.0
+// @accept application/json
+// @param Name query string true "username"
+// @param Password query string true "password"
+// @param Telephone query string true "telephone"
+// @param Email query string true "email"
+// @param Authorization header string true "token"
+// @Success 200 {object} server.SuccessResponse200 "更新成功"
+// @Failure 401 {object} server.FailureResponse401 "权限不足"
+// @router /user/update [put]
+func UpdateUserInfoService(userId uint, name string, password string, telephone string, email string) {
+	if len(name) < 2 {
+		err := errors.New(server.NameTooShort)
+		panic(err.Error())
+	}
+	if len(password) < 6 {
+		err := errors.New(server.PasswordTooShort)
+		panic(err.Error())
+	}
+	if user := dao.GetUserInfoByName(name); user.ID != 0 {
+		err := errors.New(server.UsernameAlreadyExist)
+		panic(err.Error())
+	}
+	hasePassword, errEncryp := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if errEncryp != nil {
+		err := errors.New(server.PasswordEncryptionFailed)
+		panic(err.Error())
+	}
+	password = string(hasePassword)
+	dao.UpdateUserInfo(userId, name, password, telephone, email)
+}

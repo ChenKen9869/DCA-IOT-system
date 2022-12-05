@@ -13,7 +13,9 @@ func UserRouter(r *gin.Engine) *gin.Engine {
 	user.POST("/register", controller.UserRegisterController)
 	user.POST("/login", controller.UserLoginController)
 	
-	user.GET("/info", middleware.AuthMiddleware(), controller.UserInfoController)
+	user.GET("/info", middleware.AuthMiddleware(), controller.GetUserInfoController)
+
+	user.PUT("/update", middleware.AuthMiddleware(), controller.UpdateUserInfoController)
 
 	return r
 }

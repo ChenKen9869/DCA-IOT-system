@@ -22,3 +22,6 @@ func GetUserInfoById(userId uint) entity.User {
 	return userInfo
 }
 
+func UpdateUserInfo(userId uint, name string, password string, telephone string, email string) {
+	common.GetDB().Model(&entity.User{}).Where("id = ?", userId).Update("name", name).Update("password", password).Update("telephone", telephone).Update("email", email)
+}

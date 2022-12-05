@@ -23,6 +23,8 @@ func CompanyRouter(r *gin.Engine) *gin.Engine {
 	companyUser.POST("/create", controller.CreateCompanyUserController)
 	companyUser.DELETE("/delete", controller.DeleteCompanyUserController)
 
+	company.PUT("update", controller.UpdateCompanyInfoController)
+
 	return r
 }
 

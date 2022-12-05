@@ -78,3 +78,25 @@ func GetFioRecordListByTimeService(fioId uint, startTime string, endTime string)
 
 	return result
 }
+
+// @Summary API of golang gin backend
+// @Tags Device-fixed
+// @description get latest position collar information : 获取定位项圈的最新数据 参数列表：[定位项圈的设备ID] 访问携带token
+// @version 1.0
+// @accept application/json
+// @param Id query string true "Id"
+// @param Authorization header string true "token"
+// @Success 200 {object} server.SuccessResponse200 "成功"
+// @router /device/portable/get_position_collar_latest [get]
+func GetLatestPosCollarService(fioId uint) vo.PosCollarData {
+	deviceId := dao.GetPortableDeviceInfoById(fioId).DeviceID
+	message := sensor.GetLatestDataPosCollar(deviceId)
+	data := vo.PosCollarData{
+			Id: fioId,
+			Latitude: message.Latitude,
+			Longitude: message.Longitude,
+			Altitude: message.Altitude,
+			Time: message.Time,
+		}
+	return data
+}

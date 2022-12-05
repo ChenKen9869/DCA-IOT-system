@@ -194,7 +194,7 @@ func GetCompanyTreeListService(userId uint) ([]vo.CompanyTreeNode, []uint) {
 // @version 1.0
 // @accept mpfd
 // @param Name formData string true "company_name"
-// @param ParentId formData string true "parent id"
+// @param ParentId formData int true "parent id"
 // @param Location formData string true "location"
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
@@ -350,4 +350,19 @@ func GetOwnCompanyListService(userId uint) []vo.CompanyTreeNode {
 		treeList = append(treeList, root)
 	}
 	return treeList
+}
+
+// @Summary API of golang gin backend
+// @Tags Company
+// @description update company info : 更新公司信息 参数列表：[公司ID，新名字，新地址] 访问携带token
+// @version 1.0
+// @accept application/json
+// @param Name query string true "company_name"
+// @param Location query string true "location"
+// @param CompanyId query int true "company id"
+// @param Authorization header string true "token"
+// @Success 200 {object} server.SuccessResponse200 "成功"
+// @router /company/update [put]
+func UpdateCompanyInfoService(companyId uint, name string, location string) {
+	dao.UpdateCompanyInfo(companyId, name, location)
 }

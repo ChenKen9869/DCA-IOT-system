@@ -66,3 +66,7 @@ func GetOwnCompanyList(userId uint) []entity.Company {
 	common.GetDB().Table("companies").Where("owner = ? and parent_id = 0", userId).Find(&companyList)
 	return companyList
 }
+
+func UpdateCompanyInfo(companyId uint, companyName string, location string) {
+	common.GetDB().Table("companies").Where("id = ?", companyId).Update("name", companyName).Update("location", location)
+}

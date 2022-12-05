@@ -221,3 +221,26 @@ func GetOwnCompanyListController(ctx *gin.Context) {
 	companyList := service.GetOwnCompanyListService(user.ID)
 	server.ResponseSuccess(ctx, gin.H{"company_list": companyList}, server.Success)
 }
+
+func UpdateCompanyInfoController(ctx *gin.Context) {
+	companyName := ctx.Query("Name")
+	location := ctx.Query("Location")
+	companyIdString := ctx.Query("CompanyId")
+
+	companyId, errAtoi := strconv.Atoi(companyIdString)
+	if errAtoi != nil {
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, "服务器内部错误")
+	}
+	userInfo, exists := ctx.Get("user")
+	if !exists {
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user infromation does not exists in application context")
+		return
+	}
+	user := userInfo.(entity.User)
+	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		return
+	}
+	service.UpdateCompanyInfoService(uint(companyId), companyName, location)
+	server.ResponseSuccess(ctx, nil, server.Success)
+}
