@@ -26,6 +26,7 @@ mongodb:
   database: xxxxxx
   collar: xxxxxx
   fio: xxxxxx
+  position-collar: xxxxxx
   username: xxxx
   password: xxxxxx
 fence:

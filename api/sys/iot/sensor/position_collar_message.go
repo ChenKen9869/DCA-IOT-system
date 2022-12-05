@@ -27,7 +27,7 @@ func GetLatestDataListPosCollar(deviceId string, nums int64) []PositionCollarMes
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	opts := options.Find().SetSort(bson.D{primitive.E{Key: "_id", Value: -1}}).SetLimit(nums)
-	cursor, err := common.GetDeviceDB().Collection(fioCollection).Find(ctx, filter, opts)
+	cursor, err := common.GetDeviceDB().Collection(posCollarCollection).Find(ctx, filter, opts)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -49,7 +49,7 @@ func GetRecordListByTimePosCollar(deviceId string, startTime string, endTime str
 	defer cancel()
 	opts := options.Find().SetSort(bson.D{primitive.E{Key: "_id", Value: -1}})
 	var results []PositionCollarMessage
-	cursor, err := common.GetDeviceDB().Collection(fioCollection).Find(ctx, filter, opts)
+	cursor, err := common.GetDeviceDB().Collection(posCollarCollection).Find(ctx, filter, opts)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -65,8 +65,8 @@ func GetLatestDataPosCollar(deviceId string) PositionCollarMessage {
 	filter := bson.D{primitive.E{Key: "deviceid", Value: deviceId}}
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	opts := options.FindOne().SetSort(bson.D{primitive.E{Key: "session", Value: -1}})
-	err := common.GetDeviceDB().Collection(fioCollection).FindOne(ctx, filter, opts).Decode(&result)
+	opts := options.FindOne().SetSort(bson.D{primitive.E{Key: "_id", Value: -1}})
+	err := common.GetDeviceDB().Collection(posCollarCollection).FindOne(ctx, filter, opts).Decode(&result)
 	if err != nil {
 		panic(err.Error())
 	}
