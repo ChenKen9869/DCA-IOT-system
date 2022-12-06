@@ -510,6 +510,30 @@ paths:
       summary: API of golang gin backend
       tags:
       - Biology
+  /biology/get_statistic:
+    get:
+      consumes:
+      - application/json
+      description: 'get biology statistic : 获取指定牧场中的生物统计信息 参数列表：[牧场Id] 访问携带token'
+      parameters:
+      - description: company id
+        in: query
+        name: CompanyId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
   /biology/get_with_device_list:
     get:
       consumes:
@@ -1103,6 +1127,30 @@ paths:
       summary: API of golang gin backend
       tags:
       - Device-fixed
+  /device/fixed/get_statistic:
+    get:
+      consumes:
+      - application/json
+      description: 'get fixed device statistic : 获取指定牧场中的固定设备统计信息 参数列表：[牧场Id] 访问携带token'
+      parameters:
+      - description: company id
+        in: query
+        name: CompanyId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-Fixed
   /device/fixed/own_list:
     get:
       consumes:
@@ -1334,6 +1382,30 @@ paths:
       summary: API of golang gin backend
       tags:
       - Device-portable
+  /device/portable/get_statistic:
+    get:
+      consumes:
+      - application/json
+      description: 'get portable device statistic : 获取指定牧场中的便携设备统计信息 参数列表：[牧场Id] 访问携带token'
+      parameters:
+      - description: company id
+        in: query
+        name: CompanyId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Device-Portable
   /device/portable/own_list:
     get:
       consumes:

@@ -655,6 +655,42 @@
                 }
             }
         },
+        "/biology/get_statistic": {
+            "get": {
+                "description": "get biology statistic : 获取指定牧场中的生物统计信息 参数列表：[牧场Id] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
         "/biology/get_with_device_list": {
             "get": {
                 "description": "get all biologies with devices of company : 根据农牧场ID获取其中所有携带有便携式设备的生物所组成的列表（包括每个生物对应的设备信息） 参数列表：[农牧场ID] 访问携带token",
@@ -1524,6 +1560,42 @@
                 }
             }
         },
+        "/device/fixed/get_statistic": {
+            "get": {
+                "description": "get fixed device statistic : 获取指定牧场中的固定设备统计信息 参数列表：[牧场Id] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device-Fixed"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
         "/device/fixed/own_list": {
             "get": {
                 "description": "get own fixed device list : 获取当前用户拥有的所有固定式设备信息 参数列表：[] 访问携带token",
@@ -1841,6 +1913,42 @@
                         "type": "string",
                         "description": "Id",
                         "name": "Id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/portable/get_statistic": {
+            "get": {
+                "description": "get portable device statistic : 获取指定牧场中的便携设备统计信息 参数列表：[牧场Id] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Device-Portable"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "company id",
+                        "name": "CompanyId",
                         "in": "query",
                         "required": true
                     },

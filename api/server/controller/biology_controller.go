@@ -454,3 +454,20 @@ func GetOwnBiologyListController(ctx *gin.Context) {
 	biologyList := service.GetOwnBiologyListService(user.ID)
 	server.ResponseSuccess(ctx, gin.H{"biology_list": biologyList}, server.Success)
 }
+
+func GetBiologyStatisticController(ctx *gin.Context) {
+	companyIdString := ctx.Query("CompanyId")
+
+	companyId, _:= strconv.Atoi(companyIdString)
+	userInfo, exists := ctx.Get("user")
+	if !exists {
+		panic("error: user information does not exists in application context")
+	}
+	user := userInfo.(entity.User)
+	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		return
+	}
+	result := service.GetBiologyStatisticService(uint(companyId))
+	server.ResponseSuccess(ctx, gin.H{"biology_statistic": result}, server.Success)
+}

@@ -453,3 +453,21 @@ func GetOwnBiologyListService(userId uint) []vo.OwnBiology {
 	}
 	return biologyInfoList
 }
+
+// @Summary API of golang gin backend
+// @Tags Biology
+// @description get biology statistic : 获取指定牧场中的生物统计信息 参数列表：[牧场Id] 访问携带token
+// @version 1.0
+// @accept application/json
+// @param CompanyId query int true "company id"
+// @param Authorization header string true "token"
+// @Success 200 {object} server.SuccessResponse200 "成功"
+// @router /biology/get_statistic [get]
+func GetBiologyStatisticService(companyId uint) map[string]uint {
+	result := make(map[string]uint)
+	biologyList := GetBiologyListService(companyId)
+	for _, biology := range biologyList {
+		result[biology.BiologyTypeID] += 1
+	}
+	return result
+}

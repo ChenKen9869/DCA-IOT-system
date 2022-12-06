@@ -20,6 +20,7 @@ func DeviceRouter(r *gin.Engine) *gin.Engine {
 	fixedDevice.GET("/get_fio_list_by_time", controller.GetFioListByTime)
 	fixedDevice.GET("/get_auth_list", controller.GetFixedDeviceAuthListController)
 	fixedDevice.GET("/own_fixed_device_list", controller.GetOwnFixedDeviceListController)
+	fixedDevice.GET("/get_statistic", controller.GetFixedDeviceStatisticController)
 
 	fixedDevice.DELETE("/delete_type", controller.DeleteFixedDeviceTypeController)
 	fixedDevice.DELETE("/delete", controller.DeleteFixedDeviceController)
@@ -33,6 +34,7 @@ func DeviceRouter(r *gin.Engine) *gin.Engine {
 	portableDevice.GET("/get_by_biology", controller.GetPortableDeviceListByBiologyController)
 	portableDevice.GET("/own_list", controller.GetOwnPortableListController)
 	portableDevice.GET("/get_position_collar_latest", controller.GetLatestPosCollarController)
+	portableDevice.GET("/get_statistic", controller.GetPortableDeviceStatisticController)
 
 	portableDevice.DELETE("/delete_type", controller.DeletePortableDeviceTypeController)
 	portableDevice.DELETE("/delete", controller.DeletePortableDeviceController)

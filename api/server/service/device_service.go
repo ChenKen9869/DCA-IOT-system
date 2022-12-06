@@ -454,3 +454,39 @@ func GetPortableDeviceListByBiologyService(biologyId uint) []vo.BiologyPortableD
 	}
 	return result
 }
+
+// @Summary API of golang gin backend
+// @Tags Device-Fixed
+// @description get fixed device statistic : 获取指定牧场中的固定设备统计信息 参数列表：[牧场Id] 访问携带token
+// @version 1.0
+// @accept application/json
+// @param CompanyId query int true "company id"
+// @param Authorization header string true "token"
+// @Success 200 {object} server.SuccessResponse200 "成功"
+// @router /device/fixed/get_statistic [get]
+func GetFixedDeviceStatisticService(companyId uint) map[string]uint {
+	result := make(map[string]uint)
+	deviceList := GetFixedDeviceListByFarmhouseService(companyId)
+	for _, device := range deviceList {
+		result[device.FixedDeviceTypeID] += 1
+	}
+	return result
+}
+
+// @Summary API of golang gin backend
+// @Tags Device-Portable
+// @description get portable device statistic : 获取指定牧场中的便携设备统计信息 参数列表：[牧场Id] 访问携带token
+// @version 1.0
+// @accept application/json
+// @param CompanyId query int true "company id"
+// @param Authorization header string true "token"
+// @Success 200 {object} server.SuccessResponse200 "成功"
+// @router /device/portable/get_statistic [get]
+func GetPortableDeviceStatisticService(companyId uint) map[string]uint {
+	result := make(map[string]uint)
+	deviceList := GetPortableDeviceListByFarmhouseService(companyId)
+	for _, devcie := range deviceList {
+		result[devcie.DeviceType] += 1
+	}
+	return result
+}
