@@ -446,6 +446,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/biology/get_gender_statistic": {
+            "get": {
+                "description": "get biology gender statistic : 获取指定牧场中的生物性别统计信息 参数列表：[牧场Id] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Biology"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
         "/biology/get_info": {
             "get": {
                 "description": "get picture of biology : 获取生物的详细信息 参数列表：[生物ID] 访问携带token",
@@ -1574,7 +1610,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Device-Fixed"
+                    "Device-fixed"
                 ],
                 "summary": "API of golang gin backend",
                 "parameters": [
@@ -1948,7 +1984,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Device-Portable"
+                    "Device-portable"
                 ],
                 "summary": "API of golang gin backend",
                 "parameters": [
@@ -2588,6 +2624,48 @@ const docTemplate = `{
                         "type": "string",
                         "description": "email",
                         "name": "Email",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    },
+                    "401": {
+                        "description": "权限不足",
+                        "schema": {
+                            "$ref": "#/definitions/server.FailureResponse401"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/update_default_company": {
+            "put": {
+                "description": "update user default company : 更新当前用户的首页默认显示企业 参数列表：[公司ID] 访问携带token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "company id",
+                        "name": "CompanyId",
                         "in": "query",
                         "required": true
                     },

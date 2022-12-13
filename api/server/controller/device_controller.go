@@ -18,8 +18,8 @@ func CreateFixedDeviceController(ctx *gin.Context) {
 	typeId := ctx.PostForm("TypeId")
 	installTime := ctx.PostForm("InstallTime")
 	boughtTime := ctx.PostForm("BoughtTime")
-	
-	userInfo, exists:= ctx.Get("user")
+
+	userInfo, exists := ctx.Get("user")
 	user := userInfo.(entity.User)
 	if !exists {
 		panic("error: user information does not exists in application context")
@@ -28,7 +28,7 @@ func CreateFixedDeviceController(ctx *gin.Context) {
 	if err != nil {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "server inter failed")
 		return
-	}	
+	}
 	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
@@ -49,7 +49,7 @@ func DeleteFixedDeviceController(ctx *gin.Context) {
 	fixedDeviceIdString := ctx.Query("Id")
 
 	fixedDeviceId, _ := strconv.Atoi(fixedDeviceIdString)
-	userInfo, exists:= ctx.Get("user")
+	userInfo, exists := ctx.Get("user")
 	user := userInfo.(entity.User)
 	if !exists {
 		panic("error: user information does not exists in application context")
@@ -77,7 +77,7 @@ func CreatePortableDeviceController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "server inter failed")
 		return
 	}
-	userInfo, exists := ctx.Get("user") 
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user information does not exists in application context")
 		return
@@ -99,10 +99,10 @@ func CreatePortableDeviceController(ctx *gin.Context) {
 func DeletePortableDeviceController(ctx *gin.Context) {
 	portableDeviceIdString := ctx.Query("Id")
 
-	portableDeviceId, _ := strconv.Atoi(portableDeviceIdString) 
+	portableDeviceId, _ := strconv.Atoi(portableDeviceIdString)
 	biologyId := dao.GetPortableDeviceInfoById(uint(portableDeviceId)).BiologyID
 	companyId := dao.GetBiologyInfoById(biologyId).FarmhouseID
-	userInfo, exists := ctx.Get("user") 
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user information does not exists in application context")
 		return
@@ -152,7 +152,7 @@ func GetMonitorStreamController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusBadRequest, 400, nil, "monitorId is empty")
 		return
 	}
-	userInfo, exists := ctx.Get("user") 
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user information does not exists in application context")
 		return
@@ -166,14 +166,14 @@ func GetMonitorStreamController(ctx *gin.Context) {
 	deviceType := dao.GetFixedDeviceInfoById(uint(deviceIdInt)).FixedDeviceTypeID
 	if deviceType != "摄像头" {
 		server.Response(ctx, http.StatusUnauthorized, 403, nil, "设备类型错误")
-		return	
+		return
 	}
-	resultUrl, resultExpireTime, id, msg, accessToken:= service.GetMonitorStreamByDeviceIdService(uint(deviceIdInt))
+	resultUrl, resultExpireTime, id, msg, accessToken := service.GetMonitorStreamByDeviceIdService(uint(deviceIdInt))
 	payload := gin.H{
-		"id" : id,
-		"url" : resultUrl,
-		"expireTime" : resultExpireTime,
-		"msg" : msg, 
+		"id":          id,
+		"url":         resultUrl,
+		"expireTime":  resultExpireTime,
+		"msg":         msg,
 		"accessToken": accessToken,
 	}
 	server.ResponseSuccess(ctx, payload, server.Success)
@@ -187,7 +187,7 @@ func GetNewCollarRealtimeController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusBadRequest, 400, nil, "monitorId is empty")
 		return
 	}
-	userInfo, exists := ctx.Get("user") 
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user information does not exists in application context")
 		return
@@ -203,12 +203,12 @@ func GetNewCollarRealtimeController(ctx *gin.Context) {
 	deviceType := deviceInfo.PortableDeviceTypeID
 	if deviceType != "中农智联耳标" {
 		server.Response(ctx, http.StatusUnauthorized, 403, nil, "设备类型错误")
-		return	
+		return
 	}
-	data, msg:= service.GetNewCollarRealtimeByDeviceIdService(uint(deviceIdInt))
+	data, msg := service.GetNewCollarRealtimeByDeviceIdService(uint(deviceIdInt))
 	payload := gin.H{
 		"data": data,
-		"msg": msg,
+		"msg":  msg,
 	}
 	server.ResponseSuccess(ctx, payload, server.Success)
 }
@@ -217,7 +217,7 @@ func GetLatestFioController(ctx *gin.Context) {
 	fioIdString := ctx.Query("Id")
 
 	fioId, _ := strconv.Atoi(fioIdString)
-	userInfo, exists := ctx.Get("user") 
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user information does not exists in application context")
 		return
@@ -238,7 +238,7 @@ func GetFioListByTime(ctx *gin.Context) {
 	endTime := ctx.Query("EndTime")
 
 	fioId, _ := strconv.Atoi(fioIdString)
-	userInfo, exists := ctx.Get("user") 
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user information does not exists in application context")
 		return
@@ -274,14 +274,14 @@ func GetFixedDeviceListByFarmhouseController(ctx *gin.Context) {
 	var result []gin.H
 	for _, deviceInfo := range fixedDeviceList {
 		result = append(result, gin.H{
-			"id": deviceInfo.ID,
-			"type": deviceInfo.FixedDeviceTypeID,
+			"id":           deviceInfo.ID,
+			"type":         deviceInfo.FixedDeviceTypeID,
 			"farmhouse_id": deviceInfo.FarmhouseID,
-			"create_date": deviceInfo.CreatedAt,
-			"device_id": deviceInfo.DeviceID,
-			"bought_time": deviceInfo.BoughtTime,
+			"create_date":  deviceInfo.CreatedAt,
+			"device_id":    deviceInfo.DeviceID,
+			"bought_time":  deviceInfo.BoughtTime,
 			"install_time": deviceInfo.InstallTime,
-			"stat": deviceInfo.Stat,
+			"stat":         deviceInfo.Stat,
 		})
 	}
 	server.ResponseSuccess(ctx, gin.H{"fixedDeviceList": result}, server.Success)
@@ -289,7 +289,7 @@ func GetFixedDeviceListByFarmhouseController(ctx *gin.Context) {
 
 func GetPortableDeviceListByFarmhouseController(ctx *gin.Context) {
 	companyIdString := ctx.Query("CompanyId")
-	
+
 	companyId, errAtoiComanyId := strconv.Atoi(companyIdString)
 	if errAtoiComanyId != nil {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoiComanyId.Error())
@@ -368,7 +368,7 @@ func GetLatestPosCollarController(ctx *gin.Context) {
 	posCollarIdString := ctx.Query("Id")
 
 	posCollarId, _ := strconv.Atoi(posCollarIdString)
-	userInfo, exists := ctx.Get("user") 
+	userInfo, exists := ctx.Get("user")
 	if !exists {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user information does not exists in application context")
 		return
@@ -387,7 +387,7 @@ func GetLatestPosCollarController(ctx *gin.Context) {
 func GetFixedDeviceStatisticController(ctx *gin.Context) {
 	companyIdString := ctx.Query("CompanyId")
 
-	companyId, _:= strconv.Atoi(companyIdString)
+	companyId, _ := strconv.Atoi(companyIdString)
 	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
@@ -397,14 +397,27 @@ func GetFixedDeviceStatisticController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
-	result := service.GetBiologyStatisticService(uint(companyId))
-	server.ResponseSuccess(ctx, gin.H{"biology_statistic": result}, server.Success)
+	result := service.GetFixedDeviceStatisticService(uint(companyId))
+	var st []struct {
+		Key   string `json:"name"`
+		Value uint   `json:"value"`
+	}
+	for k, v := range result {
+		st = append(st, struct {
+			Key   string `json:"name"`
+			Value uint   `json:"value"`
+		}{
+			Key:   k,
+			Value: v,
+		})
+	}
+	server.ResponseSuccess(ctx, gin.H{"fixed_device_statistic": st}, server.Success)
 }
 
 func GetPortableDeviceStatisticController(ctx *gin.Context) {
 	companyIdString := ctx.Query("CompanyId")
 
-	companyId, _:= strconv.Atoi(companyIdString)
+	companyId, _ := strconv.Atoi(companyIdString)
 	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
@@ -414,6 +427,19 @@ func GetPortableDeviceStatisticController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 		return
 	}
-	result := service.GetBiologyStatisticService(uint(companyId))
-	server.ResponseSuccess(ctx, gin.H{"biology_statistic": result}, server.Success)
+	result := service.GetPortableDeviceStatisticService(uint(companyId))
+	var st []struct {
+		Key   string `json:"name"`
+		Value uint   `json:"value"`
+	}
+	for k, v := range result {
+		st = append(st, struct {
+			Key   string `json:"name"`
+			Value uint   `json:"value"`
+		}{
+			Key:   k,
+			Value: v,
+		})
+	}
+	server.ResponseSuccess(ctx, gin.H{"portable_device_statistic": st}, server.Success)
 }

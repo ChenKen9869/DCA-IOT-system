@@ -23,7 +23,7 @@ func CreateBiologyController(ctx *gin.Context) {
 	farmhouseIdString := ctx.PostForm("CompanyId")
 	birth := ctx.PostForm("Birthday")
 	gender := ctx.PostForm("Gender")
-	
+
 	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
@@ -101,14 +101,14 @@ func GetBiologyListController(ctx *gin.Context) {
 	for _, biologyInfo := range biologyList {
 		devices := dao.GetPortableDeviceListByBiology(biologyInfo.ID)
 		result = append(result, gin.H{
-			"biology_id": biologyInfo.ID,
+			"biology_id":   biologyInfo.ID,
 			"biology_name": biologyInfo.Name,
 			"biology_type": biologyInfo.BiologyTypeID,
 			"farmhouse_id": biologyInfo.FarmhouseID,
-			"device_nums": len(devices),
-			"gender": biologyInfo.Gender,
-			"birthday": biologyInfo.Birthday,
-			"create_date": biologyInfo.CreatedAt,
+			"device_nums":  len(devices),
+			"gender":       biologyInfo.Gender,
+			"birthday":     biologyInfo.Birthday,
+			"create_date":  biologyInfo.CreatedAt,
 		})
 	}
 	resultList := gin.H{
@@ -206,7 +206,7 @@ func UpdateBiologyFarmhouseController(ctx *gin.Context) {
 	}
 	if dao.GetCompanyInfoByID(uint(farmhouseId)).Owner != currentBiology.Owner {
 		server.Response(ctx, http.StatusBadRequest, 400, nil, "不允许跨集团转舍")
-		return	
+		return
 	}
 	service.UpdateBiologyFarmhouseService(operator, telephoneNumber, uint(biologyId), uint(farmhouseId))
 	server.ResponseSuccess(ctx, nil, server.Success)
@@ -255,7 +255,7 @@ func GetEpidemicPreventRecordListController(ctx *gin.Context) {
 		return
 	}
 	resultList := service.GetEpidemicPreventionRecordListService(uint(biologyId))
-	server.ResponseSuccess(ctx, gin.H{"result_list": resultList,}, server.Success)
+	server.ResponseSuccess(ctx, gin.H{"result_list": resultList}, server.Success)
 }
 
 func CreateOperationRecordController(ctx *gin.Context) {
@@ -303,7 +303,7 @@ func GetOperationRecordListController(ctx *gin.Context) {
 		return
 	}
 	resultList := service.GetOperationRecordListService(uint(biologyId))
-	server.ResponseSuccess(ctx, gin.H{"result_list": resultList,}, server.Success)
+	server.ResponseSuccess(ctx, gin.H{"result_list": resultList}, server.Success)
 }
 
 func CreateMedicalRecordController(ctx *gin.Context) {
@@ -350,7 +350,7 @@ func GetMedicalRecordListController(ctx *gin.Context) {
 		return
 	}
 	resultList := service.GetMedicalRecordListService(uint(biologyId))
-	server.ResponseSuccess(ctx, gin.H{"result_list": resultList,}, server.Success)
+	server.ResponseSuccess(ctx, gin.H{"result_list": resultList}, server.Success)
 }
 
 func UpdateBiologyPictureController(ctx *gin.Context) {
@@ -458,7 +458,7 @@ func GetOwnBiologyListController(ctx *gin.Context) {
 func GetBiologyStatisticController(ctx *gin.Context) {
 	companyIdString := ctx.Query("CompanyId")
 
-	companyId, _:= strconv.Atoi(companyIdString)
+	companyId, _ := strconv.Atoi(companyIdString)
 	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
@@ -469,5 +469,51 @@ func GetBiologyStatisticController(ctx *gin.Context) {
 		return
 	}
 	result := service.GetBiologyStatisticService(uint(companyId))
-	server.ResponseSuccess(ctx, gin.H{"biology_statistic": result}, server.Success)
+	var st []struct {
+		Key   string `json:"name"`
+		Value uint   `json:"value"`
+	}
+	for k, v := range result {
+		st = append(st, struct {
+			Key   string `json:"name"`
+			Value uint   `json:"value"`
+		}{
+			Key:   k,
+			Value: v,
+		})
+	}
+	server.ResponseSuccess(ctx, gin.H{"biology_statistic": st}, server.Success)
+}
+
+func GetBiologyGenderStatisticController(ctx *gin.Context) {
+	companyIdString := ctx.Query("CompanyId")
+
+	companyId, _ := strconv.Atoi(companyIdString)
+	userInfo, exists := ctx.Get("user")
+	if !exists {
+		panic("error: user information does not exists in application context")
+	}
+	user := userInfo.(entity.User)
+	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		return
+	}
+	result := service.GetBiologyGenderStatisticService(uint(companyId))
+	var st []struct {
+		Type   string `json:"type"`
+		Gender string   `json:"gender"`
+		Num uint `json:"value"`
+	}
+	for k, v := range result {
+		st = append(st, struct {
+			Type   string `json:"type"`
+			Gender string `json:"gender"`
+			Num uint   `json:"value"`
+		}{
+			Type:  k.Type,
+			Gender: k.Gender,
+			Num: v,
+		})
+	}
+	server.ResponseSuccess(ctx, gin.H{"biology_gender_statistic": st}, server.Success)
 }

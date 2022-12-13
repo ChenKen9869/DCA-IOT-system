@@ -362,6 +362,30 @@ paths:
       summary: API of golang gin backend
       tags:
       - Biology
+  /biology/get_gender_statistic:
+    get:
+      consumes:
+      - application/json
+      description: 'get biology gender statistic : 获取指定牧场中的生物性别统计信息 参数列表：[牧场Id] 访问携带token'
+      parameters:
+      - description: company id
+        in: query
+        name: CompanyId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Biology
   /biology/get_info:
     get:
       consumes:
@@ -1150,7 +1174,7 @@ paths:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
       tags:
-      - Device-Fixed
+      - Device-fixed
   /device/fixed/own_list:
     get:
       consumes:
@@ -1405,7 +1429,7 @@ paths:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
       tags:
-      - Device-Portable
+      - Device-portable
   /device/portable/own_list:
     get:
       consumes:
@@ -1821,6 +1845,34 @@ paths:
         name: Email
         required: true
         type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+        "401":
+          description: 权限不足
+          schema:
+            $ref: '#/definitions/server.FailureResponse401'
+      summary: API of golang gin backend
+      tags:
+      - User
+  /user/update_default_company:
+    put:
+      consumes:
+      - application/json
+      description: 'update user default company : 更新当前用户的首页默认显示企业 参数列表：[公司ID] 访问携带token'
+      parameters:
+      - description: company id
+        in: query
+        name: CompanyId
+        required: true
+        type: integer
       - description: token
         in: header
         name: Authorization

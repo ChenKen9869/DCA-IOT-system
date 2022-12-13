@@ -25,3 +25,7 @@ func GetUserInfoById(userId uint) entity.User {
 func UpdateUserInfo(userId uint, name string, password string, telephone string, email string) {
 	common.GetDB().Model(&entity.User{}).Where("id = ?", userId).Update("name", name).Update("password", password).Update("telephone", telephone).Update("email", email)
 }
+
+func UpdateUserDefaultCompany(userId uint, companyId uint) {
+	common.GetDB().Model(&entity.User{}).Where("id = ?", userId).Update("default_company", companyId)
+}

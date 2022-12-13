@@ -16,6 +16,6 @@ func UserRouter(r *gin.Engine) *gin.Engine {
 	user.GET("/info", middleware.AuthMiddleware(), controller.GetUserInfoController)
 
 	user.PUT("/update", middleware.AuthMiddleware(), controller.UpdateUserInfoController)
-
+	user.PUT("/update_default_company", middleware.AuthMiddleware(), controller.UpdateUserDefaultCompanyController)
 	return r
 }

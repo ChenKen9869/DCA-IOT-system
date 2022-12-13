@@ -31,11 +31,7 @@ func CreateCompanyController(ctx *gin.Context) {
 			server.Response(ctx, http.StatusUnprocessableEntity, 422, nil, "param error")
 			return
 		}
-		companyUser := entity.CompanyUser{
-			CompanyID: id,
-			UserID: user.ID,
-		}
-		dao.CreateCompanyUser(companyUser)
+		service.CreateCompanyUserService(id, user.ID)
 		server.ResponseSuccess(ctx, gin.H{"CompanyId": id}, server.Success)
 		return
 	}

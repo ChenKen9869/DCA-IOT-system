@@ -68,30 +68,26 @@ func RegisterService(name string, password string, telephone string, email strin
 // @Failure 422 {object} server.FailureResponse422 "输入参数错误"
 // @Failure 500 {object} server.FailureResponse500 "系统异常"
 // @router /user/login [post]
-func LoginService(name string, password string) (uint, string, error) {
+func LoginService(name string, password string) (uint, string, uint, error) {
 	if len(name) < 2 {
-		err := errors.New(server.NameTooShort)
-		return 0, "", err
+		panic((server.NameTooShort))
 	}
 	if len(password) < 6 {
 		err := errors.New(server.PasswordTooShort)
-		return 0, "", err
+		return 0, "", 0, err
 	}
 	user := dao.GetUserInfoByName(name)
 	if user.ID == 0 {
-		err := errors.New(server.UserNotExist)
-		return 0, "", err
+		panic(server.UserNotExist)
 	}
 	if errPassword := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); errPassword != nil {
-		err := errors.New(server.WrongPassword)
-		return 0, "", err
+		panic(server.WrongPassword)
 	}
 	token, errToken := common.ReleaseToken(user.ID)
 	if errToken != nil {
-		err := errors.New(server.TokenGenerateFailed)
-		return 0, "", err
+		panic(server.TokenGenerateFailed)
 	}
-	return user.ID, token, nil
+	return user.ID, token, user.DefaultCompany, nil
 }
 
 // @Summary API of golang gin backend
@@ -155,4 +151,18 @@ func UpdateUserInfoService(userId uint, name string, password string, telephone 
 	}
 	password = string(hasePassword)
 	dao.UpdateUserInfo(userId, name, password, telephone, email)
+}
+
+// @Summary API of golang gin backend
+// @Tags User
+// @description update user default company : 更新当前用户的首页默认显示企业 参数列表：[公司ID] 访问携带token
+// @version 1.0
+// @accept application/json
+// @param CompanyId query int true "company id"
+// @param Authorization header string true "token"
+// @Success 200 {object} server.SuccessResponse200 "更新成功"
+// @Failure 401 {object} server.FailureResponse401 "权限不足"
+// @router /user/update_default_company [put]
+func UpdateUserDefaultCompanyService(userId uint, companyId uint) {
+	dao.UpdateUserDefaultCompany(userId, companyId)
 }

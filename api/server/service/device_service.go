@@ -456,7 +456,7 @@ func GetPortableDeviceListByBiologyService(biologyId uint) []vo.BiologyPortableD
 }
 
 // @Summary API of golang gin backend
-// @Tags Device-Fixed
+// @Tags Device-fixed
 // @description get fixed device statistic : 获取指定牧场中的固定设备统计信息 参数列表：[牧场Id] 访问携带token
 // @version 1.0
 // @accept application/json
@@ -474,7 +474,7 @@ func GetFixedDeviceStatisticService(companyId uint) map[string]uint {
 }
 
 // @Summary API of golang gin backend
-// @Tags Device-Portable
+// @Tags Device-portable
 // @description get portable device statistic : 获取指定牧场中的便携设备统计信息 参数列表：[牧场Id] 访问携带token
 // @version 1.0
 // @accept application/json

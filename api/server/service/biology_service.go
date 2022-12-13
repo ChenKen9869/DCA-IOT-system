@@ -471,3 +471,26 @@ func GetBiologyStatisticService(companyId uint) map[string]uint {
 	}
 	return result
 }
+
+type BioGender struct {
+	Type string
+	Gender string
+}
+
+// @Summary API of golang gin backend
+// @Tags Biology
+// @description get biology gender statistic : 获取指定牧场中的生物性别统计信息 参数列表：[牧场Id] 访问携带token
+// @version 1.0
+// @accept application/json
+// @param CompanyId query int true "company id"
+// @param Authorization header string true "token"
+// @Success 200 {object} server.SuccessResponse200 "成功"
+// @router /biology/get_gender_statistic [get]
+func GetBiologyGenderStatisticService(companyId uint) map[BioGender]uint {
+	result := make(map[BioGender]uint)
+	biologyList := GetBiologyListService(companyId)
+	for _, biology := range biologyList {
+		result[BioGender{Type: biology.BiologyTypeID, Gender: biology.Gender}] += 1
+	}
+	return result
+}

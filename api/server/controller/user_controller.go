@@ -2,9 +2,11 @@ package controller
 
 import (
 	"go-backend/api/server/entity"
-	"go-backend/api/server/tools/server"
 	"go-backend/api/server/service"
+	"go-backend/api/server/tools/server"
 	"net/http"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,7 +36,7 @@ func UserLoginController(ctx *gin.Context) {
 	name := ctx.PostForm("Name")
 	password := ctx.PostForm("Password")
 
-	id, token, err := service.LoginService(name, password)
+	id, token, defaultCompany, err := service.LoginService(name, password)
 	if err != nil {
 		if msg := err.Error(); msg == server.PasswordTooShort ||
 			msg == server.NameTooShort {
@@ -49,7 +51,7 @@ func UserLoginController(ctx *gin.Context) {
 			return
 		}
 	}
-	server.ResponseSuccess(ctx, gin.H{"token": token, "id": id}, server.Success)
+	server.ResponseSuccess(ctx, gin.H{"token": token, "id": id, "default_company": defaultCompany}, server.Success)
 }
 
 func GetUserInfoController(ctx *gin.Context) {
@@ -69,10 +71,10 @@ func GetUserInfoController(ctx *gin.Context) {
 }
 
 func UpdateUserInfoController(ctx *gin.Context) {
-	name := ctx.PostForm("Name")
-	password := ctx.PostForm("Password")
-	telephone := ctx.PostForm("Telephone")
-	email := ctx.PostForm("Email")
+	name := ctx.Query("Name")
+	password := ctx.Query("Password")
+	telephone := ctx.Query("Telephone")
+	email := ctx.Query("Email")
 	
 	user, exists := ctx.Get("user")
 	if !exists {
@@ -80,5 +82,22 @@ func UpdateUserInfoController(ctx *gin.Context) {
 	}
 	user_info := user.(entity.User)
 	service.UpdateUserInfoService(user_info.ID, name, password, telephone, email)
+	server.ResponseSuccess(ctx, nil, server.Success)
+}
+
+func UpdateUserDefaultCompanyController(ctx *gin.Context) {
+	companyIdString := ctx.Query("CompanyId")
+	
+	companyId, _ := strconv.Atoi(companyIdString)
+	user, exists := ctx.Get("user")
+	if !exists {
+		panic("error: user information does not exists in application context")
+	}
+	user_info := user.(entity.User)
+	if (!service.AuthCompanyUser(user_info.ID, uint(companyId))) && (!service.AuthVisitor(user_info.ID, uint(companyId))) {
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		return
+	}
+	service.UpdateUserDefaultCompanyService(user_info.ID, uint(companyId))
 	server.ResponseSuccess(ctx, nil, server.Success)
 }

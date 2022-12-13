@@ -92,7 +92,7 @@ func DeleteCompanyService(companyId uint, operator entity.User) error {
 	managerList := dao.GetUserListByCompanyId(companyId)
 	visitorList := dao.GetVisitorListByCompanyId(companyId)
 	for _, manager := range managerList {
-		dao.DeleteCompanyUser(manager.ID)
+		DeleteCompanyUserService(manager.CompanyID, manager.UserID)
 	}
 	for _, visitor := range visitorList {
 		dao.DeleteVisitorById(visitor.ID)
@@ -111,6 +111,7 @@ func makeChildrenTreeListRecursive(parentId uint) []vo.CompanyTreeNode {
 		childNode := vo.CompanyTreeNode{
 			Id:        child.ID,
 			Name:      child.Name,
+			Location:  child.Location,
 			Owner:     child.Owner,
 			Ancestors: child.Ancestors,
 			Children:  makeChildrenTreeListRecursive(child.ID),
@@ -139,6 +140,7 @@ func makeTreeByCompanyId(currentId uint) vo.CompanyTreeNode {
 			node := vo.CompanyTreeNode{
 				Id:        ancestorNode.ID,
 				Name:      ancestorNode.Name,
+				Location:  ancestorNode.Location,
 				Owner: 	   ancestorNode.Owner,
 				Ancestors: ancestorNode.Ancestors,
 				Children:  []vo.CompanyTreeNode{},
@@ -149,6 +151,7 @@ func makeTreeByCompanyId(currentId uint) vo.CompanyTreeNode {
 		current := vo.CompanyTreeNode{
 			Id:        currentNode.ID,
 			Name:      currentNode.Name,
+			Location:  currentNode.Location,
 			Owner: 	   currentNode.Owner,
 			Ancestors: currentNode.Ancestors,
 			Children:  nil,
@@ -158,6 +161,7 @@ func makeTreeByCompanyId(currentId uint) vo.CompanyTreeNode {
 	} else {
 		root.Id = currentId
 		root.Name = currentNode.Name
+		root.Location = currentNode.Location
 		root.Ancestors = currentNode.Ancestors
 		root.Owner = currentNode.Owner
 		root.Children = nil
@@ -270,6 +274,10 @@ func CreateCompanyUserService(companyId uint, userId uint) error {
 		UserID: userId,
 	}
 	dao.CreateCompanyUser(companyUserInfo)
+	l, _ := GetCompanyTreeListService(userId)
+	if len(l) == 0 {
+		dao.UpdateUserDefaultCompany(userId, companyId)
+	}
 	return nil
 }
 
@@ -286,6 +294,14 @@ func CreateCompanyUserService(companyId uint, userId uint) error {
 func DeleteCompanyUserService(companyId uint, userId uint) {
 	companyUser := dao.GetCompanyUser(companyId, userId)
 	dao.DeleteCompanyUser(companyUser.ID)
+	if companyId == dao.GetUserInfoById(userId).DefaultCompany {
+		_, l := GetCompanyTreeListService(userId)
+		if len(l) == 0 {
+			UpdateUserDefaultCompanyService(userId, 0)
+		} else {
+			UpdateUserDefaultCompanyService(userId, l[0])
+		}
+	}
 }
 
 // @Summary API of golang gin backend
