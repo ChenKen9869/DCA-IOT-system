@@ -141,7 +141,7 @@ func makeTreeByCompanyId(currentId uint) vo.CompanyTreeNode {
 				Id:        ancestorNode.ID,
 				Name:      ancestorNode.Name,
 				Location:  ancestorNode.Location,
-				Owner: 	   ancestorNode.Owner,
+				Owner:     ancestorNode.Owner,
 				Ancestors: ancestorNode.Ancestors,
 				Children:  []vo.CompanyTreeNode{},
 			}
@@ -152,7 +152,7 @@ func makeTreeByCompanyId(currentId uint) vo.CompanyTreeNode {
 			Id:        currentNode.ID,
 			Name:      currentNode.Name,
 			Location:  currentNode.Location,
-			Owner: 	   currentNode.Owner,
+			Owner:     currentNode.Owner,
 			Ancestors: currentNode.Ancestors,
 			Children:  nil,
 		}
@@ -212,9 +212,9 @@ func CreateCompanyService(parentId uint, name string, owner uint, location strin
 		newCompany := entity.Company{
 			Ancestors: "0",
 			Name:      name,
-			Owner:    owner,
+			Owner:     owner,
 			ParentID:  0,
-			Location: location,
+			Location:  location,
 		}
 		id := dao.CreateCompany(newCompany)
 		return id, nil
@@ -271,11 +271,13 @@ func CreateCompanyUserService(companyId uint, userId uint) error {
 	}
 	companyUserInfo := entity.CompanyUser{
 		CompanyID: companyId,
-		UserID: userId,
+		UserID:    userId,
 	}
 	dao.CreateCompanyUser(companyUserInfo)
-	l, _ := GetCompanyTreeListService(userId)
-	if len(l) == 0 {
+	// l := dao.GetOwnCompanyList(userId)
+	// _, l := GetCompanyTreeListService(userId)
+	defaultCompany := dao.GetUserInfoById(userId).DefaultCompany
+	if defaultCompany == 0 {
 		dao.UpdateUserDefaultCompany(userId, companyId)
 	}
 	return nil
@@ -343,8 +345,8 @@ func GetEmployeeRecursive(companyId uint, employeeList map[entity.User][]uint) {
 func GetCompanyInfoService(companyId uint) vo.CompanyInfo {
 	company := dao.GetCompanyInfoByID(companyId)
 	companyInfo := vo.CompanyInfo{
-		Id: company.ID,
-		Name: company.Name,
+		Id:       company.ID,
+		Name:     company.Name,
 		Location: company.Location,
 	}
 	return companyInfo

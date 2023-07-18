@@ -1,20 +1,20 @@
 package main
 
 import (
-	"go-backend/api/common/common"
-	docs "go-backend/docs"
-	"go-backend/api/sys/gis/geo/geocontainer"
-	"go-backend/api/common/middleware"
-	"go-backend/api/sys/iot/monitor"
-	"go-backend/api/server/router"
-	"go-backend/api/sys/iot/sensor"
-	"net/http"
-	"os"
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/spf13/viper"
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
+	"go-backend/api/common/common"
+	"go-backend/api/common/middleware"
+	"go-backend/api/server/router"
+	"go-backend/api/sys/gis/geo/geocontainer"
+	"go-backend/api/sys/iot/monitor"
+	"go-backend/api/sys/iot/sensor"
+	docs "go-backend/docs"
+	"net/http"
+	"os"
 )
 
 // @title Intelligent Pasture Backend APIs
@@ -31,7 +31,7 @@ import (
 
 // @host 8.142.115.160:5930
 // @BasePath /
-func main () {
+func main() {
 	InitConfig()
 	db := common.InitDB()
 	deviceDb := common.InitDeviceDB()
@@ -40,7 +40,7 @@ func main () {
 	monitor.InitMonitor()
 	defer db.Close()
 	defer deviceDb.Client().Disconnect(common.Ctx)
-	
+
 	r := gin.Default()
 	r.Use(middleware.LoggerToFile())
 	r.Use(middleware.CORSMiddleware())
@@ -53,7 +53,7 @@ func main () {
 	r = router.RoleRouter(r)
 	r.StaticFS("/biology_pictures", http.Dir("./pictures"))
 	port := viper.GetString("server.port")
-	
+
 	docs.SwaggerInfo.BasePath = ""
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

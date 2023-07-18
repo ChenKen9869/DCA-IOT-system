@@ -21,7 +21,7 @@ func DeleteCompanyByID(companyId uint) entity.Company {
 	return company
 }
 
-func DeleteCompanyUser(Id uint)  {
+func DeleteCompanyUser(Id uint) {
 	common.GetDB().Delete(&entity.CompanyUser{}, Id)
 }
 
@@ -33,8 +33,8 @@ func GetCompanyListByParent(parentId uint) []entity.Company {
 
 func GetCompanyInfoByID(id uint) entity.Company {
 	var company entity.Company
-	common.GetDB().Where("id = ?", id).First(&company)
-	return company
+    common.GetDB().Where("id = ?", id).First(&company)
+    return company
 }
 
 func GetCompanyUserInfoExists(companyId uint, userId uint) bool {

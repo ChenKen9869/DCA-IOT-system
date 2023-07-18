@@ -1,5 +1,6 @@
 package cache
 
+// not use
 import (
 	"context"
 	"go-backend/api/common/common"
@@ -9,25 +10,24 @@ import (
 
 func getRandomExpireTime() time.Duration {
 	rand.Seed(time.Now().UnixNano())
-	return time.Duration(rand.Intn(100)*int(time.Hour))
+	return time.Duration(rand.Intn(100) * int(time.Hour))
 }
 
 type CacheUnit struct {
-	Key string
+	Key   string
 	Value interface{}
 }
 
 var ctx = context.Background()
 
-func (cacheUnit *CacheUnit)Set(key string, value interface{}) {
+func (cacheUnit *CacheUnit) Set(key string, value interface{}) {
 	common.GetRedis().Set(ctx, key, value, getRandomExpireTime())
 }
 
-func (CacheUnit *CacheUnit)Get(key string) interface{} {
+func (CacheUnit *CacheUnit) Get(key string) interface{} {
 	value, err := common.GetRedis().Get(ctx, key).Result()
 	if err != nil {
 		panic(err.Error())
 	}
 	return value
 }
-
