@@ -40,12 +40,14 @@ func InitDB() *gorm.DB {
 	db.AutoMigrate(&entity.PortableDevice{})
 	db.AutoMigrate(&entity.FixedDeviceType{})
 	db.AutoMigrate(&entity.PortableDeviceType{})
-	db.AutoMigrate(&entity.FenceRecord{})
+	// db.AutoMigrate(&entity.FenceRecord{})
 	db.AutoMigrate(&entity.EpidemicPrevention{})
 	db.AutoMigrate(&entity.MedicalHistory{})
 	db.AutoMigrate(&entity.OperationHistory{})
 	db.AutoMigrate(&entity.BiologyChange{})
 	db.AutoMigrate(&entity.Visitor{})
+	db.AutoMigrate(&entity.Rule{})
+
 	DB = db
 	return db
 }

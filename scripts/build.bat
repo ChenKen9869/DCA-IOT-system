@@ -1,9 +1,9 @@
 @echo off
 
-set localDir=G:\code\go-backend\
+set localDir=G:\code\DCA-IOT-system\
 cd %localDir%
 swag init
 set GOOS=linux
-go build -o ./build/go-backend
+go build -o ./build/dca
 echo Down!
 exit

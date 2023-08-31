@@ -58,7 +58,7 @@ definitions:
         example: 操作成功
         type: string
     type: object
-host: 8.142.115.160:5930
+host: localhost:5930
 info:
   contact:
     email: 972576519@qq.com
@@ -714,7 +714,7 @@ paths:
         required: true
         type: integer
       - description: user id
-        in: formData
+        in: query
         name: UserId
         required: true
         type: string
@@ -1449,129 +1449,6 @@ paths:
       summary: API of golang gin backend
       tags:
       - Device-portable
-  /fence/create:
-    post:
-      consumes:
-      - multipart/form-data
-      description: 'fence create : 创建围栏任务 参数列表：[围栏地理位置、监控的设备列表（设备ID组成）、围栏任务的持续时间、坐标系、围栏任务名、围栏任务所属公司ID]
-        访问携带token'
-      parameters:
-      - description: position
-        in: formData
-        name: Position
-        required: true
-        type: string
-      - description: device list
-        in: formData
-        name: DeviceList
-        required: true
-        type: string
-      - description: duration
-        in: formData
-        name: Duration
-        required: true
-        type: string
-      - description: coordinate
-        in: formData
-        name: Coordinate
-        required: true
-        type: string
-      - description: name of fence
-        in: formData
-        name: Name
-        required: true
-        type: string
-      - description: parent id
-        in: formData
-        name: ParentId
-        required: true
-        type: string
-      - description: token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      responses:
-        "200":
-          description: 成功
-          schema:
-            $ref: '#/definitions/server.SuccessResponse200'
-      summary: API of golang gin backend
-      tags:
-      - Fence
-  /fence/get_active_list:
-    get:
-      consumes:
-      - application/json
-      description: 'get active fence list by company id : 获取牧场中所有处于活跃状态的围栏 参数列表：[牧场ID]
-        访问携带token'
-      parameters:
-      - description: company id
-        in: query
-        name: CompanyId
-        required: true
-        type: string
-      - description: token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      responses:
-        "200":
-          description: 成功
-          schema:
-            $ref: '#/definitions/server.SuccessResponse200'
-      summary: API of golang gin backend
-      tags:
-      - Fence
-  /fence/get_status:
-    get:
-      consumes:
-      - application/json
-      description: 'get fence status : 获取围栏任务的执行状态 参数列表：[围栏ID] 访问携带token'
-      parameters:
-      - description: fence id
-        in: query
-        name: FenceId
-        required: true
-        type: string
-      - description: token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      responses:
-        "200":
-          description: 成功
-          schema:
-            $ref: '#/definitions/server.SuccessResponse200'
-      summary: API of golang gin backend
-      tags:
-      - Fence
-  /fence/stop:
-    delete:
-      consumes:
-      - application/json
-      description: 'fence stop : 终止围栏任务 参数列表：[围栏ID] 访问携带token'
-      parameters:
-      - description: fence id
-        in: query
-        name: FenceId
-        required: true
-        type: integer
-      - description: token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      responses:
-        "200":
-          description: 成功
-          schema:
-            $ref: '#/definitions/server.SuccessResponse200'
-      summary: API of golang gin backend
-      tags:
-      - Fence
   /monitorCentor/connect:
     get:
       consumes:
@@ -1713,6 +1590,238 @@ paths:
       summary: API of golang gin backend
       tags:
       - Role
+  /rule/create:
+    post:
+      consumes:
+      - multipart/form-data
+      description: create a rule
+      parameters:
+      - description: datasource
+        in: formData
+        name: Datasource
+        required: true
+        type: string
+      - description: condition
+        in: formData
+        name: Condition
+        required: true
+        type: string
+      - description: action
+        in: formData
+        name: Action
+        required: true
+        type: string
+      - description: company id
+        in: formData
+        name: CompanyId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Rule
+  /rule/delete:
+    delete:
+      consumes:
+      - application/json
+      description: delete an inactive rule
+      parameters:
+      - description: rule id
+        in: query
+        name: RuleId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Rule
+  /rule/end:
+    get:
+      consumes:
+      - application/json
+      description: end a rule
+      parameters:
+      - description: rule id
+        in: formData
+        name: RuleId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Rule
+  /rule/get_company:
+    get:
+      consumes:
+      - application/json
+      description: get rule list by company id
+      parameters:
+      - description: company id
+        in: formData
+        name: CompanyId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Rule
+  /rule/get_user:
+    get:
+      consumes:
+      - application/json
+      description: get rule list by user id
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Rule
+  /rule/schedule:
+    get:
+      consumes:
+      - application/json
+      description: schedule a rule
+      parameters:
+      - description: rule id
+        in: formData
+        name: RuleId
+        required: true
+        type: integer
+      - description: exec internal
+        in: formData
+        name: ExecInternal
+        required: true
+        type: string
+      - description: future start time
+        in: formData
+        name: FutureTime
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Rule
+  /rule/start:
+    get:
+      consumes:
+      - application/json
+      description: start a rule
+      parameters:
+      - description: rule id
+        in: formData
+        name: RuleId
+        required: true
+        type: integer
+      - description: exec internal
+        in: formData
+        name: ExecInternal
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Rule
+  /rule/update:
+    put:
+      consumes:
+      - application/json
+      description: update an inactive rule
+      parameters:
+      - description: datasource
+        in: query
+        name: Datasource
+        required: true
+        type: string
+      - description: condition
+        in: query
+        name: Condition
+        required: true
+        type: string
+      - description: action
+        in: query
+        name: Action
+        required: true
+        type: string
+      - description: rule id
+        in: query
+        name: RuleId
+        required: true
+        type: integer
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/server.SuccessResponse200'
+      summary: API of golang gin backend
+      tags:
+      - Rule
   /user/info:
     get:
       consumes:

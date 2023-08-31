@@ -1,13 +1,12 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/spf13/viper"
-	swaggerFiles "github.com/swaggo/files"
-	"github.com/swaggo/gin-swagger"
 	"go-backend/api/common/common"
 	"go-backend/api/common/middleware"
+	"go-backend/api/rule/accepter"
+	"go-backend/api/rule/actions"
+	"go-backend/api/rule/ruleparser/matcher"
+	"go-backend/api/rule/scheduler"
 	"go-backend/api/server/router"
 	"go-backend/api/sys/gis/geo/geocontainer"
 	"go-backend/api/sys/iot/monitor"
@@ -15,6 +14,12 @@ import (
 	docs "go-backend/docs"
 	"net/http"
 	"os"
+
+	"github.com/gin-gonic/gin"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/spf13/viper"
+	swaggerFiles "github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
 )
 
 // @title Intelligent Pasture Backend APIs
@@ -29,7 +34,7 @@ import (
 // @license.name license(Mandatory)
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host 8.142.115.160:5930
+// @host localhost:5930
 // @BasePath /
 func main() {
 	InitConfig()
@@ -38,6 +43,10 @@ func main() {
 	sensor.InitCollections()
 	geocontainer.InitContainer()
 	monitor.InitMonitor()
+	scheduler.InitRuleScheduler()
+	matcher.InitMatcher()
+	actions.InitAction()
+	accepter.InitAccepter()
 	defer db.Close()
 	defer deviceDb.Client().Disconnect(common.Ctx)
 
@@ -48,9 +57,10 @@ func main() {
 	r = router.CompanyRouter(r)
 	r = router.DeviceRouter(r)
 	r = router.BiologyRouter(r)
-	r = router.FenceRouter(r)
+	// r = router.FenceRouter(r)
 	r = router.MonitorRouter(r)
 	r = router.RoleRouter(r)
+	r = router.RuleRouter(r)
 	r.StaticFS("/biology_pictures", http.Dir("./pictures"))
 	port := viper.GetString("server.port")
 

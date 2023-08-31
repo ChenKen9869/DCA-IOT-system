@@ -289,7 +289,7 @@ func CreateCompanyUserService(companyId uint, userId uint) error {
 // @version 1.0
 // @accept application/json
 // @param CompanyId query int true "company id"
-// @param UserId formData string true "user id"
+// @param UserId query string true "user id"
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /company/company_user/delete [delete]

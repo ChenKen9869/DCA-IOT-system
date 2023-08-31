@@ -964,7 +964,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "user id",
                         "name": "UserId",
-                        "in": "formData",
+                        "in": "query",
                         "required": true
                     },
                     {
@@ -2042,185 +2042,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/fence/create": {
-            "post": {
-                "description": "fence create : 创建围栏任务 参数列表：[围栏地理位置、监控的设备列表（设备ID组成）、围栏任务的持续时间、坐标系、围栏任务名、围栏任务所属公司ID] 访问携带token",
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "tags": [
-                    "Fence"
-                ],
-                "summary": "API of golang gin backend",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "position",
-                        "name": "Position",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "device list",
-                        "name": "DeviceList",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "duration",
-                        "name": "Duration",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "coordinate",
-                        "name": "Coordinate",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "name of fence",
-                        "name": "Name",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "parent id",
-                        "name": "ParentId",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功",
-                        "schema": {
-                            "$ref": "#/definitions/server.SuccessResponse200"
-                        }
-                    }
-                }
-            }
-        },
-        "/fence/get_active_list": {
-            "get": {
-                "description": "get active fence list by company id : 获取牧场中所有处于活跃状态的围栏 参数列表：[牧场ID] 访问携带token",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Fence"
-                ],
-                "summary": "API of golang gin backend",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "company id",
-                        "name": "CompanyId",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功",
-                        "schema": {
-                            "$ref": "#/definitions/server.SuccessResponse200"
-                        }
-                    }
-                }
-            }
-        },
-        "/fence/get_status": {
-            "get": {
-                "description": "get fence status : 获取围栏任务的执行状态 参数列表：[围栏ID] 访问携带token",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Fence"
-                ],
-                "summary": "API of golang gin backend",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "fence id",
-                        "name": "FenceId",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功",
-                        "schema": {
-                            "$ref": "#/definitions/server.SuccessResponse200"
-                        }
-                    }
-                }
-            }
-        },
-        "/fence/stop": {
-            "delete": {
-                "description": "fence stop : 终止围栏任务 参数列表：[围栏ID] 访问携带token",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Fence"
-                ],
-                "summary": "API of golang gin backend",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "fence id",
-                        "name": "FenceId",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功",
-                        "schema": {
-                            "$ref": "#/definitions/server.SuccessResponse200"
-                        }
-                    }
-                }
-            }
-        },
         "/monitorCentor/connect": {
             "get": {
                 "description": "connect with monitor centor : 连接到监控中心以接受推送 参数列表：[] 访问携带token",
@@ -2409,6 +2230,350 @@ const docTemplate = `{
                         "type": "string",
                         "description": "company id",
                         "name": "CompanyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/rule/create": {
+            "post": {
+                "description": "create a rule",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "Rule"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "datasource",
+                        "name": "Datasource",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "condition",
+                        "name": "Condition",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "action",
+                        "name": "Action",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/rule/delete": {
+            "delete": {
+                "description": "delete an inactive rule",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rule"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "rule id",
+                        "name": "RuleId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/rule/end": {
+            "get": {
+                "description": "end a rule",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rule"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "rule id",
+                        "name": "RuleId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/rule/get_company": {
+            "get": {
+                "description": "get rule list by company id",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rule"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "company id",
+                        "name": "CompanyId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/rule/get_user": {
+            "get": {
+                "description": "get rule list by user id",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rule"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/rule/schedule": {
+            "get": {
+                "description": "schedule a rule",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rule"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "rule id",
+                        "name": "RuleId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "exec internal",
+                        "name": "ExecInternal",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "future start time",
+                        "name": "FutureTime",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/rule/start": {
+            "get": {
+                "description": "start a rule",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rule"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "rule id",
+                        "name": "RuleId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "exec internal",
+                        "name": "ExecInternal",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "$ref": "#/definitions/server.SuccessResponse200"
+                        }
+                    }
+                }
+            }
+        },
+        "/rule/update": {
+            "put": {
+                "description": "update an inactive rule",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rule"
+                ],
+                "summary": "API of golang gin backend",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "datasource",
+                        "name": "Datasource",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "condition",
+                        "name": "Condition",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "action",
+                        "name": "Action",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "rule id",
+                        "name": "RuleId",
                         "in": "query",
                         "required": true
                     },
@@ -2783,7 +2948,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "version(1.0)",
-	Host:             "8.142.115.160:5930",
+	Host:             "localhost:5930",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Intelligent Pasture Backend APIs",

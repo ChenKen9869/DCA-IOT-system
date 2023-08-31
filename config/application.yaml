@@ -35,3 +35,11 @@ geo:
   coordinates: GCJ-02
 biology:
   picturedir: xxxx/assets/biology_pictures/
+emqx:
+  host: 124.70.208.224
+  port: 1883
+  username: xumu
+  password: xumu@123456
+  collar: collar/#
+  fio: smartag01/#
+  position-collar: poscollar/#

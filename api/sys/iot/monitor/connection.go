@@ -109,5 +109,5 @@ func (con MonitorConnection)Disconnect() {
 
 func InitMonitor() {
 	MonitorCentor = make(map[uint]MonitorConnection)
-	ActiveFenceList = make(map[uint]ActiveFence)
+	// ActiveFenceList = make(map[uint]ActiveFence)
 }
