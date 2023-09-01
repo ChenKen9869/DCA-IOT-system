@@ -9,7 +9,7 @@ type Action struct {
 
 /*
 	Action=
-	{actionType_01: P_01($val01, $val_02)}; {actionType_02: P_02($val_01, $val_02)}
+	actionType_01: P_01($val01, $val_02); actionType_02: P_02($val_01, $val_02)
 */
 func ParseAction(action string) []Action {
 
@@ -21,7 +21,7 @@ func ParseAction(action string) []Action {
 	*/
 	actionList := strings.Split(action, ";")
 	for _, actionStr := range actionList {
-		// {actionType_01:P_01($val01,$val_02)}
+		// actionType_01:P_01($val01,$val_02)
 		aL := strings.Split(actionStr, ":")
 		result = append(result, Action{
 			ActionType:   aL[0],

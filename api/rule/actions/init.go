@@ -5,15 +5,7 @@ const (
 	MqttActionType      string = "Mqtt"
 )
 
-func InitAction() {
-	// 将 action 的 channel 注册
-	ActionChannels[WebsocketActionType] = WsActionChannel
-	ActionChannels[MqttActionType] = MqttActionChannel
-	// 启动监听器协程
-	go startActionExecutor()
-}
-
-func startActionExecutor() {
+func StartActionExecutor() {
 	for {
 		select {
 		case params := <-WsActionChannel:

@@ -276,6 +276,13 @@ const docTemplate = `{
                         "name": "BiologyTypeId",
                         "in": "formData",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1332,6 +1339,13 @@ const docTemplate = `{
                         "name": "FixedDeviceTypeId",
                         "in": "formData",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1749,6 +1763,13 @@ const docTemplate = `{
                         "name": "PortableDeviceTypeId",
                         "in": "formData",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -2042,14 +2063,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/monitorCentor/connect": {
+        "/monitorCenter/connect": {
             "get": {
-                "description": "connect with monitor centor : 连接到监控中心以接受推送 参数列表：[] 访问携带token",
+                "description": "connect with monitor center : 连接到监控中心以接受推送 参数列表：[] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
-                    "MonitorCentor"
+                    "MonitorCenter"
                 ],
                 "summary": "API of golang gin backend",
                 "parameters": [
@@ -2071,14 +2092,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/monitorCentor/disconnect": {
+        "/monitorCenter/disconnect": {
             "delete": {
-                "description": "disconnect with monitor centor : 从监控中心断开连接 参数列表：[] 访问携带token",
+                "description": "disconnect with monitor center : 从监控中心断开连接 参数列表：[] 访问携带token",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
-                    "MonitorCentor"
+                    "MonitorCenter"
                 ],
                 "summary": "API of golang gin backend",
                 "parameters": [
@@ -2359,7 +2380,7 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "rule id",
                         "name": "RuleId",
-                        "in": "formData",
+                        "in": "query",
                         "required": true
                     },
                     {
@@ -2395,7 +2416,7 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "company id",
                         "name": "CompanyId",
-                        "in": "formData",
+                        "in": "query",
                         "required": true
                     },
                     {
@@ -2460,21 +2481,21 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "rule id",
                         "name": "RuleId",
-                        "in": "formData",
+                        "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "exec internal",
                         "name": "ExecInternal",
-                        "in": "formData",
+                        "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "future start time",
                         "name": "FutureTime",
-                        "in": "formData",
+                        "in": "query",
                         "required": true
                     },
                     {
@@ -2510,14 +2531,14 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "rule id",
                         "name": "RuleId",
-                        "in": "formData",
+                        "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "exec internal",
                         "name": "ExecInternal",
-                        "in": "formData",
+                        "in": "query",
                         "required": true
                     },
                     {

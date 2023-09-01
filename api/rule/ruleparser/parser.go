@@ -1,9 +1,11 @@
 package ruleparser
 
+import "fmt"
+
 type Token struct {
-	TokenType  	string
-	TokenValue 	string
-	RealNum		float64
+	TokenType  string
+	TokenValue string
+	RealNum    float64
 }
 
 type SymbolElem struct {
@@ -41,7 +43,7 @@ func ParseRule(datasource string, condition string, action string) func() {
 		tokenList = parseFunctionCondition(conditionWithType.StrTokenList, symbolTable)
 	}
 
+	fmt.Println("condition type: " + conditionWithType.ConditionType)
 	// 3. 生成并返回模式匹配函数，将外符号表，类型标识符，TokenList，actionList一起传进去
 	return MatcherGenerator(symbolTable, conditionWithType.ConditionType, tokenList, actionList)
 }
-

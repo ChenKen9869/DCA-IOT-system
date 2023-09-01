@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"time"
+
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -33,6 +34,8 @@ func InitDeviceDB() *mongo.Database {
 		fmt.Println(err.Error())
 	}
 	DeivceDB = client.Database(deviceDatabase)
+
+	fmt.Println("[INITIAL SUCCESS] The message database module is initialized successfully!")
 	return DeivceDB
 }
 

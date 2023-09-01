@@ -29,7 +29,9 @@ func TransformCondition(infix []Token) []Token {
 				}
 			}
 		} else if t == OptTokenType {
-			if optSt.Top().(Token).TokenType == OptTokenType {
+			if optSt.IsEmpty() {
+				optSt.Push(token)
+			} else if optSt.Top().(Token).TokenType == OptTokenType {
 				if IsHigherPriority(token.TokenValue, optSt.Top().(Token).TokenValue) {
 					postSt.Push(token)
 				} else {

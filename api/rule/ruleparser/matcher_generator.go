@@ -1,12 +1,14 @@
 package ruleparser
 
 import (
+	"fmt"
 	"go-backend/api/rule/accepter"
 	"go-backend/api/rule/actions"
 )
 
 func MatcherGenerator(symbolTable SymbolTable, conditionType string, tokenList []Token, actionList []Action) func() {
 	return func() {
+		fmt.Println("rule match start, waiting for result ... ")
 		// 构建内符号表
 		currData := make(InnerTable)
 		for symbol, symbolData := range symbolTable {
@@ -19,9 +21,14 @@ func MatcherGenerator(symbolTable SymbolTable, conditionType string, tokenList [
 		}
 		// 查找并调用匹配算法
 		if MatcherMap[conditionType](tokenList, currData) {
+			fmt.Println("rule matched! ")
 			for _, ac := range actionList {
+				// 使用内符号表替换 actionparams
+
 				actions.ActionChannels[ac.ActionType] <- ac.ActionParams
 			}
+			return
 		}
+		fmt.Println("rule not matched! ")
 	}
 }

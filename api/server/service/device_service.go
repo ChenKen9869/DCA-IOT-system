@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"strings"
 	"time"
+
 	"github.com/spf13/viper"
 )
 
@@ -27,13 +28,13 @@ import (
 // @router /device/fixed/create [post]
 func CreateFixedDeviceService(deviceId string, farmhouseId uint, fixedDeviceTypeId string, owner uint, installTime time.Time, boughtTime time.Time) uint {
 	fixedDevice := entity.FixedDevice{
-		DeviceID: deviceId,
-		FarmhouseID: farmhouseId,
+		DeviceID:          deviceId,
+		FarmhouseID:       farmhouseId,
 		FixedDeviceTypeID: fixedDeviceTypeId,
-		Owner: owner,
-		BoughtTime: boughtTime,
-		InstallTime: installTime,
-		Stat: "normal",
+		Owner:             owner,
+		BoughtTime:        boughtTime,
+		InstallTime:       installTime,
+		Stat:              "normal",
 	}
 	id := dao.CreateFixedDevice(fixedDevice)
 	return id
@@ -72,13 +73,13 @@ func CreatePortableDeviceService(biologyId uint, portableDeviceId string, portab
 	}
 	owner := biology.Owner
 	portableDevice := entity.PortableDevice{
-		DeviceID: portableDeviceId,
-		BiologyID: biologyId,
+		DeviceID:             portableDeviceId,
+		BiologyID:            biologyId,
 		PortableDeviceTypeID: portableDeviceTypeId,
-		Owner: owner,
-		BoughtTime: boughtTime,
-		InstallTime: installTime,
-		Stat: "normal",
+		Owner:                owner,
+		BoughtTime:           boughtTime,
+		InstallTime:          installTime,
+		Stat:                 "normal",
 	}
 	id := dao.CreatePortableDevice(portableDevice)
 	return id
@@ -103,6 +104,7 @@ func DeletePortableDeviceService(portableDeviceId uint) {
 // @version 1.0
 // @accept mpfd
 // @param FixedDeviceTypeId formData string true "type name"
+// @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /device/fixed/create_type [post]
 func CreateFixedDeviceTypeService(fixedDeviceTypeId string) {
@@ -127,10 +129,11 @@ func DeleteFixedDeviceTypeService(fixedDeviceTypeId string) {
 
 // @Summary API of golang gin backend
 // @Tags Device-portable
-// @description create portable device type : 新增便携式设备类型 参数列表：[设备类型] 
+// @description create portable device type : 新增便携式设备类型 参数列表：[设备类型]
 // @version 1.0
 // @accept mpfd
 // @param PortableDeviceTypeId formData string true "type name"
+// @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router  /device/portable/create_type [post]
 func CreatePortableDeviceTypeService(portableDeviceTypeId string) {
@@ -153,9 +156,9 @@ func DeletePortableDeviceTypeService(fixedDeviceTypeId string) {
 	dao.DeleteFixedDeviceType(fixedDeviceTypeId)
 }
 
-var streamAccessToken = map[string]interface{} {
-	"accessToken" : "null",
-	"expireTime" : time.Now().AddDate(0, 0, -2),
+var streamAccessToken = map[string]interface{}{
+	"accessToken": "null",
+	"expireTime":  time.Now().AddDate(0, 0, -2),
 }
 
 func updateMonitorStreamToken() {
@@ -187,13 +190,13 @@ func updateMonitorStreamToken() {
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /device/fixed/get_monitor [get]
-func GetMonitorStreamByDeviceIdService(deviceId uint) (string, int64, string, string, string){
+func GetMonitorStreamByDeviceIdService(deviceId uint) (string, int64, string, string, string) {
 	accessToken := streamAccessToken["accessToken"].(string)
 	expireTime := streamAccessToken["expireTime"].(time.Time)
-	if accessToken == "null" || 
-		time.Since(expireTime) >= 24 * time.Hour {
-			updateMonitorStreamToken()
-		}
+	if accessToken == "null" ||
+		time.Since(expireTime) >= 24*time.Hour {
+		updateMonitorStreamToken()
+	}
 	accessToken = streamAccessToken["accessToken"].(string)
 	monitorDeviceId := dao.GetFixedDeviceInfoById(deviceId).DeviceID
 	serverUrl := viper.GetString("monitoR.GetStreamAddressUrl")
@@ -217,9 +220,9 @@ func GetMonitorStreamByDeviceIdService(deviceId uint) (string, int64, string, st
 	return resultUrl, resultExpireTime, id, msg, accessToken
 }
 
-var newCollarAccessToken = map[string]interface{} {
-	"accessToken" : "null",
-	"expireTime" : time.Now().AddDate(0, 0, -2),
+var newCollarAccessToken = map[string]interface{}{
+	"accessToken": "null",
+	"expireTime":  time.Now().AddDate(0, 0, -2),
 }
 
 func updateNewCollarToken() {
@@ -250,11 +253,11 @@ func updateNewCollarToken() {
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /device/portable/get_new_collar [get]
-func GetNewCollarRealtimeByDeviceIdService(deviceId uint) (vo.NewCollar, string){
+func GetNewCollarRealtimeByDeviceIdService(deviceId uint) (vo.NewCollar, string) {
 	accessToken := newCollarAccessToken["accessToken"].(string)
 	expireTime := newCollarAccessToken["expireTime"].(time.Time)
-	if accessToken == "null" || time.Since(expireTime) >= 24 * time.Hour {
-			updateNewCollarToken()
+	if accessToken == "null" || time.Since(expireTime) >= 24*time.Hour {
+		updateNewCollarToken()
 	}
 	accessToken = newCollarAccessToken["accessToken"].(string)
 	collarDeviceId := dao.GetPortableDeviceInfoById(deviceId).DeviceID
@@ -279,18 +282,18 @@ func GetNewCollarRealtimeByDeviceIdService(deviceId uint) (vo.NewCollar, string)
 	responseBody := server.GetResponseBodyNewCollarRealtime(response)
 	msg := responseBody.Msg
 	data := (responseBody.Data)[0]
-	newCollarRealtimeData := vo.NewCollar {
-		Area: data.Area,
-		Iccid: data.Iccid,
-		Police: data.Police,
-		AllStep: data.AllStep,
-		LastTime: data.LastTime,
-		Temperature: data.Temperature,
-		Station: data.Station,
-		IsOnline: data.IsOnline,
+	newCollarRealtimeData := vo.NewCollar{
+		Area:           data.Area,
+		Iccid:          data.Iccid,
+		Police:         data.Police,
+		AllStep:        data.AllStep,
+		LastTime:       data.LastTime,
+		Temperature:    data.Temperature,
+		Station:        data.Station,
+		IsOnline:       data.IsOnline,
 		SignalStrength: data.SignalStrength,
-		Type: data.Type,
-		Voltage: data.Voltage,
+		Type:           data.Type,
+		Voltage:        data.Voltage,
 	}
 	return newCollarRealtimeData, msg
 }
@@ -335,11 +338,11 @@ func GetPortableDeviceListByFarmhouseService(farmhouseId uint) []vo.BiologyDevic
 		for _, device := range deviceList {
 			if device.ID != 0 {
 				result = append(result, vo.BiologyDevice{
-					BiologyId: biology.ID,
+					BiologyId:   biology.ID,
 					BiologyName: biology.Name,
 					BiologyType: biology.BiologyTypeID,
-					DeviceId: device.ID,
-					DeviceType: device.PortableDeviceTypeID,
+					DeviceId:    device.ID,
+					DeviceType:  device.PortableDeviceTypeID,
 				})
 			}
 		}
@@ -366,13 +369,13 @@ func GetAuthFixedDeviceListService(userId uint) []vo.AuthFixedDevice {
 		currList := dao.GetFixedDeviceListByFarmhouse(node)
 		for _, curr := range currList {
 			result = append(result, vo.AuthFixedDevice{
-				DeviceId: curr.ID,
-				DeviceType: curr.FixedDeviceTypeID,
+				DeviceId:    curr.ID,
+				DeviceType:  curr.FixedDeviceTypeID,
 				FarmhouseId: curr.FarmhouseID,
-				CreateDate: curr.CreatedAt,
-				BoughtDate: curr.BoughtTime,
+				CreateDate:  curr.CreatedAt,
+				BoughtDate:  curr.BoughtTime,
 				InstallDate: curr.InstallTime,
-				Stat: curr.Stat,
+				Stat:        curr.Stat,
 			})
 		}
 	}
@@ -392,13 +395,13 @@ func GetOwnFixedDeviceListService(userId uint) []vo.OwnFixedDevice {
 	fixedDeviceList := dao.GetOwnFixedDeviceList(userId)
 	for _, fixedDevice := range fixedDeviceList {
 		fixedDeviceInfoList = append(fixedDeviceInfoList, vo.OwnFixedDevice{
-			Id: fixedDevice.ID,
-			Type: fixedDevice.FixedDeviceTypeID,
-			DeviceId: fixedDevice.DeviceID,
+			Id:          fixedDevice.ID,
+			Type:        fixedDevice.FixedDeviceTypeID,
+			DeviceId:    fixedDevice.DeviceID,
 			InstallTime: fixedDevice.InstallTime,
-			CreateTime: fixedDevice.CreatedAt,
+			CreateTime:  fixedDevice.CreatedAt,
 			FarmhouseId: fixedDevice.FarmhouseID,
-			BoughtTime: fixedDevice.BoughtTime,
+			BoughtTime:  fixedDevice.BoughtTime,
 		})
 	}
 	return fixedDeviceInfoList
@@ -417,13 +420,13 @@ func GetOwnPortableDeviceListService(userId uint) []vo.OwnPortableDevice {
 	portableDeviceList := dao.GetOwnPortableDeviceList(userId)
 	for _, portableDevice := range portableDeviceList {
 		portableDeviceInfoList = append(portableDeviceInfoList, vo.OwnPortableDevice{
-			Id: portableDevice.ID,
-			Type: portableDevice.PortableDeviceTypeID,
-			DeviceId: portableDevice.DeviceID,
+			Id:          portableDevice.ID,
+			Type:        portableDevice.PortableDeviceTypeID,
+			DeviceId:    portableDevice.DeviceID,
 			InstallTime: portableDevice.InstallTime,
-			CreateTime: portableDevice.CreatedAt,
-			BiologyId: portableDevice.BiologyID,
-			BoughtTime: portableDevice.BoughtTime,
+			CreateTime:  portableDevice.CreatedAt,
+			BiologyId:   portableDevice.BiologyID,
+			BoughtTime:  portableDevice.BoughtTime,
 		})
 	}
 	return portableDeviceInfoList
@@ -443,13 +446,13 @@ func GetPortableDeviceListByBiologyService(biologyId uint) []vo.BiologyPortableD
 	var result []vo.BiologyPortableDevice
 	for _, portableDevice := range portableDeviceList {
 		result = append(result, vo.BiologyPortableDevice{
-			Id: portableDevice.ID,
-			Type: portableDevice.PortableDeviceTypeID,
-			DeviceId: portableDevice.DeviceID,
+			Id:          portableDevice.ID,
+			Type:        portableDevice.PortableDeviceTypeID,
+			DeviceId:    portableDevice.DeviceID,
 			InstallTime: portableDevice.InstallTime,
-			CreateTime: portableDevice.CreatedAt,
-			BoughtTime: portableDevice.BoughtTime,
-			Stat: portableDevice.Stat,
+			CreateTime:  portableDevice.CreatedAt,
+			BoughtTime:  portableDevice.BoughtTime,
+			Stat:        portableDevice.Stat,
 		})
 	}
 	return result

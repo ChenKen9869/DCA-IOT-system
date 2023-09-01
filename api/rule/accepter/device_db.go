@@ -1,5 +1,9 @@
 package accepter
 
 type DeviceType = string
-type DBTable = string
-var DeviceDBMap map[DeviceType]DBTable
+type DBTable struct {
+	TableName string
+	ColumnName string
+}
+
+var DeviceDBMap map[DeviceType]DBTable 

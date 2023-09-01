@@ -1,6 +1,7 @@
 package accepter
 
 import (
+	"fmt"
 	"go-backend/api/common/common"
 	"go-backend/api/server/entity"
 	"time"
@@ -8,24 +9,25 @@ import (
 
 // (可选)存入 mongoDB 数据库
 
-func startExampleAccepter() {
+func StartExampleAccepter() {
 	for {
 		deviceId, msgDeviceType, attribute, value := messageArrive()
+		fmt.Println("msg arrived")
 		deviceType := getDeviceTypeInMysql(msgDeviceType)
 		// 在 mysql 中查找对应设备的 主键id
 		var id int
 		if deviceType == PortableDeviceType {
 			var deviceInfo entity.PortableDevice
-			common.GetDB().Table(DeviceDBMap[deviceType]).Where("device_id = ?", deviceId).Where("device_type = ?", msgDeviceType).First(&deviceInfo)
+			common.GetDB().Table(DeviceDBMap[deviceType].TableName).Where(DeviceDBMap[deviceType].ColumnName+" = ?", msgDeviceType).Where("device_id = ?", deviceId).First(&deviceInfo)
 			id = int(deviceInfo.ID)
 		} else {
 			var deviceInfo entity.FixedDevice
-			common.GetDB().Table(DeviceDBMap[deviceType]).Where("device_id = ?", deviceId).Where("device_type = ?", msgDeviceType).First(&deviceInfo)
+			common.GetDB().Table(DeviceDBMap[deviceType].TableName).Where(DeviceDBMap[deviceType].ColumnName+" = ?", msgDeviceType).Where("device_id = ?", deviceId).First(&deviceInfo)
 			id = int(deviceInfo.ID)
 		}
 		updateDatasourceManagement(id, deviceType, attribute, value)
-
-		time.Sleep(5 * time.Minute)
+		fmt.Println("update datasource management down!")
+		time.Sleep(1 * time.Minute)
 	}
 }
 
@@ -37,9 +39,14 @@ func updateDatasourceManagement(id int, deviceType string, attr string, value fl
 	}
 
 	DMLock.Lock()
-	v := DatasourceManagement[index][attr]
-	v.Value = value
-	DatasourceManagement[index][attr] = v
+	v1, exist1 := DatasourceManagement[index]
+	if exist1 {
+		v, exist := v1[attr]
+		if exist {
+			v.Value = value
+			DatasourceManagement[index][attr] = v
+		}
+	}
 	DMLock.Unlock()
 }
 

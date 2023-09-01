@@ -1,9 +1,11 @@
 package preprosess
 
 import (
+	"fmt"
 	"go-backend/api/common/common"
 	"go-backend/api/rule/accepter"
 	"go-backend/api/rule/ruleparser"
+	"go-backend/api/server/dao"
 	"go-backend/api/server/entity"
 )
 
@@ -79,10 +81,27 @@ func AuthDevices(datasource string, companyId uint) bool {
 		id := ds.DeviceId
 		typeS := ds.DeviceType
 		// auth company and device
-		var rule entity.Rule
-		common.GetDB().Table(accepter.DeviceDBMap[typeS]).Where("id = ?", id).First(&rule)
-		if rule.ParentId != companyId {
-			return false
+		if ds.DeviceType == accepter.PortableDeviceType {
+			var device entity.PortableDevice
+			fmt.Println(id, typeS+"    "+accepter.DeviceDBMap[typeS].TableName)
+			fmt.Println("__________-------------_______")
+			common.GetDB().Table(accepter.DeviceDBMap[typeS].TableName).Where("id = ?", id).First(&device)
+			pid := dao.GetBiologyInfoById(device.BiologyID).FarmhouseID
+			fmt.Println(pid, companyId)
+			if pid != companyId {
+				return false
+			}
+		} else if ds.DeviceType == accepter.FixedDeviceType {
+			var device entity.FixedDevice
+			fmt.Println(id, typeS+"    "+accepter.DeviceDBMap[typeS].TableName)
+			fmt.Println("__________-------------_______")
+			common.GetDB().Table(accepter.DeviceDBMap[typeS].TableName).Where("id = ?", id).First(&device)
+			fmt.Println(device.FarmhouseID, companyId)
+			if device.FarmhouseID != companyId {
+				return false
+			}
+		} else {
+			panic("device type Error")
 		}
 	}
 	return true

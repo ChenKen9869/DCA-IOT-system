@@ -38,10 +38,10 @@ package monitor
 // 			return
 // 		} else {
 // 			service.AddAlarmTimeService(fenceId, vitalAbnormalList, positionAbnormalList)
-// 			if _, ok := MonitorCentor[userId]; ok {
+// 			if _, ok := MonitorCenter[userId]; ok {
 // 				message := "01" + vitalAbnormalList + "#" + positionAbnormalList
 // 				msg := MakeMessage(FenceJob, fenceId, message)
-// 				MonitorCentor[userId].MessageChan <- msg
+// 				MonitorCenter[userId].MessageChan <- msg
 // 			}
 // 		}
 // 	})

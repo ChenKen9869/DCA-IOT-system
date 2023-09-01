@@ -1,12 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"go-backend/api/common/common"
 	"go-backend/api/common/middleware"
-	"go-backend/api/rule/accepter"
-	"go-backend/api/rule/actions"
-	"go-backend/api/rule/ruleparser/matcher"
-	"go-backend/api/rule/scheduler"
+	"go-backend/api/rule"
 	"go-backend/api/server/router"
 	"go-backend/api/sys/gis/geo/geocontainer"
 	"go-backend/api/sys/iot/monitor"
@@ -19,7 +17,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/spf13/viper"
 	swaggerFiles "github.com/swaggo/files"
-	"github.com/swaggo/gin-swagger"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // @title Intelligent Pasture Backend APIs
@@ -43,10 +41,7 @@ func main() {
 	sensor.InitCollections()
 	geocontainer.InitContainer()
 	monitor.InitMonitor()
-	scheduler.InitRuleScheduler()
-	matcher.InitMatcher()
-	actions.InitAction()
-	accepter.InitAccepter()
+	rule.InitRule()
 	defer db.Close()
 	defer deviceDb.Client().Disconnect(common.Ctx)
 
@@ -82,4 +77,5 @@ func InitConfig() {
 	if err != nil {
 		panic("")
 	}
+	fmt.Println("[INITIAL SUCCESS] System config is initialized successfully!")
 }

@@ -1,19 +1,21 @@
 package monitor
 
 import (
+	"fmt"
 	"go-backend/api/server/entity"
 	"go-backend/api/server/tools/server"
 	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
 
 type MonitorConnection struct {
 	MessageChan chan string
-	QuitChan chan int
+	QuitChan    chan int
 }
 
-var MonitorCentor map[uint]MonitorConnection
+var MonitorCenter map[uint]MonitorConnection
 
 var upGrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
@@ -22,14 +24,14 @@ var upGrader = websocket.Upgrader{
 }
 
 // @Summary API of golang gin backend
-// @Tags MonitorCentor
-// @description connect with monitor centor : 连接到监控中心以接受推送 参数列表：[] 访问携带token
+// @Tags MonitorCenter
+// @description connect with monitor center : 连接到监控中心以接受推送 参数列表：[] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
-// @router /monitorCentor/connect [get]
-func ConnectToMonitorCentor(ctx *gin.Context) {
+// @router /monitorCenter/connect [get]
+func ConnectToMonitorCenter(ctx *gin.Context) {
 	userInfo, exists := ctx.Get("user")
 	if !exists {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user info does not exists in application context")
@@ -37,10 +39,10 @@ func ConnectToMonitorCentor(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	userId := user.ID
-	if _, exists := MonitorCentor[userId]; !exists {
-		MonitorCentor[userId] = MonitorConnection {
+	if _, exists := MonitorCenter[userId]; !exists {
+		MonitorCenter[userId] = MonitorConnection{
 			MessageChan: make(chan string),
-			QuitChan: make(chan int),
+			QuitChan:    make(chan int),
 		}
 	}
 	ws, err := upGrader.Upgrade(ctx.Writer, ctx.Request, nil)
@@ -60,7 +62,7 @@ func ConnectToMonitorCentor(ctx *gin.Context) {
 	})
 	defer ws.Close()
 	ws.WriteMessage(websocket.TextMessage, []byte("connected"))
-	ws.SetPingHandler(func(ping string) error { 
+	ws.SetPingHandler(func(ping string) error {
 		err := ws.WriteMessage(websocket.PongMessage, []byte("pong"))
 		if err != nil {
 			return err
@@ -69,15 +71,15 @@ func ConnectToMonitorCentor(ctx *gin.Context) {
 	})
 	for {
 		select {
-		case message := <- MonitorCentor[userId].MessageChan:
+		case message := <-MonitorCenter[userId].MessageChan:
 			err := ws.WriteMessage(websocket.TextMessage, []byte(message))
 			// 如果连接断开，则将最新取出的消息放回管道末尾
 			if err != nil {
-				MonitorCentor[userId].MessageChan <- message
+				MonitorCenter[userId].MessageChan <- message
 				return
 			}
-		case <- MonitorCentor[userId].QuitChan:
-			delete(MonitorCentor, userId)
+		case <-MonitorCenter[userId].QuitChan:
+			delete(MonitorCenter, userId)
 			ws.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(1000, "closed"))
 			return
 		}
@@ -85,29 +87,31 @@ func ConnectToMonitorCentor(ctx *gin.Context) {
 }
 
 // @Summary API of golang gin backend
-// @Tags MonitorCentor
-// @description disconnect with monitor centor : 从监控中心断开连接 参数列表：[] 访问携带token
+// @Tags MonitorCenter
+// @description disconnect with monitor center : 从监控中心断开连接 参数列表：[] 访问携带token
 // @version 1.0
 // @accept application/json
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
-// @router /monitorCentor/disconnect  [delete]
-func DisconnectMonitorCentor(ctx *gin.Context) {
+// @router /monitorCenter/disconnect  [delete]
+func DisconnectMonitorCenter(ctx *gin.Context) {
 	userInfo, exists := ctx.Get("user")
 	if !exists {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user info does not exists in application context")
 		return
 	}
 	user := userInfo.(entity.User)
-	MonitorCentor[user.ID].Disconnect()
+	MonitorCenter[user.ID].Disconnect()
 	server.ResponseSuccess(ctx, nil, server.Success)
 }
 
-func (con MonitorConnection)Disconnect() {
+func (con MonitorConnection) Disconnect() {
 	con.QuitChan <- -1
 }
 
 func InitMonitor() {
-	MonitorCentor = make(map[uint]MonitorConnection)
+	MonitorCenter = make(map[uint]MonitorConnection)
 	// ActiveFenceList = make(map[uint]ActiveFence)
+
+	fmt.Println("[INITIAL SUCCESS] The monitor center is initialized successfully!")
 }

@@ -7,4 +7,4 @@ type ActionSignal struct {
 
 type ActionType = string
 
-var ActionChannels map[ActionType](chan string) = make(map[string]chan string)
+var ActionChannels map[ActionType](chan string)

@@ -25,12 +25,12 @@ import (
 // @router /biology/create [post]
 func CreateBiologyService(biologyName string, farmhouseId uint, biologyTypeId string, birthday time.Time, gender string, owner uint) uint {
 	biology := entity.Biology{
-		Name: biologyName,
-		FarmhouseID: farmhouseId,
+		Name:          biologyName,
+		FarmhouseID:   farmhouseId,
 		BiologyTypeID: biologyTypeId,
-		Owner: owner,
-		Birthday: birthday,
-		Gender: gender,
+		Owner:         owner,
+		Birthday:      birthday,
+		Gender:        gender,
 	}
 	id := dao.CreateBiology(biology)
 	// 判断 type 是否在服务器中注册过
@@ -57,28 +57,29 @@ func CreateBiologyService(biologyName string, farmhouseId uint, biologyTypeId st
 // @router  /biology/delete [delete]
 func DeleteBiologyService(operator string, telephoneNumber string, leavePlace string, biologyId uint) {
 	portableDeviceList := dao.GetPortableDeviceListByBiology(biologyId)
-	for _, portableDevice := range portableDeviceList {	
+	for _, portableDevice := range portableDeviceList {
 		dao.DeletePortableDevice(portableDevice.ID)
 	}
 	dao.DeleteBiology(biologyId)
-	biologyChangeRecord := entity.BiologyChange {
-		BiologyId: biologyId,
-		FromCompany: int(dao.GetBiologyInfoById(biologyId).FarmhouseID),
-		ToCompany: -1,
-		Operator: operator,
+	biologyChangeRecord := entity.BiologyChange{
+		BiologyId:       biologyId,
+		FromCompany:     int(dao.GetBiologyInfoById(biologyId).FarmhouseID),
+		ToCompany:       -1,
+		Operator:        operator,
 		TelephoneNumber: telephoneNumber,
-		LeavePlace: leavePlace,
+		LeavePlace:      leavePlace,
 	}
 	dao.CreateBiologyChangeRecord(biologyChangeRecord)
 }
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description create biology type : 创建生物类型 参数列表：[生物类型名称] 
+// @description create biology type : 创建生物类型 参数列表：[生物类型名称]
 // @version 1.0
 // @accept mpfd
 // @param BiologyTypeId formData string true "type name"
 // @Success 200 {object} server.SuccessResponse200 "成功"
+// @param Authorization header string true "token"
 // @router /biology/create_type [post]
 func CreateBiologyTypeService(biologyTypeId string) {
 	biologyType := entity.BiologyType{
@@ -144,11 +145,11 @@ func GetBiologyWithDeviceListService(companyId uint) []vo.BiologyDevice {
 			for _, device := range deviceList {
 				if device.ID != 0 {
 					result = append(result, vo.BiologyDevice{
-						BiologyId: biology.ID,
+						BiologyId:   biology.ID,
 						BiologyName: biology.Name,
 						BiologyType: biology.BiologyTypeID,
-						DeviceId: device.ID,
-						DeviceType: device.PortableDeviceTypeID,
+						DeviceId:    device.ID,
+						DeviceType:  device.PortableDeviceTypeID,
 					})
 				}
 			}
@@ -171,13 +172,13 @@ func GetBiologyWithDeviceListService(companyId uint) []vo.BiologyDevice {
 // @router /biology/update_farmhouse [put]
 func UpdateBiologyFarmhouseService(operator string, telephoneNumber string, biologyId uint, farmhouseId uint) {
 	dao.UpdateBiologyFarmhouse(biologyId, farmhouseId)
-	biologyChangeRecord := entity.BiologyChange {
-		BiologyId: biologyId,
-		FromCompany: int(dao.GetBiologyInfoById(biologyId).FarmhouseID),
-		ToCompany: int(farmhouseId),
-		Operator: operator,
+	biologyChangeRecord := entity.BiologyChange{
+		BiologyId:       biologyId,
+		FromCompany:     int(dao.GetBiologyInfoById(biologyId).FarmhouseID),
+		ToCompany:       int(farmhouseId),
+		Operator:        operator,
 		TelephoneNumber: telephoneNumber,
-		LeavePlace: "null",
+		LeavePlace:      "null",
 	}
 	dao.CreateBiologyChangeRecord(biologyChangeRecord)
 }
@@ -195,9 +196,9 @@ func UpdateBiologyFarmhouseService(operator string, telephoneNumber string, biol
 // @router /biology/create_epidemic_prevention_record [post]
 func CreateEpidemicPreventionRecordService(biologyId uint, vaccineDescription string, inoculationTime string) {
 	dao.CreateEpidemicPreventionRecord(entity.EpidemicPrevention{
-		BiologyId: biologyId,
+		BiologyId:          biologyId,
 		VaccineDescription: vaccineDescription,
-		InoculationTime: util.ParseDate(inoculationTime),
+		InoculationTime:    util.ParseDate(inoculationTime),
 	})
 }
 
@@ -216,7 +217,7 @@ func GetEpidemicPreventionRecordListService(biologyId uint) []vo.EpidemicPrevent
 	for _, record := range recordList {
 		resultList = append(resultList, vo.EpidemicPreventionRecord{
 			VaccineDescription: record.VaccineDescription,
-			InoculationTime: record.InoculationTime,
+			InoculationTime:    record.InoculationTime,
 		})
 	}
 	return resultList
@@ -237,11 +238,11 @@ func GetEpidemicPreventionRecordListService(biologyId uint) []vo.EpidemicPrevent
 // @router /biology/create_operation_record [post]
 func CreateOperationRecordService(biologyId uint, doctor string, operationTime string, processDescription string, result string) {
 	dao.CreateOperationRecord(entity.OperationHistory{
-		BiologyId: biologyId,
-		Doctor: doctor,
-		OperationTime: util.ParseDate(operationTime),
+		BiologyId:          biologyId,
+		Doctor:             doctor,
+		OperationTime:      util.ParseDate(operationTime),
 		ProcessDescription: processDescription,
-		Result: result,
+		Result:             result,
 	})
 }
 
@@ -259,10 +260,10 @@ func GetOperationRecordListService(biologyId uint) []vo.OperationRecord {
 	var resultList []vo.OperationRecord
 	for _, record := range recordList {
 		resultList = append(resultList, vo.OperationRecord{
-			Doctor: record.Doctor,
-			OperationTime: record.OperationTime,
+			Doctor:             record.Doctor,
+			OperationTime:      record.OperationTime,
 			ProcessDescription: record.ProcessDescription,
-			Result: record.Result,
+			Result:             record.Result,
 		})
 	}
 	return resultList
@@ -282,9 +283,9 @@ func GetOperationRecordListService(biologyId uint) []vo.OperationRecord {
 // @router /biology/create_medical_record [post]
 func CreateMedicalRecordService(biologyId uint, disease string, illnessTime string, treatmentPlan string) {
 	dao.CreateMedicalRecord(entity.MedicalHistory{
-		BiologyId: biologyId,
-		Disease: disease,
-		IllnessTime: util.ParseDate(illnessTime),
+		BiologyId:     biologyId,
+		Disease:       disease,
+		IllnessTime:   util.ParseDate(illnessTime),
 		TreatmentPlan: treatmentPlan,
 	})
 }
@@ -303,8 +304,8 @@ func GetMedicalRecordListService(biologyId uint) []vo.MedicalRecord {
 	var resultList []vo.MedicalRecord
 	for _, record := range recordList {
 		resultList = append(resultList, vo.MedicalRecord{
-			Disease: record.Disease,
-			IllnessTime: record.IllnessTime,
+			Disease:       record.Disease,
+			IllnessTime:   record.IllnessTime,
 			TreatmentPlan: record.TreatmentPlan,
 		})
 	}
@@ -373,13 +374,13 @@ func GetBiologyInfoService(biologyId uint) vo.BiologyInfo {
 	if biology.ID == 0 {
 		panic("biology does not exist")
 	}
-	biologyInfo := vo.BiologyInfo {
-		Id: biology.ID,
-		Name: biology.Name,
-		Type: biology.BiologyTypeID,
-		Gender: biology.Gender,
-		Birthday: biology.Birthday,
-		CreateTime: biology.CreatedAt,
+	biologyInfo := vo.BiologyInfo{
+		Id:          biology.ID,
+		Name:        biology.Name,
+		Type:        biology.BiologyTypeID,
+		Gender:      biology.Gender,
+		Birthday:    biology.Birthday,
+		CreateTime:  biology.CreatedAt,
 		FarmhouseId: biology.FarmhouseID,
 	}
 	return biologyInfo
@@ -416,13 +417,13 @@ func GetAuthBiologyListService(userId uint) []vo.AuthBology {
 		currList := dao.GetBiologyListByFarmhouse(node)
 		for _, curr := range currList {
 			result = append(result, vo.AuthBology{
-				BiologyId: curr.ID,
+				BiologyId:   curr.ID,
 				BiologyName: curr.Name,
 				BiologyType: curr.BiologyTypeID,
-				Gender: curr.Gender,
+				Gender:      curr.Gender,
 				FarmhouseId: curr.FarmhouseID,
-				Birthday: curr.Birthday,
-				CreateDate: curr.CreatedAt,
+				Birthday:    curr.Birthday,
+				CreateDate:  curr.CreatedAt,
 			})
 		}
 	}
@@ -442,12 +443,12 @@ func GetOwnBiologyListService(userId uint) []vo.OwnBiology {
 	biologyList := dao.GetOwnBiologyList(userId)
 	for _, biology := range biologyList {
 		biologyInfoList = append(biologyInfoList, vo.OwnBiology{
-			Id: biology.ID,
-			Name: biology.Name,
-			Type: biology.BiologyTypeID,
-			Gender: biology.Gender,
-			Birthday: biology.Birthday,
-			CreateTime: biology.CreatedAt,
+			Id:          biology.ID,
+			Name:        biology.Name,
+			Type:        biology.BiologyTypeID,
+			Gender:      biology.Gender,
+			Birthday:    biology.Birthday,
+			CreateTime:  biology.CreatedAt,
 			FarmhouseId: biology.FarmhouseID,
 		})
 	}
@@ -473,7 +474,7 @@ func GetBiologyStatisticService(companyId uint) map[string]uint {
 }
 
 type BioGender struct {
-	Type string
+	Type   string
 	Gender string
 }
 

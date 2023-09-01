@@ -29,7 +29,7 @@ func GetRuleInfo(ruleId uint) entity.Rule {
 
 func GetRuleListByUser(userId uint) []entity.Rule {
 	var ruleList []entity.Rule
-	common.GetDB().Table("rules").Where("onwer = ?", userId).Find(&ruleList)
+	common.GetDB().Table("rules").Where("owner = ?", userId).Find(&ruleList)
 	return ruleList
 }
 

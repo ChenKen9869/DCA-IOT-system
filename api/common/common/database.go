@@ -49,6 +49,8 @@ func InitDB() *gorm.DB {
 	db.AutoMigrate(&entity.Rule{})
 
 	DB = db
+
+	fmt.Println("[INITIAL SUCCESS] The database module is initialized successfully!")
 	return db
 }
 

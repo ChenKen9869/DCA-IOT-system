@@ -1,7 +1,9 @@
 package geocontainer
 
 import (
+	"fmt"
 	"strings"
+
 	"github.com/spf13/viper"
 )
 
@@ -22,6 +24,7 @@ func InitContainer() {
 			Coordinates[coordinate] = true
 		}
 	}
+	fmt.Println("[INITIAL SUCCESS] The gis module is initialized successfully!")
 }
 
 func InitCoordinates() {

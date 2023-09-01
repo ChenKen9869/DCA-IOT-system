@@ -7,7 +7,9 @@ import (
 
 func LexerCondition(exp string, symbolTable SymbolTable) []Token {
 	var result []Token
+	tempString := ""
 	var temp *string
+	temp = &tempString
 	skip := false
 	for index, c := range exp {
 		if skip {

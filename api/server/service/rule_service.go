@@ -25,7 +25,7 @@ import (
 func CreateRuleService(companyId uint, datasource string, condition string, action string, owner uint) uint {
 	// prePROCESS: auth devices
 	if !preprosess.AuthDevices(datasource, companyId) {
-		panic("rule syntax error!")
+		panic("rule auth error!")
 	}
 	ruleId := dao.CreateRule(entity.Rule{
 		Datasource: datasource,
@@ -43,8 +43,8 @@ func CreateRuleService(companyId uint, datasource string, condition string, acti
 // @description start a rule
 // @version 1.0
 // @accept application/json
-// @param RuleId formData int true "rule id"
-// @param ExecInternal formData string true "exec internal"
+// @param RuleId query int true "rule id"
+// @param ExecInternal query string true "exec internal"
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /rule/start [get]
@@ -74,7 +74,7 @@ func StartRuleService(ruleId uint, internal string) {
 // @description end a rule
 // @version 1.0
 // @accept application/json
-// @param RuleId formData int true "rule id"
+// @param RuleId query int true "rule id"
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /rule/end [get]
@@ -89,9 +89,9 @@ func EndRuleService(ruleId uint) {
 // @description schedule a rule
 // @version 1.0
 // @accept application/json
-// @param RuleId formData int true "rule id"
-// @param ExecInternal formData string true "exec internal"
-// @param FutureTime formData string true "future start time"
+// @param RuleId query int true "rule id"
+// @param ExecInternal query string true "exec internal"
+// @param FutureTime query string true "future start time"
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /rule/schedule [get]
@@ -115,7 +115,7 @@ func getRuleRecursive(companyId uint, ruleList *[]entity.Rule) {
 // @description get rule list by company id
 // @version 1.0
 // @accept application/json
-// @param CompanyId formData int true "company id"
+// @param CompanyId query int true "company id"
 // @param Authorization header string true "token"
 // @Success 200 {object} server.SuccessResponse200 "成功"
 // @router /rule/get_company [get]

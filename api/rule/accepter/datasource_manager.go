@@ -18,7 +18,7 @@ type DeviceIndex struct {
 	DeviceType string
 }
 
-var DatasourceManagement map[DeviceIndex]KeyAttr = make(map[DeviceIndex]KeyAttr)
+var DatasourceManagement map[DeviceIndex]KeyAttr
 
 func InitFloatDatasource() Attribute {
 	return Attribute{RefNum: 1, Value: float64(0)}
