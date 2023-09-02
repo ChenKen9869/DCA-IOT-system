@@ -76,6 +76,7 @@ func AuthDevices(datasource string, companyId uint) bool {
 	/* Datasource =
 	name{id, type, attr}, name{id, type, attr}
 	*/
+	fmt.Println("[Auth Rule] Start auth rule syntax ... ")
 	datasourceList := ruleparser.ParseDatasource(datasource)
 	for _, ds := range datasourceList {
 		id := ds.DeviceId
@@ -83,26 +84,22 @@ func AuthDevices(datasource string, companyId uint) bool {
 		// auth company and device
 		if ds.DeviceType == accepter.PortableDeviceType {
 			var device entity.PortableDevice
-			fmt.Println(id, typeS+"    "+accepter.DeviceDBMap[typeS].TableName)
-			fmt.Println("__________-------------_______")
 			common.GetDB().Table(accepter.DeviceDBMap[typeS].TableName).Where("id = ?", id).First(&device)
 			pid := dao.GetBiologyInfoById(device.BiologyID).FarmhouseID
-			fmt.Println(pid, companyId)
 			if pid != companyId {
 				return false
 			}
 		} else if ds.DeviceType == accepter.FixedDeviceType {
 			var device entity.FixedDevice
-			fmt.Println(id, typeS+"    "+accepter.DeviceDBMap[typeS].TableName)
-			fmt.Println("__________-------------_______")
 			common.GetDB().Table(accepter.DeviceDBMap[typeS].TableName).Where("id = ?", id).First(&device)
-			fmt.Println(device.FarmhouseID, companyId)
 			if device.FarmhouseID != companyId {
+				fmt.Println("[Auth Rule] Auth Error: Company does not have the access permission to such datasource!")
 				return false
 			}
 		} else {
-			panic("device type Error")
+			panic("[Auth Rule] Syntax Error: Device type does not exist!")
 		}
 	}
+	fmt.Println("[Auth Rule] Auth Passed! ")
 	return true
 }

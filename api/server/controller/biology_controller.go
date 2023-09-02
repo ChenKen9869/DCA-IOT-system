@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"go-backend/api/server/dao"
 	"go-backend/api/server/entity"
 	"go-backend/api/server/service"
@@ -398,7 +397,6 @@ func GetBiologyPictureController(ctx *gin.Context) {
 		return
 	}
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
-	fmt.Println(farmhouseId)
 	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
@@ -501,18 +499,18 @@ func GetBiologyGenderStatisticController(ctx *gin.Context) {
 	result := service.GetBiologyGenderStatisticService(uint(companyId))
 	var st []struct {
 		Type   string `json:"type"`
-		Gender string   `json:"gender"`
-		Num uint `json:"value"`
+		Gender string `json:"gender"`
+		Num    uint   `json:"value"`
 	}
 	for k, v := range result {
 		st = append(st, struct {
 			Type   string `json:"type"`
 			Gender string `json:"gender"`
-			Num uint   `json:"value"`
+			Num    uint   `json:"value"`
 		}{
-			Type:  k.Type,
+			Type:   k.Type,
 			Gender: k.Gender,
-			Num: v,
+			Num:    v,
 		})
 	}
 	server.ResponseSuccess(ctx, gin.H{"biology_gender_statistic": st}, server.Success)

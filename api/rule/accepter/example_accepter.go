@@ -1,18 +1,49 @@
 package accepter
 
 import (
+	"bufio"
 	"fmt"
 	"go-backend/api/common/common"
 	"go-backend/api/server/entity"
-	"time"
+	"net"
+	"strconv"
+	"strings"
 )
 
-// (可选)存入 mongoDB 数据库
+func parseExampleMessage(msg string) (deviceId string, deviceType string, attribute string, value float64) {
+	// 0000001, collar, temperature, 25.6
+	msg = strings.Replace(msg, " ", "", -1)
+	msgList := strings.Split(msg, ",")
+	deviceId = msgList[0]
+	deviceType = msgList[1]
+	attribute = msgList[2]
+	v, err := strconv.ParseFloat(msgList[3], 64)
+	if err != nil {
+		panic(err.Error())
+	}
+	value = v
+	return deviceId, deviceType, attribute, value
+}
 
-func StartExampleAccepter() {
+func processExampleMsg(conn net.Conn) {
+	defer conn.Close()
 	for {
-		deviceId, msgDeviceType, attribute, value := messageArrive()
-		fmt.Println("msg arrived")
+		reader := bufio.NewReader(conn)
+		fmt.Println("[Example Accepter] Waiting for message from client ...")
+		var buf [128]byte
+		n, err := reader.Read(buf[:])
+		if err != nil {
+			fmt.Println("[Example Accepter] Error Occur: Read from client failed, " + err.Error())
+			fmt.Println("[Example Accepter] Client closed the connection")
+			return
+		}
+		recvStr := string(buf[:n])
+		fmt.Println("[Example Accepter] Accept Message: " + recvStr)
+		conn.Write([]byte("[Message from server] Message accepted!"))
+
+		// deviceId, msgDeviceType, attribute, value := messageArrive()
+		deviceId, msgDeviceType, attribute, value := parseExampleMessage(recvStr)
+		fmt.Println("[Example Accepter] Message has parsed! ")
 		deviceType := getDeviceTypeInMysql(msgDeviceType)
 		// 在 mysql 中查找对应设备的 主键id
 		var id int
@@ -25,9 +56,25 @@ func StartExampleAccepter() {
 			common.GetDB().Table(DeviceDBMap[deviceType].TableName).Where(DeviceDBMap[deviceType].ColumnName+" = ?", msgDeviceType).Where("device_id = ?", deviceId).First(&deviceInfo)
 			id = int(deviceInfo.ID)
 		}
-		fmt.Println(id, deviceType, attribute, value)
 		updateDatasourceManagement(id, deviceType, attribute, value)
-		time.Sleep(30 * time.Second)
+		// time.Sleep(30 * time.Second)
+	}
+}
+
+func StartExampleAccepter() {
+	listen, err := net.Listen("tcp", "localhost:9869")
+	if err != nil {
+		panic(err.Error())
+	}
+	for {
+		fmt.Println("[Example Accepter] Waiting for connect ... ")
+		conn, err := listen.Accept()
+		if err != nil {
+			fmt.Println("[Example Accepter] Connection establish failed, " + err.Error())
+			continue
+		}
+		fmt.Println("[Example Accepter] Connection established successfully!")
+		processExampleMsg(conn)
 	}
 }
 
@@ -47,16 +94,11 @@ func updateDatasourceManagement(id int, deviceType string, attr string, value fl
 			v.Value = value
 			DatasourceManagement[index][attr] = v
 		}
-		fmt.Println("update datasource management down!")
+		fmt.Println("[Example Accepter] Update datasource management down!")
 	} else {
-		fmt.Println("datasource management has not updated!")
+		fmt.Println("[Example Accepter] Datasource management has not updated!")
 	}
 	DMLock.Unlock()
-}
-
-// 模拟数据到达
-func messageArrive() (deviceId string, deviceType string, attribute string, value float64) {
-	return "0000001", "collar", "temperature", float64(25.6)
 }
 
 func getDeviceTypeInMysql(msgDeviceType string) string {
@@ -66,3 +108,8 @@ func getDeviceTypeInMysql(msgDeviceType string) string {
 		return FixedDeviceType
 	}
 }
+
+// 模拟数据到达
+// func messageArrive() (deviceId string, deviceType string, attribute string, value float64) {
+// 	return "0000001", "collar", "temperature", float64(25.6)
+// }

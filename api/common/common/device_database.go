@@ -31,7 +31,7 @@ func InitDeviceDB() *mongo.Database {
 	Ctx = ctx
 	client, err := mongo.Connect(ctx, opt)
 	if err != nil {
-		fmt.Println(err.Error())
+		panic(err.Error())
 	}
 	DeivceDB = client.Database(deviceDatabase)
 

@@ -15,13 +15,13 @@ func StartActionExecutor() {
 	for {
 		select {
 		case params := <-WsActionChannel:
-			fmt.Println("params arrived at websocket executor!")
+			fmt.Println("[Action Executor] Params arrived at websocket executor!")
 			gopool.Go(func() {
 				ExecWsAction(params)
 			})
 			// go ExecWsAction(params)
 		case params := <-MqttActionChannel:
-			fmt.Println("params arrived at mqtt executor!")
+			fmt.Println("[Action Executor] Params arrived at mqtt executor!")
 			gopool.Go(func() {
 				ExecMqttAction(params)
 			})

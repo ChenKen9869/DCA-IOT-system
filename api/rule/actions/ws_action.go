@@ -15,9 +15,9 @@ func sendWebsocketMSG(userId uint, msg string) {
 	if exist {
 		ch.MessageChan <- msg
 
-		fmt.Println("msg has send")
+		fmt.Println("[WebSocket Action] Message: { " + msg + " } has sent to target user!")
 	} else {
-		panic("warning: Msg was not sent. The target user is not connected to Monitoring Center!")
+		panic("[WebSocket Action] Warning: Message was not sent. The target user is not connected to Monitoring Center!")
 	}
 
 }
@@ -25,9 +25,7 @@ func sendWebsocketMSG(userId uint, msg string) {
 var WsActionChannel chan (string)
 
 func ExecWsAction(params string) {
-	fmt.Println("doing websocket action... ")
-	// params: userId,msg
-	// params = strings.Replace(params, " ", "", -1)
+	fmt.Println("[WebSocket Action] Start executing websocket action... ")
 	var paramList []string
 	for i, c := range params {
 		if string(c) == "," {

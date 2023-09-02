@@ -8,12 +8,9 @@ import (
 
 // 基于 stack 的匹配算法
 func MatchExpressionCondition(tokenList []ruleparser.Token, innerTable ruleparser.InnerTable) bool {
-	fmt.Println("entered match function")
+	fmt.Println("[Rule Matcher] Start matching expression condition with current data!")
 	var st util.Stack
 	for _, token := range tokenList {
-
-		fmt.Println(token.TokenType, token.TokenValue, token.RealNum)
-
 		if token.TokenType == ruleparser.NumTokenType {
 			// 数值直接进栈
 			st.Push(token)
@@ -21,16 +18,12 @@ func MatchExpressionCondition(tokenList []ruleparser.Token, innerTable ruleparse
 			// 变量用内表替换成数值后，入栈
 			v := token.TokenValue
 			for symbol, value := range innerTable {
-				fmt.Println(symbol, value)
 				if v == symbol {
 					token.RealNum = value
 					token.TokenType = ruleparser.NumTokenType
 					st.Push(token)
 				}
 			}
-
-			fmt.Println(token.RealNum)
-
 		} else if token.TokenType == ruleparser.OptTokenType {
 			// 运算符，则取出栈里的两个token，做运算，运算结果压入栈中
 			optA := st.Pop().(ruleparser.Token)
@@ -41,9 +34,6 @@ func MatchExpressionCondition(tokenList []ruleparser.Token, innerTable ruleparse
 	if st.Top().(ruleparser.Token).TokenType != ruleparser.BoolTokenType {
 		panic("syntax error!")
 	}
-
-	fmt.Println(st.Top().(ruleparser.Token).RealNum)
-
 	return util.IsFloat64Equal(st.Top().(ruleparser.Token).RealNum, float64(1))
 }
 

@@ -12,6 +12,7 @@ var MqttActionChannel chan (string)
 
 // 发布一条消息到 mqtt
 func ExecMqttAction(params string) {
+	fmt.Println("[Mqtt Action] Start executing mqtt action... ")
 	// params: address, port, username, password, topic, msg
 	address, port, username, password, topic, msg, portStr := parseMqttParams(params)
 
@@ -28,7 +29,7 @@ func ExecMqttAction(params string) {
 	// 发布消息
 	token := c.Publish(topic, 0, false, msg)
 	token.Wait()
-	fmt.Println("msg " + msg + " has send to mqtt topic: " + topic + "of " + address + ":" + portStr + "! ")
+	fmt.Println("[Mqtt Executor] Message: { " + msg + " } has send to mqtt topic: { " + topic + " } of { " + address + ":" + portStr + " }! ")
 }
 
 func parseMqttParams(params string) (string, int, string, string, string, string, string) {

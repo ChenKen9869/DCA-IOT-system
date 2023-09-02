@@ -9,49 +9,43 @@ import (
 
 func MatcherGenerator(symbolTable SymbolTable, conditionType string, tokenList []Token, actionList []Action) func() {
 	return func() {
-		fmt.Println("rule match start, waiting for result ... ")
+		fmt.Println("[Rule Matcher] Start matching rule, waiting for result ... ")
 		// 构建内符号表
 		currData := make(InnerTable)
 		for symbol, symbolData := range symbolTable {
-			fmt.Println(symbol, symbolData.Attr, symbolData.DeviceType, symbolData.DeviceId)
 			accepter.DMLock.Lock()
 			v, exist := accepter.DatasourceManagement[accepter.DeviceIndex{
 				Id:         symbolData.DeviceId,
 				DeviceType: symbolData.DeviceType,
 			}]
-			if exist {
-				fmt.Println("device information exist in datasource management!")
+			if !exist {
+				panic("[Rule Matcher] Device information does not exist in datasource management!")
 			}
 			data, e := v[symbolData.Attr]
-			if e {
-				fmt.Println("attribute exist in device info!")
+			if !e {
+				panic("[Rule Matcher] Attribute information does not exist in device info of datasource!")
 			}
 			currData[symbol] = data.Value
-			// currData[symbol] = accepter.DatasourceManagement[accepter.DeviceIndex{
-			// 	Id:         symbolData.DeviceId,
-			// 	DeviceType: symbolData.DeviceType,
-			// }][symbolData.Attr].Value
-			fmt.Println(currData[symbol])
 			accepter.DMLock.Unlock()
 		}
 		// 查找并调用匹配算法
 		if MatcherMap[conditionType](tokenList, currData) {
-			fmt.Println("rule matched! ")
+			fmt.Println("[Rule Matcher] Rule matched! ")
 			for _, ac := range actionList {
 				// 使用内符号表替换 actionparams
-				fmt.Println(ac.ActionParams)
 				params := ac.ActionParams
 				params = replaceSymbolInParams(params, currData)
 				actionChannel, exist := actions.ActionChannels[ac.ActionType]
 				if exist {
 					actionChannel <- params
 				} else {
-					panic("syntax error: action type " + ac.ActionType + "does not exist! ")
+					panic("Syntax error: action type " + ac.ActionType + "does not exist! ")
 				}
 			}
+			fmt.Println("[Rule Matcher] Action params has all sent to their executors! ")
 			return
 		}
-		fmt.Println("rule not matched! ")
+		fmt.Println("[Rule Matcher] Rule not matched! ")
 	}
 }
 

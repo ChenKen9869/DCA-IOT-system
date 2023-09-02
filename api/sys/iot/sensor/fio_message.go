@@ -1,31 +1,31 @@
 package sensor
 
 import (
-	"time"
 	"context"
-	"fmt"
 	"go-backend/api/common/common"
 	"go-backend/api/server/tools/util"
+	"time"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type FiveInOneMessage struct {
-	Head string
-	Edition string
-	DeviceType string
-	DeviceId string
-	Session string
-	Commond string
+	Head          string
+	Edition       string
+	DeviceType    string
+	DeviceId      string
+	Session       string
+	Commond       string
 	MessageLength string
-	Humidity float32
-	Temperature float32
-	Methane float32
-	Ammonia float32
-	Hydrogen float32
-	End string
-	Time time.Time `bson:"time"`
+	Humidity      float32
+	Temperature   float32
+	Methane       float32
+	Ammonia       float32
+	Hydrogen      float32
+	End           string
+	Time          time.Time `bson:"time"`
 }
 
 func GetLatestDataListFio(deviceId string, nums int64) []FiveInOneMessage {
@@ -39,7 +39,7 @@ func GetLatestDataListFio(deviceId string, nums int64) []FiveInOneMessage {
 	opts := options.Find().SetSort(bson.D{primitive.E{Key: "_id", Value: -1}}).SetLimit(nums)
 	cursor, err := common.GetDeviceDB().Collection(fioCollection).Find(ctx, filter, opts)
 	if err != nil {
-		fmt.Println(err.Error())
+		panic(err.Error())
 	}
 	cursor.All(context.TODO(), &results)
 	return results
@@ -61,7 +61,7 @@ func GetRecordListByTimeFio(deviceId string, startTime string, endTime string) [
 	var results []FiveInOneMessage
 	cursor, err := common.GetDeviceDB().Collection(fioCollection).Find(ctx, filter, opts)
 	if err != nil {
-		fmt.Println(err.Error())
+		panic(err.Error())
 	}
 	if err = cursor.All(context.TODO(), &results); err != nil {
 		panic(err.Error())
