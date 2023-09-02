@@ -8,12 +8,12 @@ import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
-var MqttActionChannel chan (string) = make(chan string)
+var MqttActionChannel chan (string)
 
 // 发布一条消息到 mqtt
 func ExecMqttAction(params string) {
 	// params: address, port, username, password, topic, msg
-	address, port, username, password, topic, msg := parseMqttParams(params)
+	address, port, username, password, topic, msg, portStr := parseMqttParams(params)
 
 	opts := mqtt.NewClientOptions().AddBroker(fmt.Sprintf("tcp://%s:%d", address, port)).SetUsername(username).SetPassword(password)
 
@@ -28,14 +28,22 @@ func ExecMqttAction(params string) {
 	// 发布消息
 	token := c.Publish(topic, 0, false, msg)
 	token.Wait()
+	fmt.Println("msg " + msg + " has send to mqtt topic: " + topic + "of " + address + ":" + portStr + "! ")
 }
 
-func parseMqttParams(params string) (address string, port int, username string, password string, topic string, msg string) {
-	params = strings.Replace(params, " ", "", -1)
-	paramList := strings.Split(params, ";")
-	port, err := strconv.Atoi(paramList[1])
+func parseMqttParams(params string) (string, int, string, string, string, string, string) {
+	// params = strings.Replace(params, " ", "", -1)
+	paramList := strings.Split(params, ",")
+	address := strings.Replace(paramList[0], " ", "", -1)
+	portStr := strings.Replace(paramList[1], " ", "", -1)
+	port, err := strconv.Atoi(portStr)
 	if err != nil {
 		panic(err.Error())
 	}
-	return paramList[0], port, paramList[2], paramList[3], paramList[4], paramList[5]
+	username := strings.Replace(paramList[2], " ", "", -1)
+	password := strings.Replace(paramList[3], " ", "", -1)
+	topic := strings.Replace(paramList[4], " ", "", -1)
+	msg := paramList[5]
+
+	return address, port, username, password, topic, msg, portStr
 }

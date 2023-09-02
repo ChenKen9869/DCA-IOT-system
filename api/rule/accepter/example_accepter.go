@@ -25,14 +25,15 @@ func StartExampleAccepter() {
 			common.GetDB().Table(DeviceDBMap[deviceType].TableName).Where(DeviceDBMap[deviceType].ColumnName+" = ?", msgDeviceType).Where("device_id = ?", deviceId).First(&deviceInfo)
 			id = int(deviceInfo.ID)
 		}
+		fmt.Println(id, deviceType, attribute, value)
 		updateDatasourceManagement(id, deviceType, attribute, value)
-		fmt.Println("update datasource management down!")
-		time.Sleep(1 * time.Minute)
+		time.Sleep(30 * time.Second)
 	}
 }
 
 // 查找并更新数据源管理器的数据
 func updateDatasourceManagement(id int, deviceType string, attr string, value float64) {
+
 	index := DeviceIndex{
 		Id:         id,
 		DeviceType: deviceType,
@@ -46,6 +47,9 @@ func updateDatasourceManagement(id int, deviceType string, attr string, value fl
 			v.Value = value
 			DatasourceManagement[index][attr] = v
 		}
+		fmt.Println("update datasource management down!")
+	} else {
+		fmt.Println("datasource management has not updated!")
 	}
 	DMLock.Unlock()
 }

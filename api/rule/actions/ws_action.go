@@ -22,12 +22,25 @@ func sendWebsocketMSG(userId uint, msg string) {
 
 }
 
-var WsActionChannel chan (string) = make(chan string)
+var WsActionChannel chan (string)
 
 func ExecWsAction(params string) {
-	// params: userId, msg
+	fmt.Println("doing websocket action... ")
+	// params: userId,msg
 	// params = strings.Replace(params, " ", "", -1)
-	paramList := strings.Split(params, ";")
+	var paramList []string
+	for i, c := range params {
+		if string(c) == "," {
+			if i == len(params)-1 {
+				paramList = append(paramList, params)
+				paramList = append(paramList, "")
+			} else {
+				paramList = append(paramList, params[:i])
+				paramList = append(paramList, params[i+1:])
+			}
+		}
+	}
+	paramList[0] = strings.Replace(paramList[0], " ", "", -1)
 	userId, err := strconv.Atoi(paramList[0])
 	if err != nil {
 		panic(err.Error())

@@ -44,6 +44,8 @@ func InitRule() {
 	actions.ActionChannels = make(map[string]chan string)
 
 	// 将 action 的 channel 注册
+	actions.WsActionChannel = make(chan string)
+	actions.MqttActionChannel = make(chan string)
 	actions.ActionChannels[actions.WebsocketActionType] = actions.WsActionChannel
 	actions.ActionChannels[actions.MqttActionType] = actions.MqttActionChannel
 	// 启动监听器协程
