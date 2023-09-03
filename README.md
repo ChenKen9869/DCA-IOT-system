@@ -27,4 +27,4 @@ cd ./scripts
 
 ### see more detail of api : (after run the server)
 
-swagger api : <http://localhost:xxxx/swagger/index.html>
+swagger api : <http://localhost:5930/swagger/index.html>
