@@ -26,7 +26,7 @@ func LexerCondition(exp string, symbolTable SymbolTable) []Token {
 						TokenValue: string(c) + next,
 					})
 				} else {
-					panic("syntax error")
+					panic("Syntax Error")
 				}
 			} else {
 				if string(c) == "(" || string(c) == ")" {
@@ -49,12 +49,9 @@ func LexerCondition(exp string, symbolTable SymbolTable) []Token {
 			}
 		}
 	}
-
-	// 返回中缀
 	return result
 }
 
-// 是否是运算符？
 func isOpt(str string) bool {
 	return str == "*" || str == "/" ||
 		str == "+" || str == "-" ||
@@ -63,7 +60,6 @@ func isOpt(str string) bool {
 		str == "&"
 }
 
-// 是否是0-9的数字，浮点，或者 _ ，或者大小写字母？
 func isNumOrCharacter(str string) bool {
 	_, err := strconv.Atoi(str)
 	if err == nil {
@@ -74,7 +70,6 @@ func isNumOrCharacter(str string) bool {
 		unicode.IsLower(rune(str[0]))
 }
 
-// 根据符号表生成 token，并加入到 tokenList 中
 func generateToken(value *string, tokenList *[]Token, symbolTable SymbolTable) {
 	intValue, errInt := strconv.Atoi(*value)
 	if errInt == nil {
@@ -101,7 +96,7 @@ func generateToken(value *string, tokenList *[]Token, symbolTable SymbolTable) {
 			}
 		}
 		if !found {
-			panic("syntax error: symbol not exist!")
+			panic("Syntax Error: Symbol not exist!")
 		}
 	}
 	*value = ""

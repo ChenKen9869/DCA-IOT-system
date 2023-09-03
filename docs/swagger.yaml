@@ -1,53 +1,5 @@
 basePath: /
 definitions:
-  server.FailureResponse400:
-    properties:
-      code:
-        example: 400
-        type: integer
-      data:
-        example: "null"
-        type: string
-      msg:
-        example: 语法无效
-        type: string
-    type: object
-  server.FailureResponse401:
-    properties:
-      code:
-        example: 401
-        type: integer
-      data:
-        example: "null"
-        type: string
-      msg:
-        example: 权限不足
-        type: string
-    type: object
-  server.FailureResponse422:
-    properties:
-      code:
-        example: 422
-        type: integer
-      data:
-        example: "null"
-        type: string
-      msg:
-        example: 无法处理
-        type: string
-    type: object
-  server.FailureResponse500:
-    properties:
-      code:
-        example: 500
-        type: integer
-      data:
-        example: "null"
-        type: string
-      msg:
-        example: 服务器内部错误
-        type: string
-    type: object
   server.SuccessResponse200:
     properties:
       code:
@@ -55,7 +7,7 @@ definitions:
         type: integer
       data: {}
       msg:
-        example: 操作成功
+        example: success
         type: string
     type: object
 host: localhost:5930
@@ -75,7 +27,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: 'create biology : 创建一个生物 参数列表：[生物名称、生物类别、该生物所在的牧舍ID、出生日期、性别] 访问携带token'
+      description: create biology
       parameters:
       - description: biology name
         in: formData
@@ -109,7 +61,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -119,8 +71,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: 'create biology epidemic prevention record : 新增生物的防疫记录 参数列表：[生物ID、本次使用的疫苗信息记录（疫苗描述信息）、注射时间]
-        访问携带token'
+      description: create biology epidemic prevention record
       parameters:
       - description: biology id
         in: formData
@@ -144,7 +95,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -154,8 +105,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: 'create biology medical record : 新增生物的用药记录（新增病历） 参数列表：[生物ID、疾病描述、患病时间、治疗方案]
-        访问携带token'
+      description: create biology medical record
       parameters:
       - description: biology id
         in: formData
@@ -184,7 +134,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -194,8 +144,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: 'create biology operation record : 新增生物的手术记录 参数列表：[生物ID、手术医生、手术时间、过程记录、手术结果]
-        访问携带token'
+      description: create biology operation record
       parameters:
       - description: biology id
         in: formData
@@ -229,7 +178,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -239,7 +188,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: 'create biology type : 创建生物类型 参数列表：[生物类型名称]'
+      description: create biology type
       parameters:
       - description: type name
         in: formData
@@ -253,7 +202,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -263,8 +212,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: 'delete biology : 删除一个生物 参数列表：[本次删除的操作人员姓名，操作人员的联系方式，生物的去处（病死，屠宰场。卖出
-        等），生物ID] 访问携带token'
+      description: delete biology
       parameters:
       - description: name of operator
         in: query
@@ -293,7 +241,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -303,7 +251,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: 'delete biology type : 删除生物类型 参数列表：[生物类型名称] 访问携带token'
+      description: delete biology type
       parameters:
       - description: type name
         in: query
@@ -317,7 +265,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -327,7 +275,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get user''s auth biology list : 获取当前用户有权限的所有生物信息 参数列表：[] 访问携带token'
+      description: get user's auth biology list
       parameters:
       - description: token
         in: header
@@ -336,7 +284,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -346,8 +294,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get epidemic prevention record list of biology : 获取生物的防疫信息记录列表
-        参数列表：[生物ID] 访问携带token'
+      description: get epidemic prevention record list of biology
       parameters:
       - description: biology id
         in: query
@@ -361,7 +308,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -371,7 +318,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get biology gender statistic : 获取指定牧场中的生物性别统计信息 参数列表：[牧场Id] 访问携带token'
+      description: get biology gender statistic
       parameters:
       - description: company id
         in: query
@@ -385,7 +332,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -395,7 +342,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get picture of biology : 获取生物的详细信息 参数列表：[生物ID] 访问携带token'
+      description: get picture of biology
       parameters:
       - description: biology id
         in: query
@@ -409,7 +356,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -419,8 +366,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get all biologies of farmhouse : 通过牧舍ID获取其中的所有生物组成的列表 参数列表：[牧舍ID]
-        访问携带token'
+      description: get all biologies of farmhouse
       parameters:
       - description: company id
         in: query
@@ -434,7 +380,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -444,7 +390,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get medical record list of biology : 获取生物的病历列表 参数列表：[生物ID] 访问携带token'
+      description: get medical record list of biology
       parameters:
       - description: biology id
         in: query
@@ -458,7 +404,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -468,8 +414,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get operation record list of biology : 获取生物的手术记录列表 参数列表：[生物ID]
-        访问携带token'
+      description: get operation record list of biology
       parameters:
       - description: biology id
         in: query
@@ -483,7 +428,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -493,8 +438,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get picture of biology : 获取生物的照片（获取生物照片的 bytes 形式）参数列表：[生物ID]
-        访问携带token'
+      description: get picture of biology
       parameters:
       - description: biology id
         in: query
@@ -508,7 +452,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -518,8 +462,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get static picture path of biology : 获取生物的照片（获取生物照片在服务器中的静态资源地址）
-        参数列表：[生物ID] 访问携带token'
+      description: get static picture path of biology
       parameters:
       - description: biology id
         in: query
@@ -533,7 +476,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -543,7 +486,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get biology statistic : 获取指定牧场中的生物统计信息 参数列表：[牧场Id] 访问携带token'
+      description: get biology statistic
       parameters:
       - description: company id
         in: query
@@ -557,7 +500,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -567,8 +510,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get all biologies with devices of company : 根据农牧场ID获取其中所有携带有便携式设备的生物所组成的列表（包括每个生物对应的设备信息）
-        参数列表：[农牧场ID] 访问携带token'
+      description: get all biologies with devices of company
       parameters:
       - description: company id
         in: query
@@ -582,7 +524,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -592,7 +534,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get own biology list : 获取当前用户拥有的所有生物信息 参数列表：[] 访问携带token'
+      description: get own biology list
       parameters:
       - description: token
         in: header
@@ -601,7 +543,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -611,8 +553,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: 'update biology farmhouse : 更新生物所属的牧舍（转舍） 参数列表：[本次转舍的操作人员姓名、操作人员联系方式、生物ID、生物的目的牧舍ID]
-        访问携带token'
+      description: update biology farmhouse
       parameters:
       - description: name of operator
         in: formData
@@ -641,7 +582,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -651,7 +592,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: 'update biology picture : 上传（更新）生物的照片 参数列表：[生物ID、照片文件] 访问携带token'
+      description: update biology picture
       parameters:
       - description: biology id
         in: formData
@@ -670,7 +611,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -680,8 +621,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: 'add company auth to user : 为指定用户分配指定公司的权限（接口访问者需要事先拥有该公司的权限） 参数列表：[公司ID、用户ID]
-        访问携带token'
+      description: add company auth to user
       parameters:
       - description: company id
         in: formData
@@ -700,7 +640,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -710,8 +650,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: 'delete company auth of user : 从指定用户处收回指定公司的权限 参数列表：[公司ID、用户ID]
-        访问携带token'
+      description: delete company auth of user
       parameters:
       - description: company id
         in: query
@@ -730,7 +669,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -740,8 +679,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: 'create company : 创建一个公司 参数列表：[公司名称、该公司的父公司ID（root公司的父公司ID填写0）、该公司的地理位置信息描述（前端自己决定格式，具体看第三方天气定位等服务的接口要求，后端只负责保存地理信息，不做其他处理）]
-        访问携带token'
+      description: create company
       parameters:
       - description: company_name
         in: formData
@@ -765,7 +703,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -775,7 +713,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: 'delete company : 删除一个公司 参数列表：[公司ID] 访问携带token'
+      description: delete company
       parameters:
       - description: company id
         in: query
@@ -789,7 +727,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -799,7 +737,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get employee list of company : 获取公司的员工列表 参数列表：[公司ID] 访问携带token'
+      description: get employee list of company
       parameters:
       - description: company id
         in: query
@@ -813,7 +751,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -823,7 +761,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get company information : 获取公司的详细信息 参数列表：[公司ID] 访问携带token'
+      description: get company information
       parameters:
       - description: company id
         in: query
@@ -837,7 +775,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -847,7 +785,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get own company list : 获取当前用户拥有的公司列表 参数列表：[] 访问携带token'
+      description: get own company list
       parameters:
       - description: token
         in: header
@@ -856,7 +794,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -866,7 +804,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get user''s company tree : 获取当前用户有权限的所有公司信息（以树形结构返回） 参数列表：[] 访问携带token'
+      description: get user's company tree
       parameters:
       - description: token
         in: header
@@ -875,7 +813,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -885,7 +823,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: 'update company info : 更新公司信息 参数列表：[公司ID，新名字，新地址] 访问携带token'
+      description: update company info
       parameters:
       - description: company_name
         in: query
@@ -909,7 +847,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -919,8 +857,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: 'create fixed device  : 创建固定式设备 参数列表：[设备所在的牧舍ID、厂家提供的设备编号、设备类型]
-        访问携带token'
+      description: create fixed device
       parameters:
       - description: company id
         in: formData
@@ -954,7 +891,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -964,7 +901,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: 'create fixed device type : 新增固定式设备类型 参数列表：[设备类型]'
+      description: create fixed device type
       parameters:
       - description: type name
         in: formData
@@ -978,7 +915,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -988,7 +925,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: 'delete fixed device : 删除固定式设备 参数列表：[设备ID] 访问携带token'
+      description: delete fixed device
       parameters:
       - description: id
         in: query
@@ -1002,7 +939,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1012,7 +949,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: 'delete fixed device type : 删除固定式设备类型 参数列表：[设备类型ID] 访问携带token'
+      description: delete fixed device type
       parameters:
       - description: type name
         in: query
@@ -1026,7 +963,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1036,8 +973,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get user''s auth fixed device list : 获取当前用户有权限的所有固定式设备信息 参数列表：[]
-        访问携带token'
+      description: get user's auth fixed device list
       parameters:
       - description: token
         in: header
@@ -1046,7 +982,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1056,8 +992,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get all fixed devices by farmhouse : 获取一个牧舍下的所有固定式设备 参数列表：[牧舍ID]
-        访问携带token'
+      description: get all fixed devices by farmhouse
       parameters:
       - description: company id
         in: query
@@ -1071,7 +1006,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1081,8 +1016,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get latest five-in-one device information : 获取五合一传感器的最新数据 参数列表：[五合一传感器的设备ID]
-        访问携带token'
+      description: get latest five-in-one device information
       parameters:
       - description: Id
         in: query
@@ -1096,7 +1030,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1106,8 +1040,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get five-in-one information within time period : 以时间段作为参数获取五合一传感器的数据列表
-        参数列表：[五合一传感器的设备ID、开始时间、结束时间] 访问携带token'
+      description: get five-in-one information within time period
       parameters:
       - description: id
         in: query
@@ -1131,7 +1064,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1141,7 +1074,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get monitor streaming address : 获取摄像头的直播地址 参数列表：[摄像头设备ID] 访问携带token'
+      description: get monitor streaming address
       parameters:
       - description: id
         in: query
@@ -1155,7 +1088,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1165,7 +1098,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get fixed device statistic : 获取指定牧场中的固定设备统计信息 参数列表：[牧场Id] 访问携带token'
+      description: get fixed device statistic
       parameters:
       - description: company id
         in: query
@@ -1179,7 +1112,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1189,7 +1122,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get own fixed device list : 获取当前用户拥有的所有固定式设备信息 参数列表：[] 访问携带token'
+      description: get own fixed device list
       parameters:
       - description: token
         in: header
@@ -1198,7 +1131,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1208,8 +1141,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: 'create portable device : 创建便携式设备 参数列表：[设备绑定的生物ID、厂家提供的设备编号、设备类型]
-        访问携带token'
+      description: create portable device
       parameters:
       - description: biology id
         in: formData
@@ -1243,7 +1175,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1253,7 +1185,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: 'create portable device type : 新增便携式设备类型 参数列表：[设备类型]'
+      description: create portable device type
       parameters:
       - description: type name
         in: formData
@@ -1267,7 +1199,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1277,7 +1209,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: 'delete portable device : 删除便携式设备 参数列表：[设备ID] 访问携带token'
+      description: delete portable device
       parameters:
       - description: id
         in: query
@@ -1291,7 +1223,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1301,7 +1233,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: 'delete portable device type : 删除便携式设备类型 参数列表：[设备类型ID] 访问携带token'
+      description: delete portable device type
       parameters:
       - description: type name
         in: query
@@ -1315,7 +1247,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1325,8 +1257,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get biology portable device list : 获取指定生物绑定的所有便携式设备信息 参数列表：[生物id]
-        访问携带token'
+      description: get biology portable device list
       parameters:
       - description: biology id
         in: query
@@ -1340,7 +1271,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1350,8 +1281,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get all portable devices by farmhouse : 获取一个牧舍下的所有便携式设备 参数列表：[牧舍ID]
-        访问携带token'
+      description: get all portable devices by farmhouse
       parameters:
       - description: company id
         in: query
@@ -1365,7 +1295,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1375,8 +1305,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get new-type collar realtime data by device id : 获取中农智联项圈的最新数据
-        参数列表：[设备ID] 访问携带token'
+      description: get new-type collar realtime data by device id
       parameters:
       - description: id
         in: query
@@ -1390,7 +1319,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1400,8 +1329,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get latest position collar information : 获取定位项圈的最新数据 参数列表：[定位项圈的设备ID]
-        访问携带token'
+      description: get latest position collar information
       parameters:
       - description: Id
         in: query
@@ -1415,7 +1343,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1425,7 +1353,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get portable device statistic : 获取指定牧场中的便携设备统计信息 参数列表：[牧场Id] 访问携带token'
+      description: get portable device statistic
       parameters:
       - description: company id
         in: query
@@ -1439,7 +1367,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1449,7 +1377,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get own portable device list : 获取当前用户拥有的所有便携式设备信息 参数列表：[] 访问携带token'
+      description: get own portable device list
       parameters:
       - description: token
         in: header
@@ -1458,7 +1386,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1468,7 +1396,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'connect with monitor center : 连接到监控中心以接受推送 参数列表：[] 访问携带token'
+      description: connect with monitor center
       parameters:
       - description: token
         in: header
@@ -1477,7 +1405,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1506,8 +1434,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: 'add company visitor auth to user : 给指定用户赋予指定公司的访客权限 参数列表：[公司ID、用户ID]
-        访问携带token'
+      description: add company visitor auth to user
       parameters:
       - description: company id
         in: formData
@@ -1526,7 +1453,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1536,8 +1463,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: 'delete company visitor auth of user : 指定用户的访客权限 参数列表：[公司ID、用户ID]
-        访问携带token'
+      description: delete company visitor auth of user
       parameters:
       - description: company id
         in: query
@@ -1556,7 +1482,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1566,7 +1492,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get user''s visitor company list : 获取当前用户具有访客权限的所有公司 参数列表：[] 访问携带token'
+      description: get user's visitor company list
       parameters:
       - description: token
         in: header
@@ -1575,7 +1501,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1585,7 +1511,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get visitor list of company : 获取公司的所有访客 参数列表：[公司ID] 访问携带token'
+      description: get visitor list of company
       parameters:
       - description: company id
         in: query
@@ -1599,7 +1525,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1638,7 +1564,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1662,7 +1588,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1686,7 +1612,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1710,7 +1636,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1729,7 +1655,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1763,7 +1689,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1792,7 +1718,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1831,7 +1757,7 @@ paths:
         type: string
       responses:
         "200":
-          description: 成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
       summary: API of golang gin backend
@@ -1841,7 +1767,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 'get user information : 获取当前用户的详细信息 参数列表：[] 访问携带token'
+      description: get user information
       parameters:
       - description: Id
         in: query
@@ -1855,17 +1781,9 @@ paths:
         type: string
       responses:
         "200":
-          description: 查询成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
-        "400":
-          description: 用户信息不存在
-          schema:
-            $ref: '#/definitions/server.FailureResponse400'
-        "401":
-          description: 权限不足
-          schema:
-            $ref: '#/definitions/server.FailureResponse401'
       summary: API of golang gin backend
       tags:
       - User
@@ -1873,7 +1791,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: 'user login : 用户登录 参数列表：[用户名、密码]'
+      description: user login
       parameters:
       - description: username
         in: formData
@@ -1887,17 +1805,9 @@ paths:
         type: string
       responses:
         "200":
-          description: 登录成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
-        "422":
-          description: 输入参数错误
-          schema:
-            $ref: '#/definitions/server.FailureResponse422'
-        "500":
-          description: 系统异常
-          schema:
-            $ref: '#/definitions/server.FailureResponse500'
       summary: API of golang gin backend
       tags:
       - User
@@ -1905,7 +1815,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: 'user register : 用户注册 参数列表：[用户名、密码、电话号码、邮箱地址]'
+      description: user register
       parameters:
       - description: username
         in: formData
@@ -1929,17 +1839,9 @@ paths:
         type: string
       responses:
         "200":
-          description: 注册成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
-        "422":
-          description: 输入参数错误
-          schema:
-            $ref: '#/definitions/server.FailureResponse422'
-        "500":
-          description: 系统异常
-          schema:
-            $ref: '#/definitions/server.FailureResponse500'
       summary: API of golang gin backend
       tags:
       - User
@@ -1947,7 +1849,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: 'update user information : 更新当前用户的详细信息 参数列表：[] 访问携带token'
+      description: update user information
       parameters:
       - description: username
         in: query
@@ -1976,13 +1878,9 @@ paths:
         type: string
       responses:
         "200":
-          description: 更新成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
-        "401":
-          description: 权限不足
-          schema:
-            $ref: '#/definitions/server.FailureResponse401'
       summary: API of golang gin backend
       tags:
       - User
@@ -1990,7 +1888,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: 'update user default company : 更新当前用户的首页默认显示企业 参数列表：[公司ID] 访问携带token'
+      description: update user default company
       parameters:
       - description: company id
         in: query
@@ -2004,13 +1902,9 @@ paths:
         type: string
       responses:
         "200":
-          description: 更新成功
+          description: success
           schema:
             $ref: '#/definitions/server.SuccessResponse200'
-        "401":
-          description: 权限不足
-          schema:
-            $ref: '#/definitions/server.FailureResponse401'
       summary: API of golang gin backend
       tags:
       - User

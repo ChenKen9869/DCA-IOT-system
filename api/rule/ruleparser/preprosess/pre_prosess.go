@@ -10,16 +10,11 @@ import (
 )
 
 func AddDatasource(datasource string) {
-	/* Datasource =
-	name{id, type, attr}, name{id, type, attr}
-	*/
-	// 解析出 id, type, attr
 	datasourceList := ruleparser.ParseDatasource(datasource)
 	for _, ds := range datasourceList {
 		id := ds.DeviceId
 		typeS := ds.DeviceType
 		attrS := ds.Attribute
-		// 将 datasource 加入到数据源管理器中
 		deviceIndex := accepter.DeviceIndex{
 			Id:         id,
 			DeviceType: typeS,
@@ -42,13 +37,11 @@ func AddDatasource(datasource string) {
 }
 
 func RemoveDatasource(datasource string) {
-	// remove from datasource management
 	datasourceList := ruleparser.ParseDatasource(datasource)
 	for _, ds := range datasourceList {
 		id := ds.DeviceId
 		typeS := ds.DeviceType
 		attrS := ds.Attribute
-		// 将 datasource 加入到数据源管理器中
 		deviceIndex := accepter.DeviceIndex{
 			Id:         id,
 			DeviceType: typeS,
@@ -56,10 +49,8 @@ func RemoveDatasource(datasource string) {
 		accepter.DMLock.Lock()
 		val := accepter.DatasourceManagement[deviceIndex]
 		curr := val[attrS]
-		// 引用计数减少 1，若减少为 0，则删除该数据源
 		curr.RefNum -= 1
 		if curr.RefNum == 0 {
-			// remove this entry
 			delete(val, attrS)
 			if len(val) == 0 {
 				delete(accepter.DatasourceManagement, deviceIndex)
@@ -72,11 +63,6 @@ func RemoveDatasource(datasource string) {
 }
 
 func AuthDevices(datasource string, companyId uint) bool {
-	// 判断数据源是否全部属于该企业
-	/* Datasource =
-	name{id, type, attr}, name{id, type, attr}
-	*/
-	fmt.Println("[Auth Rule] Start auth rule syntax ... ")
 	datasourceList := ruleparser.ParseDatasource(datasource)
 	for _, ds := range datasourceList {
 		id := ds.DeviceId
@@ -100,6 +86,5 @@ func AuthDevices(datasource string, companyId uint) bool {
 			panic("[Auth Rule] Syntax Error: Device type does not exist!")
 		}
 	}
-	fmt.Println("[Auth Rule] Auth Passed! ")
 	return true
 }

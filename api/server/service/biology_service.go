@@ -12,7 +12,7 @@ import (
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description create biology : 创建一个生物 参数列表：[生物名称、生物类别、该生物所在的牧舍ID、出生日期、性别] 访问携带token
+// @description create biology
 // @version 1.0
 // @accept mpfd
 // @param BiologyName formData string true "biology name"
@@ -21,7 +21,7 @@ import (
 // @param Birthday formData string true "biology birthday"
 // @param Gender formData string true "biology gender"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/create [post]
 func CreateBiologyService(biologyName string, farmhouseId uint, biologyTypeId string, birthday time.Time, gender string, owner uint) uint {
 	biology := entity.Biology{
@@ -45,7 +45,7 @@ func CreateBiologyService(biologyName string, farmhouseId uint, biologyTypeId st
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description delete biology : 删除一个生物 参数列表：[本次删除的操作人员姓名，操作人员的联系方式，生物的去处（病死，屠宰场。卖出 等），生物ID] 访问携带token
+// @description delete biology
 // @version 1.0
 // @accept application/json
 // @param Operator query string true "name of operator"
@@ -53,7 +53,7 @@ func CreateBiologyService(biologyName string, farmhouseId uint, biologyTypeId st
 // @param LeavePlace query string true "leave place"
 // @param Id query string true "id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router  /biology/delete [delete]
 func DeleteBiologyService(operator string, telephoneNumber string, leavePlace string, biologyId uint) {
 	portableDeviceList := dao.GetPortableDeviceListByBiology(biologyId)
@@ -74,11 +74,11 @@ func DeleteBiologyService(operator string, telephoneNumber string, leavePlace st
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description create biology type : 创建生物类型 参数列表：[生物类型名称]
+// @description create biology type
 // @version 1.0
 // @accept mpfd
 // @param BiologyTypeId formData string true "type name"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @param Authorization header string true "token"
 // @router /biology/create_type [post]
 func CreateBiologyTypeService(biologyTypeId string) {
@@ -90,12 +90,12 @@ func CreateBiologyTypeService(biologyTypeId string) {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description delete biology type : 删除生物类型 参数列表：[生物类型名称] 访问携带token
+// @description delete biology type
 // @version 1.0
 // @accept application/json
 // @param BiologyTypeId query string true "type name"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/delete_type [delete]
 func DeleteBiologyTypeService(biologyTypeId string) {
 	dao.DeleteBiologyType(biologyTypeId)
@@ -112,12 +112,12 @@ func getBiologyRecursive(companyId uint, biologyList *[]entity.Biology) {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get all biologies of farmhouse : 通过牧舍ID获取其中的所有生物组成的列表 参数列表：[牧舍ID] 访问携带token
+// @description get all biologies of farmhouse
 // @version 1.0
 // @accept application/json
 // @param CompanyId query int true "company id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/get_list [get]
 func GetBiologyListService(companyId uint) []entity.Biology {
 	var biologyList []entity.Biology
@@ -127,12 +127,12 @@ func GetBiologyListService(companyId uint) []entity.Biology {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get all biologies with devices of company : 根据农牧场ID获取其中所有携带有便携式设备的生物所组成的列表（包括每个生物对应的设备信息） 参数列表：[农牧场ID] 访问携带token
+// @description get all biologies with devices of company
 // @version 1.0
 // @accept application/json
 // @param CompanyId query int true "company id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/get_with_device_list [get]
 func GetBiologyWithDeviceListService(companyId uint) []vo.BiologyDevice {
 	farmhouseList := dao.GetCompanyListByParent(companyId)
@@ -160,7 +160,7 @@ func GetBiologyWithDeviceListService(companyId uint) []vo.BiologyDevice {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description update biology farmhouse : 更新生物所属的牧舍（转舍） 参数列表：[本次转舍的操作人员姓名、操作人员联系方式、生物ID、生物的目的牧舍ID] 访问携带token
+// @description update biology farmhouse
 // @version 1.0
 // @accept application/json
 // @param Operator formData string true "name of operator"
@@ -168,7 +168,7 @@ func GetBiologyWithDeviceListService(companyId uint) []vo.BiologyDevice {
 // @param BiologyId formData int true "biology id"
 // @param FarmhouseId formData string true "farmhouse id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/update_farmhouse [put]
 func UpdateBiologyFarmhouseService(operator string, telephoneNumber string, biologyId uint, farmhouseId uint) {
 	dao.UpdateBiologyFarmhouse(biologyId, farmhouseId)
@@ -185,14 +185,14 @@ func UpdateBiologyFarmhouseService(operator string, telephoneNumber string, biol
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description create biology epidemic prevention record : 新增生物的防疫记录 参数列表：[生物ID、本次使用的疫苗信息记录（疫苗描述信息）、注射时间] 访问携带token
+// @description create biology epidemic prevention record
 // @version 1.0
 // @accept mpfd
 // @param BiologyId formData int true "biology id"
 // @param VaccineDescription formData string true "vaccine description"
 // @param InoculationTime formData string true "inoculation time"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/create_epidemic_prevention_record [post]
 func CreateEpidemicPreventionRecordService(biologyId uint, vaccineDescription string, inoculationTime string) {
 	dao.CreateEpidemicPreventionRecord(entity.EpidemicPrevention{
@@ -204,12 +204,12 @@ func CreateEpidemicPreventionRecordService(biologyId uint, vaccineDescription st
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get epidemic prevention record list of biology : 获取生物的防疫信息记录列表 参数列表：[生物ID] 访问携带token
+// @description get epidemic prevention record list of biology
 // @version 1.0
 // @accept application/json
 // @param BiologyId query int true "biology id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/get_epidemic_prevention_record_list [get]
 func GetEpidemicPreventionRecordListService(biologyId uint) []vo.EpidemicPreventionRecord {
 	recordList := dao.GetEpidemicPreventionRecordListByBiology(biologyId)
@@ -225,7 +225,7 @@ func GetEpidemicPreventionRecordListService(biologyId uint) []vo.EpidemicPrevent
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description create biology operation record : 新增生物的手术记录 参数列表：[生物ID、手术医生、手术时间、过程记录、手术结果] 访问携带token
+// @description create biology operation record
 // @version 1.0
 // @accept mpfd
 // @param BiologyId formData int true "biology id"
@@ -234,7 +234,7 @@ func GetEpidemicPreventionRecordListService(biologyId uint) []vo.EpidemicPrevent
 // @param ProcessDescription formData string true "process description"
 // @param Result formData string true "result"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/create_operation_record [post]
 func CreateOperationRecordService(biologyId uint, doctor string, operationTime string, processDescription string, result string) {
 	dao.CreateOperationRecord(entity.OperationHistory{
@@ -248,12 +248,12 @@ func CreateOperationRecordService(biologyId uint, doctor string, operationTime s
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get operation record list of biology : 获取生物的手术记录列表 参数列表：[生物ID] 访问携带token
+// @description get operation record list of biology
 // @version 1.0
 // @accept application/json
 // @param BiologyId query int true "biology id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/get_operation_record_list [get]
 func GetOperationRecordListService(biologyId uint) []vo.OperationRecord {
 	recordList := dao.GetOperationRecordListByBiology(biologyId)
@@ -271,7 +271,7 @@ func GetOperationRecordListService(biologyId uint) []vo.OperationRecord {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description create biology medical record : 新增生物的用药记录（新增病历） 参数列表：[生物ID、疾病描述、患病时间、治疗方案] 访问携带token
+// @description create biology medical record
 // @version 1.0
 // @accept mpfd
 // @param BiologyId formData int true "biology id"
@@ -279,7 +279,7 @@ func GetOperationRecordListService(biologyId uint) []vo.OperationRecord {
 // @param IllnessTime formData string true "illness time"
 // @param TreatmentPlan formData string true "treatment plan"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/create_medical_record [post]
 func CreateMedicalRecordService(biologyId uint, disease string, illnessTime string, treatmentPlan string) {
 	dao.CreateMedicalRecord(entity.MedicalHistory{
@@ -292,12 +292,12 @@ func CreateMedicalRecordService(biologyId uint, disease string, illnessTime stri
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get medical record list of biology : 获取生物的病历列表 参数列表：[生物ID] 访问携带token
+// @description get medical record list of biology
 // @version 1.0
 // @accept application/json
 // @param BiologyId query int true "biology id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/get_medical_record_list [get]
 func GetMedicalRecordListService(biologyId uint) []vo.MedicalRecord {
 	recordList := dao.GetMedicalRecordListByBiology(biologyId)
@@ -314,13 +314,13 @@ func GetMedicalRecordListService(biologyId uint) []vo.MedicalRecord {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description update biology picture : 上传（更新）生物的照片 参数列表：[生物ID、照片文件] 访问携带token
+// @description update biology picture
 // @version 1.0
 // @accept application/json
 // @param BiologyId formData int true "biology id"
 // @param BiologyPicture formData file true "new picture"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/update_picture [post]
 func UpdateBiologyPicturePathService(biologyId uint, picturePath string) {
 	dao.UpdateBiologyPicturePath(biologyId, picturePath)
@@ -328,12 +328,12 @@ func UpdateBiologyPicturePathService(biologyId uint, picturePath string) {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get static picture path of biology : 获取生物的照片（获取生物照片在服务器中的静态资源地址） 参数列表：[生物ID] 访问携带token
+// @description get static picture path of biology
 // @version 1.0
 // @accept application/json
 // @param BiologyId query int true "biology id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/get_picture_path [get]
 func GetBiologyPicturePathService(biologyId uint) string {
 	picturePath := dao.GetBiologyInfoById(biologyId).PicturePath
@@ -344,12 +344,12 @@ func GetBiologyPicturePathService(biologyId uint) string {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get picture of biology : 获取生物的照片（获取生物照片的 bytes 形式）参数列表：[生物ID] 访问携带token
+// @description get picture of biology
 // @version 1.0
 // @accept application/json
 // @param BiologyId query int true "biology id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/get_picture [get]
 func GetBiologyPictureService(biologyId uint) []byte {
 	picturePath := dao.GetBiologyInfoById(biologyId).PicturePath
@@ -362,12 +362,12 @@ func GetBiologyPictureService(biologyId uint) []byte {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get picture of biology : 获取生物的详细信息 参数列表：[生物ID] 访问携带token
+// @description get picture of biology
 // @version 1.0
 // @accept application/json
 // @param BiologyId query int true "biology id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/get_info [get]
 func GetBiologyInfoService(biologyId uint) vo.BiologyInfo {
 	biology := dao.GetBiologyInfoById(biologyId)
@@ -400,11 +400,11 @@ func getChildNodeRecursive(currentId uint, nodeList *[]uint) {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get user's auth biology list : 获取当前用户有权限的所有生物信息 参数列表：[] 访问携带token
+// @description get user's auth biology list
 // @version 1.0
 // @accept application/json
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/get_auth_list [get]
 func GetAuthBiologyListService(userId uint) []vo.AuthBology {
 	companies := dao.GetCompanyListByUserID(userId)
@@ -432,11 +432,11 @@ func GetAuthBiologyListService(userId uint) []vo.AuthBology {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get own biology list : 获取当前用户拥有的所有生物信息 参数列表：[] 访问携带token
+// @description get own biology list
 // @version 1.0
 // @accept application/json
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/own_list [get]
 func GetOwnBiologyListService(userId uint) []vo.OwnBiology {
 	var biologyInfoList []vo.OwnBiology
@@ -457,12 +457,12 @@ func GetOwnBiologyListService(userId uint) []vo.OwnBiology {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get biology statistic : 获取指定牧场中的生物统计信息 参数列表：[牧场Id] 访问携带token
+// @description get biology statistic
 // @version 1.0
 // @accept application/json
 // @param CompanyId query int true "company id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/get_statistic [get]
 func GetBiologyStatisticService(companyId uint) map[string]uint {
 	result := make(map[string]uint)
@@ -480,12 +480,12 @@ type BioGender struct {
 
 // @Summary API of golang gin backend
 // @Tags Biology
-// @description get biology gender statistic : 获取指定牧场中的生物性别统计信息 参数列表：[牧场Id] 访问携带token
+// @description get biology gender statistic
 // @version 1.0
 // @accept application/json
 // @param CompanyId query int true "company id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /biology/get_gender_statistic [get]
 func GetBiologyGenderStatisticService(companyId uint) map[BioGender]uint {
 	result := make(map[BioGender]uint)

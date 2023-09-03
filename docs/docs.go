@@ -26,7 +26,7 @@ const docTemplate = `{
     "paths": {
         "/biology/create": {
             "post": {
-                "description": "create biology : 创建一个生物 参数列表：[生物名称、生物类别、该生物所在的牧舍ID、出生日期、性别] 访问携带token",
+                "description": "create biology",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -80,7 +80,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -90,7 +90,7 @@ const docTemplate = `{
         },
         "/biology/create_epidemic_prevention_record": {
             "post": {
-                "description": "create biology epidemic prevention record : 新增生物的防疫记录 参数列表：[生物ID、本次使用的疫苗信息记录（疫苗描述信息）、注射时间] 访问携带token",
+                "description": "create biology epidemic prevention record",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -130,7 +130,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -140,7 +140,7 @@ const docTemplate = `{
         },
         "/biology/create_medical_record": {
             "post": {
-                "description": "create biology medical record : 新增生物的用药记录（新增病历） 参数列表：[生物ID、疾病描述、患病时间、治疗方案] 访问携带token",
+                "description": "create biology medical record",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -187,7 +187,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -197,7 +197,7 @@ const docTemplate = `{
         },
         "/biology/create_operation_record": {
             "post": {
-                "description": "create biology operation record : 新增生物的手术记录 参数列表：[生物ID、手术医生、手术时间、过程记录、手术结果] 访问携带token",
+                "description": "create biology operation record",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -251,7 +251,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -261,7 +261,7 @@ const docTemplate = `{
         },
         "/biology/create_type": {
             "post": {
-                "description": "create biology type : 创建生物类型 参数列表：[生物类型名称]",
+                "description": "create biology type",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -287,7 +287,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -297,7 +297,7 @@ const docTemplate = `{
         },
         "/biology/delete": {
             "delete": {
-                "description": "delete biology : 删除一个生物 参数列表：[本次删除的操作人员姓名，操作人员的联系方式，生物的去处（病死，屠宰场。卖出 等），生物ID] 访问携带token",
+                "description": "delete biology",
                 "consumes": [
                     "application/json"
                 ],
@@ -344,7 +344,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -354,7 +354,7 @@ const docTemplate = `{
         },
         "/biology/delete_type": {
             "delete": {
-                "description": "delete biology type : 删除生物类型 参数列表：[生物类型名称] 访问携带token",
+                "description": "delete biology type",
                 "consumes": [
                     "application/json"
                 ],
@@ -380,7 +380,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -390,7 +390,7 @@ const docTemplate = `{
         },
         "/biology/get_auth_list": {
             "get": {
-                "description": "get user's auth biology list : 获取当前用户有权限的所有生物信息 参数列表：[] 访问携带token",
+                "description": "get user's auth biology list",
                 "consumes": [
                     "application/json"
                 ],
@@ -409,7 +409,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -419,7 +419,7 @@ const docTemplate = `{
         },
         "/biology/get_epidemic_prevention_record_list": {
             "get": {
-                "description": "get epidemic prevention record list of biology : 获取生物的防疫信息记录列表 参数列表：[生物ID] 访问携带token",
+                "description": "get epidemic prevention record list of biology",
                 "consumes": [
                     "application/json"
                 ],
@@ -445,7 +445,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -455,7 +455,7 @@ const docTemplate = `{
         },
         "/biology/get_gender_statistic": {
             "get": {
-                "description": "get biology gender statistic : 获取指定牧场中的生物性别统计信息 参数列表：[牧场Id] 访问携带token",
+                "description": "get biology gender statistic",
                 "consumes": [
                     "application/json"
                 ],
@@ -481,7 +481,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -491,7 +491,7 @@ const docTemplate = `{
         },
         "/biology/get_info": {
             "get": {
-                "description": "get picture of biology : 获取生物的详细信息 参数列表：[生物ID] 访问携带token",
+                "description": "get picture of biology",
                 "consumes": [
                     "application/json"
                 ],
@@ -517,7 +517,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -527,7 +527,7 @@ const docTemplate = `{
         },
         "/biology/get_list": {
             "get": {
-                "description": "get all biologies of farmhouse : 通过牧舍ID获取其中的所有生物组成的列表 参数列表：[牧舍ID] 访问携带token",
+                "description": "get all biologies of farmhouse",
                 "consumes": [
                     "application/json"
                 ],
@@ -553,7 +553,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -563,7 +563,7 @@ const docTemplate = `{
         },
         "/biology/get_medical_record_list": {
             "get": {
-                "description": "get medical record list of biology : 获取生物的病历列表 参数列表：[生物ID] 访问携带token",
+                "description": "get medical record list of biology",
                 "consumes": [
                     "application/json"
                 ],
@@ -589,7 +589,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -599,7 +599,7 @@ const docTemplate = `{
         },
         "/biology/get_operation_record_list": {
             "get": {
-                "description": "get operation record list of biology : 获取生物的手术记录列表 参数列表：[生物ID] 访问携带token",
+                "description": "get operation record list of biology",
                 "consumes": [
                     "application/json"
                 ],
@@ -625,7 +625,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -635,7 +635,7 @@ const docTemplate = `{
         },
         "/biology/get_picture": {
             "get": {
-                "description": "get picture of biology : 获取生物的照片（获取生物照片的 bytes 形式）参数列表：[生物ID] 访问携带token",
+                "description": "get picture of biology",
                 "consumes": [
                     "application/json"
                 ],
@@ -661,7 +661,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -671,7 +671,7 @@ const docTemplate = `{
         },
         "/biology/get_picture_path": {
             "get": {
-                "description": "get static picture path of biology : 获取生物的照片（获取生物照片在服务器中的静态资源地址） 参数列表：[生物ID] 访问携带token",
+                "description": "get static picture path of biology",
                 "consumes": [
                     "application/json"
                 ],
@@ -697,7 +697,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -707,7 +707,7 @@ const docTemplate = `{
         },
         "/biology/get_statistic": {
             "get": {
-                "description": "get biology statistic : 获取指定牧场中的生物统计信息 参数列表：[牧场Id] 访问携带token",
+                "description": "get biology statistic",
                 "consumes": [
                     "application/json"
                 ],
@@ -733,7 +733,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -743,7 +743,7 @@ const docTemplate = `{
         },
         "/biology/get_with_device_list": {
             "get": {
-                "description": "get all biologies with devices of company : 根据农牧场ID获取其中所有携带有便携式设备的生物所组成的列表（包括每个生物对应的设备信息） 参数列表：[农牧场ID] 访问携带token",
+                "description": "get all biologies with devices of company",
                 "consumes": [
                     "application/json"
                 ],
@@ -769,7 +769,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -779,7 +779,7 @@ const docTemplate = `{
         },
         "/biology/own_list": {
             "get": {
-                "description": "get own biology list : 获取当前用户拥有的所有生物信息 参数列表：[] 访问携带token",
+                "description": "get own biology list",
                 "consumes": [
                     "application/json"
                 ],
@@ -798,7 +798,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -808,7 +808,7 @@ const docTemplate = `{
         },
         "/biology/update_farmhouse": {
             "put": {
-                "description": "update biology farmhouse : 更新生物所属的牧舍（转舍） 参数列表：[本次转舍的操作人员姓名、操作人员联系方式、生物ID、生物的目的牧舍ID] 访问携带token",
+                "description": "update biology farmhouse",
                 "consumes": [
                     "application/json"
                 ],
@@ -855,7 +855,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -865,7 +865,7 @@ const docTemplate = `{
         },
         "/biology/update_picture": {
             "post": {
-                "description": "update biology picture : 上传（更新）生物的照片 参数列表：[生物ID、照片文件] 访问携带token",
+                "description": "update biology picture",
                 "consumes": [
                     "application/json"
                 ],
@@ -898,7 +898,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -908,7 +908,7 @@ const docTemplate = `{
         },
         "/company/company_user/create": {
             "post": {
-                "description": "add company auth to user : 为指定用户分配指定公司的权限（接口访问者需要事先拥有该公司的权限） 参数列表：[公司ID、用户ID] 访问携带token",
+                "description": "add company auth to user",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -941,7 +941,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -951,7 +951,7 @@ const docTemplate = `{
         },
         "/company/company_user/delete": {
             "delete": {
-                "description": "delete company auth of user : 从指定用户处收回指定公司的权限 参数列表：[公司ID、用户ID] 访问携带token",
+                "description": "delete company auth of user",
                 "consumes": [
                     "application/json"
                 ],
@@ -984,7 +984,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -994,7 +994,7 @@ const docTemplate = `{
         },
         "/company/create": {
             "post": {
-                "description": "create company : 创建一个公司 参数列表：[公司名称、该公司的父公司ID（root公司的父公司ID填写0）、该公司的地理位置信息描述（前端自己决定格式，具体看第三方天气定位等服务的接口要求，后端只负责保存地理信息，不做其他处理）] 访问携带token",
+                "description": "create company",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -1034,7 +1034,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1044,7 +1044,7 @@ const docTemplate = `{
         },
         "/company/delete": {
             "delete": {
-                "description": "delete company : 删除一个公司 参数列表：[公司ID] 访问携带token",
+                "description": "delete company",
                 "consumes": [
                     "application/json"
                 ],
@@ -1070,7 +1070,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1080,7 +1080,7 @@ const docTemplate = `{
         },
         "/company/get/employeelist": {
             "get": {
-                "description": "get employee list of company : 获取公司的员工列表 参数列表：[公司ID] 访问携带token",
+                "description": "get employee list of company",
                 "consumes": [
                     "application/json"
                 ],
@@ -1106,7 +1106,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1116,7 +1116,7 @@ const docTemplate = `{
         },
         "/company/get/info": {
             "get": {
-                "description": "get company information : 获取公司的详细信息 参数列表：[公司ID] 访问携带token",
+                "description": "get company information",
                 "consumes": [
                     "application/json"
                 ],
@@ -1142,7 +1142,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1152,7 +1152,7 @@ const docTemplate = `{
         },
         "/company/get/own_list": {
             "get": {
-                "description": "get own company list : 获取当前用户拥有的公司列表 参数列表：[] 访问携带token",
+                "description": "get own company list",
                 "consumes": [
                     "application/json"
                 ],
@@ -1171,7 +1171,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1181,7 +1181,7 @@ const docTemplate = `{
         },
         "/company/get/treelist": {
             "get": {
-                "description": "get user's company tree : 获取当前用户有权限的所有公司信息（以树形结构返回） 参数列表：[] 访问携带token",
+                "description": "get user's company tree",
                 "consumes": [
                     "application/json"
                 ],
@@ -1200,7 +1200,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1210,7 +1210,7 @@ const docTemplate = `{
         },
         "/company/update": {
             "put": {
-                "description": "update company info : 更新公司信息 参数列表：[公司ID，新名字，新地址] 访问携带token",
+                "description": "update company info",
                 "consumes": [
                     "application/json"
                 ],
@@ -1250,7 +1250,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1260,7 +1260,7 @@ const docTemplate = `{
         },
         "/device/fixed/create": {
             "post": {
-                "description": "create fixed device  : 创建固定式设备 参数列表：[设备所在的牧舍ID、厂家提供的设备编号、设备类型] 访问携带token",
+                "description": "create fixed device",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -1314,7 +1314,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1324,7 +1324,7 @@ const docTemplate = `{
         },
         "/device/fixed/create_type": {
             "post": {
-                "description": "create fixed device type : 新增固定式设备类型 参数列表：[设备类型]",
+                "description": "create fixed device type",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -1350,7 +1350,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1360,7 +1360,7 @@ const docTemplate = `{
         },
         "/device/fixed/delete": {
             "delete": {
-                "description": "delete fixed device : 删除固定式设备 参数列表：[设备ID] 访问携带token",
+                "description": "delete fixed device",
                 "consumes": [
                     "application/json"
                 ],
@@ -1386,7 +1386,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1396,7 +1396,7 @@ const docTemplate = `{
         },
         "/device/fixed/delete_type": {
             "delete": {
-                "description": "delete fixed device type : 删除固定式设备类型 参数列表：[设备类型ID] 访问携带token",
+                "description": "delete fixed device type",
                 "consumes": [
                     "application/json"
                 ],
@@ -1422,7 +1422,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1432,7 +1432,7 @@ const docTemplate = `{
         },
         "/device/fixed/get_auth_list": {
             "get": {
-                "description": "get user's auth fixed device list : 获取当前用户有权限的所有固定式设备信息 参数列表：[] 访问携带token",
+                "description": "get user's auth fixed device list",
                 "consumes": [
                     "application/json"
                 ],
@@ -1451,7 +1451,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1461,7 +1461,7 @@ const docTemplate = `{
         },
         "/device/fixed/get_by_farmhouse": {
             "get": {
-                "description": "get all fixed devices by farmhouse : 获取一个牧舍下的所有固定式设备 参数列表：[牧舍ID] 访问携带token",
+                "description": "get all fixed devices by farmhouse",
                 "consumes": [
                     "application/json"
                 ],
@@ -1487,7 +1487,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1497,7 +1497,7 @@ const docTemplate = `{
         },
         "/device/fixed/get_fio_latest": {
             "get": {
-                "description": "get latest five-in-one device information : 获取五合一传感器的最新数据 参数列表：[五合一传感器的设备ID] 访问携带token",
+                "description": "get latest five-in-one device information",
                 "consumes": [
                     "application/json"
                 ],
@@ -1523,7 +1523,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1533,7 +1533,7 @@ const docTemplate = `{
         },
         "/device/fixed/get_fio_list_by_time": {
             "get": {
-                "description": "get five-in-one information within time period : 以时间段作为参数获取五合一传感器的数据列表 参数列表：[五合一传感器的设备ID、开始时间、结束时间] 访问携带token",
+                "description": "get five-in-one information within time period",
                 "consumes": [
                     "application/json"
                 ],
@@ -1573,7 +1573,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1583,7 +1583,7 @@ const docTemplate = `{
         },
         "/device/fixed/get_monitor": {
             "get": {
-                "description": "get monitor streaming address : 获取摄像头的直播地址 参数列表：[摄像头设备ID] 访问携带token",
+                "description": "get monitor streaming address",
                 "consumes": [
                     "application/json"
                 ],
@@ -1609,7 +1609,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1619,7 +1619,7 @@ const docTemplate = `{
         },
         "/device/fixed/get_statistic": {
             "get": {
-                "description": "get fixed device statistic : 获取指定牧场中的固定设备统计信息 参数列表：[牧场Id] 访问携带token",
+                "description": "get fixed device statistic",
                 "consumes": [
                     "application/json"
                 ],
@@ -1645,7 +1645,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1655,7 +1655,7 @@ const docTemplate = `{
         },
         "/device/fixed/own_list": {
             "get": {
-                "description": "get own fixed device list : 获取当前用户拥有的所有固定式设备信息 参数列表：[] 访问携带token",
+                "description": "get own fixed device list",
                 "consumes": [
                     "application/json"
                 ],
@@ -1674,7 +1674,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1684,7 +1684,7 @@ const docTemplate = `{
         },
         "/device/portable/create": {
             "post": {
-                "description": "create portable device : 创建便携式设备 参数列表：[设备绑定的生物ID、厂家提供的设备编号、设备类型] 访问携带token",
+                "description": "create portable device",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -1738,7 +1738,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1748,7 +1748,7 @@ const docTemplate = `{
         },
         "/device/portable/create_type": {
             "post": {
-                "description": "create portable device type : 新增便携式设备类型 参数列表：[设备类型]",
+                "description": "create portable device type",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -1774,7 +1774,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1784,7 +1784,7 @@ const docTemplate = `{
         },
         "/device/portable/delete": {
             "delete": {
-                "description": "delete portable device : 删除便携式设备 参数列表：[设备ID] 访问携带token",
+                "description": "delete portable device",
                 "consumes": [
                     "application/json"
                 ],
@@ -1810,7 +1810,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1820,7 +1820,7 @@ const docTemplate = `{
         },
         "/device/portable/delete_type": {
             "delete": {
-                "description": "delete portable device type : 删除便携式设备类型 参数列表：[设备类型ID] 访问携带token",
+                "description": "delete portable device type",
                 "consumes": [
                     "application/json"
                 ],
@@ -1846,7 +1846,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1856,7 +1856,7 @@ const docTemplate = `{
         },
         "/device/portable/get_by_biology": {
             "get": {
-                "description": "get biology portable device list : 获取指定生物绑定的所有便携式设备信息 参数列表：[生物id] 访问携带token",
+                "description": "get biology portable device list",
                 "consumes": [
                     "application/json"
                 ],
@@ -1882,7 +1882,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1892,7 +1892,7 @@ const docTemplate = `{
         },
         "/device/portable/get_by_farmhouse": {
             "get": {
-                "description": "get all portable devices by farmhouse : 获取一个牧舍下的所有便携式设备 参数列表：[牧舍ID] 访问携带token",
+                "description": "get all portable devices by farmhouse",
                 "consumes": [
                     "application/json"
                 ],
@@ -1918,7 +1918,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1928,7 +1928,7 @@ const docTemplate = `{
         },
         "/device/portable/get_new_collar": {
             "get": {
-                "description": "get new-type collar realtime data by device id : 获取中农智联项圈的最新数据 参数列表：[设备ID] 访问携带token",
+                "description": "get new-type collar realtime data by device id",
                 "consumes": [
                     "application/json"
                 ],
@@ -1954,7 +1954,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -1964,7 +1964,7 @@ const docTemplate = `{
         },
         "/device/portable/get_position_collar_latest": {
             "get": {
-                "description": "get latest position collar information : 获取定位项圈的最新数据 参数列表：[定位项圈的设备ID] 访问携带token",
+                "description": "get latest position collar information",
                 "consumes": [
                     "application/json"
                 ],
@@ -1990,7 +1990,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -2000,7 +2000,7 @@ const docTemplate = `{
         },
         "/device/portable/get_statistic": {
             "get": {
-                "description": "get portable device statistic : 获取指定牧场中的便携设备统计信息 参数列表：[牧场Id] 访问携带token",
+                "description": "get portable device statistic",
                 "consumes": [
                     "application/json"
                 ],
@@ -2026,7 +2026,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -2036,7 +2036,7 @@ const docTemplate = `{
         },
         "/device/portable/own_list": {
             "get": {
-                "description": "get own portable device list : 获取当前用户拥有的所有便携式设备信息 参数列表：[] 访问携带token",
+                "description": "get own portable device list",
                 "consumes": [
                     "application/json"
                 ],
@@ -2055,7 +2055,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -2065,7 +2065,7 @@ const docTemplate = `{
         },
         "/monitorCenter/connect": {
             "get": {
-                "description": "connect with monitor center : 连接到监控中心以接受推送 参数列表：[] 访问携带token",
+                "description": "connect with monitor center",
                 "consumes": [
                     "application/json"
                 ],
@@ -2084,7 +2084,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -2123,7 +2123,7 @@ const docTemplate = `{
         },
         "/role/visitor/create": {
             "post": {
-                "description": "add company visitor auth to user : 给指定用户赋予指定公司的访客权限 参数列表：[公司ID、用户ID] 访问携带token",
+                "description": "add company visitor auth to user",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -2156,7 +2156,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -2166,7 +2166,7 @@ const docTemplate = `{
         },
         "/role/visitor/delete": {
             "delete": {
-                "description": "delete company visitor auth of user : 指定用户的访客权限 参数列表：[公司ID、用户ID] 访问携带token",
+                "description": "delete company visitor auth of user",
                 "consumes": [
                     "application/json"
                 ],
@@ -2199,7 +2199,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -2209,7 +2209,7 @@ const docTemplate = `{
         },
         "/role/visitor/get_company_list": {
             "get": {
-                "description": "get user's visitor company list : 获取当前用户具有访客权限的所有公司 参数列表：[] 访问携带token",
+                "description": "get user's visitor company list",
                 "consumes": [
                     "application/json"
                 ],
@@ -2228,7 +2228,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -2238,7 +2238,7 @@ const docTemplate = `{
         },
         "/role/visitor/get_list": {
             "get": {
-                "description": "get visitor list of company : 获取公司的所有访客 参数列表：[公司ID] 访问携带token",
+                "description": "get visitor list of company",
                 "consumes": [
                     "application/json"
                 ],
@@ -2264,7 +2264,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -2321,7 +2321,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -2357,7 +2357,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -2393,7 +2393,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -2429,7 +2429,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -2458,7 +2458,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -2508,7 +2508,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -2551,7 +2551,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -2608,7 +2608,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
                         }
@@ -2618,7 +2618,7 @@ const docTemplate = `{
         },
         "/user/info": {
             "get": {
-                "description": "get user information : 获取当前用户的详细信息 参数列表：[] 访问携带token",
+                "description": "get user information",
                 "consumes": [
                     "application/json"
                 ],
@@ -2644,21 +2644,9 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "查询成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
-                        }
-                    },
-                    "400": {
-                        "description": "用户信息不存在",
-                        "schema": {
-                            "$ref": "#/definitions/server.FailureResponse400"
-                        }
-                    },
-                    "401": {
-                        "description": "权限不足",
-                        "schema": {
-                            "$ref": "#/definitions/server.FailureResponse401"
                         }
                     }
                 }
@@ -2666,7 +2654,7 @@ const docTemplate = `{
         },
         "/user/login": {
             "post": {
-                "description": "user login : 用户登录 参数列表：[用户名、密码]",
+                "description": "user login",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -2692,21 +2680,9 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "登录成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
-                        }
-                    },
-                    "422": {
-                        "description": "输入参数错误",
-                        "schema": {
-                            "$ref": "#/definitions/server.FailureResponse422"
-                        }
-                    },
-                    "500": {
-                        "description": "系统异常",
-                        "schema": {
-                            "$ref": "#/definitions/server.FailureResponse500"
                         }
                     }
                 }
@@ -2714,7 +2690,7 @@ const docTemplate = `{
         },
         "/user/register": {
             "post": {
-                "description": "user register : 用户注册 参数列表：[用户名、密码、电话号码、邮箱地址]",
+                "description": "user register",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -2754,21 +2730,9 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "注册成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
-                        }
-                    },
-                    "422": {
-                        "description": "输入参数错误",
-                        "schema": {
-                            "$ref": "#/definitions/server.FailureResponse422"
-                        }
-                    },
-                    "500": {
-                        "description": "系统异常",
-                        "schema": {
-                            "$ref": "#/definitions/server.FailureResponse500"
                         }
                     }
                 }
@@ -2776,7 +2740,7 @@ const docTemplate = `{
         },
         "/user/update": {
             "put": {
-                "description": "update user information : 更新当前用户的详细信息 参数列表：[] 访问携带token",
+                "description": "update user information",
                 "consumes": [
                     "application/json"
                 ],
@@ -2823,15 +2787,9 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "更新成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
-                        }
-                    },
-                    "401": {
-                        "description": "权限不足",
-                        "schema": {
-                            "$ref": "#/definitions/server.FailureResponse401"
                         }
                     }
                 }
@@ -2839,7 +2797,7 @@ const docTemplate = `{
         },
         "/user/update_default_company": {
             "put": {
-                "description": "update user default company : 更新当前用户的首页默认显示企业 参数列表：[公司ID] 访问携带token",
+                "description": "update user default company",
                 "consumes": [
                     "application/json"
                 ],
@@ -2865,15 +2823,9 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "更新成功",
+                        "description": "success",
                         "schema": {
                             "$ref": "#/definitions/server.SuccessResponse200"
-                        }
-                    },
-                    "401": {
-                        "description": "权限不足",
-                        "schema": {
-                            "$ref": "#/definitions/server.FailureResponse401"
                         }
                     }
                 }
@@ -2881,74 +2833,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "server.FailureResponse400": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer",
-                    "example": 400
-                },
-                "data": {
-                    "type": "string",
-                    "example": "null"
-                },
-                "msg": {
-                    "type": "string",
-                    "example": "语法无效"
-                }
-            }
-        },
-        "server.FailureResponse401": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer",
-                    "example": 401
-                },
-                "data": {
-                    "type": "string",
-                    "example": "null"
-                },
-                "msg": {
-                    "type": "string",
-                    "example": "权限不足"
-                }
-            }
-        },
-        "server.FailureResponse422": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer",
-                    "example": 422
-                },
-                "data": {
-                    "type": "string",
-                    "example": "null"
-                },
-                "msg": {
-                    "type": "string",
-                    "example": "无法处理"
-                }
-            }
-        },
-        "server.FailureResponse500": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer",
-                    "example": 500
-                },
-                "data": {
-                    "type": "string",
-                    "example": "null"
-                },
-                "msg": {
-                    "type": "string",
-                    "example": "服务器内部错误"
-                }
-            }
-        },
         "server.SuccessResponse200": {
             "type": "object",
             "properties": {
@@ -2959,7 +2843,7 @@ const docTemplate = `{
                 "data": {},
                 "msg": {
                     "type": "string",
-                    "example": "操作成功"
+                    "example": "success"
                 }
             }
         }

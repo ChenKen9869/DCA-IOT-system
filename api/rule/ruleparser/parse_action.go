@@ -12,15 +12,9 @@ type Action struct {
 	actionType_01: P_01($val01, $val_02); actionType_02: P_02($val_01, $val_02)
 */
 func ParseAction(action string) []Action {
-
 	var result []Action
-	/*
-		condition=
-		type,val,val,const,const
-	*/
 	actionList := strings.Split(action, ";")
 	for _, actionStr := range actionList {
-		// actionType_01:P_01($val01,$val_02)
 		var aL []string
 		for i, c := range actionStr {
 			if string(c) == ":" {

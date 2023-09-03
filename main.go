@@ -52,7 +52,6 @@ func main() {
 	r = router.CompanyRouter(r)
 	r = router.DeviceRouter(r)
 	r = router.BiologyRouter(r)
-	// r = router.FenceRouter(r)
 	r = router.MonitorRouter(r)
 	r = router.RoleRouter(r)
 	r = router.RuleRouter(r)

@@ -5,15 +5,12 @@ import (
 	"go-backend/api/server/tools/util"
 )
 
-// 基于 stack 的匹配算法
 func MatchExpressionCondition(tokenList []ruleparser.Token, innerTable ruleparser.InnerTable) bool {
 	var st util.Stack
 	for _, token := range tokenList {
 		if token.TokenType == ruleparser.NumTokenType {
-			// 数值直接进栈
 			st.Push(token)
 		} else if token.TokenType == ruleparser.ValTokenType {
-			// 变量用内表替换成数值后，入栈
 			v := token.TokenValue
 			for symbol, value := range innerTable {
 				if v == symbol {
@@ -23,7 +20,6 @@ func MatchExpressionCondition(tokenList []ruleparser.Token, innerTable ruleparse
 				}
 			}
 		} else if token.TokenType == ruleparser.OptTokenType {
-			// 运算符，则取出栈里的两个token，做运算，运算结果压入栈中
 			optA := st.Pop().(ruleparser.Token)
 			optB := st.Pop().(ruleparser.Token)
 			st.Push(caculateToken(optB, optA, token))

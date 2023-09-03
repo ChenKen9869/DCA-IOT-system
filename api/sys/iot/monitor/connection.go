@@ -25,11 +25,11 @@ var upGrader = websocket.Upgrader{
 
 // @Summary API of golang gin backend
 // @Tags MonitorCenter
-// @description connect with monitor center : 连接到监控中心以接受推送 参数列表：[] 访问携带token
+// @description connect with monitor center
 // @version 1.0
 // @accept application/json
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /monitorCenter/connect [get]
 func ConnectToMonitorCenter(ctx *gin.Context) {
 	userInfo, exists := ctx.Get("user")
@@ -73,7 +73,6 @@ func ConnectToMonitorCenter(ctx *gin.Context) {
 		select {
 		case message := <-MonitorCenter[userId].MessageChan:
 			err := ws.WriteMessage(websocket.TextMessage, []byte(message))
-			// 如果连接断开，则将最新取出的消息放回管道末尾
 			if err != nil {
 				MonitorCenter[userId].MessageChan <- message
 				return
@@ -111,7 +110,6 @@ func (con MonitorConnection) Disconnect() {
 
 func InitMonitor() {
 	MonitorCenter = make(map[uint]MonitorConnection)
-	// ActiveFenceList = make(map[uint]ActiveFence)
 
 	fmt.Println("[INITIAL SUCCESS] The monitor center is initialized successfully!")
 }

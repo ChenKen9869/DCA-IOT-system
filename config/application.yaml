@@ -2,11 +2,11 @@ server:
   port: 5930
 datasource:
   driverName: mysql
-  host: xx.xx.xx.xx
+  host: localhost
   port: 3306
-  database: xxx
-  username: xxx
-  password: xxx
+  database: farm
+  username: root
+  password: 123456
   charset: utf8
   loc: Asia/Shanghai
 monitor:
@@ -21,25 +21,23 @@ newcollar:
   uname: xxxxx
   psw: xxxxxx
 mongodb:
-  host: xx.xx.xx.xx
+  host: localhost
   port: 27017
   database: xxxxxx
   collar: xxxxxx
   fio: xxxxxx
   position-collar: xxxxxx
-  username: xxxx
-  password: xxxxxx
-fence:
-  spec: 10s
+  username: root
+  password: 123456
 geo:
   coordinates: GCJ-02
 biology:
-  picturedir: xxxx/assets/biology_pictures/
+  picturedir: absolute_path_of_project/assets/biology_pictures/
 emqx:
-  host: 124.70.208.224
+  host: localhost
   port: 1883
-  username: xumu
-  password: xumu@123456
+  username: root
+  password: emqx@123456
   collar: collar/#
-  fio: smartag01/#
+  fio: fio/#
   position-collar: poscollar/#

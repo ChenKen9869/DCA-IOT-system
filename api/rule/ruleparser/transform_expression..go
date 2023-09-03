@@ -25,7 +25,7 @@ func TransformCondition(infix []Token) []Token {
 					}
 				}
 				if !found {
-					panic("syntax error: pair not matched!")
+					panic("Syntax Error: Pair not matched!")
 				}
 			}
 		} else if t == OptTokenType {
@@ -46,15 +46,12 @@ func TransformCondition(infix []Token) []Token {
 	for !optSt.IsEmpty() {
 		postSt.Push(optSt.Pop())
 	}
-	// 头插法获得最终要输出的 TokenList
 	for !postSt.IsEmpty() {
 		suffix = append([]Token{postSt.Pop().(Token)}, suffix...)
 	}
-	// 返回后缀
 	return suffix
 }
 
-// if optA has more higher priority than optB
 func IsHigherPriority(optA string, optB string) bool {
 	return getPriorityNum(optA) < getPriorityNum(optB)
 }

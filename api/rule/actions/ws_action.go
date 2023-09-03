@@ -7,9 +7,6 @@ import (
 	"strings"
 )
 
-// websocket 推送
-
-// params: userId, msg
 func sendWebsocketMSG(userId uint, msg string) {
 	ch, exist := monitor.MonitorCenter[userId]
 	userIdStr := strconv.Itoa(int(userId))

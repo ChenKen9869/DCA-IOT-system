@@ -15,7 +15,7 @@ import (
 
 // @Summary API of golang gin backend
 // @Tags Device-fixed
-// @description create fixed device  : 创建固定式设备 参数列表：[设备所在的牧舍ID、厂家提供的设备编号、设备类型] 访问携带token
+// @description create fixed device
 // @version 1.0
 // @accept mpfd
 // @param CompanyId formData string true "company id"
@@ -24,7 +24,7 @@ import (
 // @param InstallTime formData string true "install time"
 // @param BoughtTime formData string true "bought time"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /device/fixed/create [post]
 func CreateFixedDeviceService(deviceId string, farmhouseId uint, fixedDeviceTypeId string, owner uint, installTime time.Time, boughtTime time.Time) uint {
 	fixedDevice := entity.FixedDevice{
@@ -42,12 +42,12 @@ func CreateFixedDeviceService(deviceId string, farmhouseId uint, fixedDeviceType
 
 // @Summary API of golang gin backend
 // @Tags Device-fixed
-// @description delete fixed device : 删除固定式设备 参数列表：[设备ID] 访问携带token
+// @description delete fixed device
 // @version 1.0
 // @accept application/json
 // @param Id query int true "id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /device/fixed/delete [delete]
 func DeleteFixedDeviceService(fixedDeviceId uint) {
 	dao.DeleteFixedDevice(fixedDeviceId)
@@ -55,7 +55,7 @@ func DeleteFixedDeviceService(fixedDeviceId uint) {
 
 // @Summary API of golang gin backend
 // @Tags Device-portable
-// @description create portable device : 创建便携式设备 参数列表：[设备绑定的生物ID、厂家提供的设备编号、设备类型] 访问携带token
+// @description create portable device
 // @version 1.0
 // @accept mpfd
 // @param BiologyId formData string true "biology id"
@@ -64,7 +64,7 @@ func DeleteFixedDeviceService(fixedDeviceId uint) {
 // @param InstallTime formData string true "install time"
 // @param BoughtTime formData string true "bought time"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /device/portable/create [post]
 func CreatePortableDeviceService(biologyId uint, portableDeviceId string, portableDeviceTypeId string, installTime time.Time, boughtTime time.Time) uint {
 	biology := dao.GetBiologyInfoById(biologyId)
@@ -87,12 +87,12 @@ func CreatePortableDeviceService(biologyId uint, portableDeviceId string, portab
 
 // @Summary API of golang gin backend
 // @Tags Device-portable
-// @description delete portable device : 删除便携式设备 参数列表：[设备ID] 访问携带token
+// @description delete portable device
 // @version 1.0
 // @accept application/json
 // @param Id query int true "id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /device/portable/delete [delete]
 func DeletePortableDeviceService(portableDeviceId uint) {
 	dao.DeletePortableDevice(portableDeviceId)
@@ -100,12 +100,12 @@ func DeletePortableDeviceService(portableDeviceId uint) {
 
 // @Summary API of golang gin backend
 // @Tags Device-fixed
-// @description create fixed device type : 新增固定式设备类型 参数列表：[设备类型]
+// @description create fixed device type
 // @version 1.0
 // @accept mpfd
 // @param FixedDeviceTypeId formData string true "type name"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /device/fixed/create_type [post]
 func CreateFixedDeviceTypeService(fixedDeviceTypeId string) {
 	fixedDeviceType := entity.FixedDeviceType{
@@ -116,12 +116,12 @@ func CreateFixedDeviceTypeService(fixedDeviceTypeId string) {
 
 // @Summary API of golang gin backend
 // @Tags Device-fixed
-// @description delete fixed device type : 删除固定式设备类型 参数列表：[设备类型ID] 访问携带token
+// @description delete fixed device type
 // @version 1.0
 // @accept application/json
 // @param FixedDeviceTypeId query int true "type name"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /device/fixed/delete_type [delete]
 func DeleteFixedDeviceTypeService(fixedDeviceTypeId string) {
 	dao.DeleteFixedDeviceType(fixedDeviceTypeId)
@@ -129,12 +129,12 @@ func DeleteFixedDeviceTypeService(fixedDeviceTypeId string) {
 
 // @Summary API of golang gin backend
 // @Tags Device-portable
-// @description create portable device type : 新增便携式设备类型 参数列表：[设备类型]
+// @description create portable device type
 // @version 1.0
 // @accept mpfd
 // @param PortableDeviceTypeId formData string true "type name"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router  /device/portable/create_type [post]
 func CreatePortableDeviceTypeService(portableDeviceTypeId string) {
 	portableDeviceType := entity.PortableDeviceType{
@@ -145,12 +145,12 @@ func CreatePortableDeviceTypeService(portableDeviceTypeId string) {
 
 // @Summary API of golang gin backend
 // @Tags Device-portable
-// @description delete portable device type : 删除便携式设备类型 参数列表：[设备类型ID] 访问携带token
+// @description delete portable device type
 // @version 1.0
 // @accept application/json
 // @param PortableDeviceTypeId query int true "type name"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /device/portable/delete_type [delete]
 func DeletePortableDeviceTypeService(fixedDeviceTypeId string) {
 	dao.DeleteFixedDeviceType(fixedDeviceTypeId)
@@ -183,12 +183,12 @@ func updateMonitorStreamToken() {
 
 // @Summary API of golang gin backend
 // @Tags Device-fixed
-// @description get monitor streaming address : 获取摄像头的直播地址 参数列表：[摄像头设备ID] 访问携带token
+// @description get monitor streaming address
 // @version 1.0
 // @accept application/json
 // @param Id query string true "id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /device/fixed/get_monitor [get]
 func GetMonitorStreamByDeviceIdService(deviceId uint) (string, int64, string, string, string) {
 	accessToken := streamAccessToken["accessToken"].(string)
@@ -246,12 +246,12 @@ func updateNewCollarToken() {
 
 // @Summary API of golang gin backend
 // @Tags Device-portable
-// @description get new-type collar realtime data by device id : 获取中农智联项圈的最新数据 参数列表：[设备ID] 访问携带token
+// @description get new-type collar realtime data by device id
 // @version 1.0
 // @accept application/json
 // @param Id query string true "id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /device/portable/get_new_collar [get]
 func GetNewCollarRealtimeByDeviceIdService(deviceId uint) (vo.NewCollar, string) {
 	accessToken := newCollarAccessToken["accessToken"].(string)
@@ -300,12 +300,12 @@ func GetNewCollarRealtimeByDeviceIdService(deviceId uint) (vo.NewCollar, string)
 
 // @Summary API of golang gin backend
 // @Tags Device-fixed
-// @description get all fixed devices by farmhouse : 获取一个牧舍下的所有固定式设备 参数列表：[牧舍ID] 访问携带token
+// @description get all fixed devices by farmhouse
 // @version 1.0
 // @accept application/json
 // @param CompanyId query string true "company id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /device/fixed/get_by_farmhouse [get]
 func GetFixedDeviceListByFarmhouseService(farmhouseId uint) []entity.FixedDevice {
 	var fixedDeviceList []entity.FixedDevice
@@ -323,12 +323,12 @@ func GetFixedDeviceRecursive(companyId uint, fixedDeviceList *[]entity.FixedDevi
 
 // @Summary API of golang gin backend
 // @Tags Device-portable
-// @description get all portable devices by farmhouse : 获取一个牧舍下的所有便携式设备 参数列表：[牧舍ID] 访问携带token
+// @description get all portable devices by farmhouse
 // @version 1.0
 // @accept application/json
 // @param CompanyId query string true "company id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /device/portable/get_by_farmhouse [get]
 func GetPortableDeviceListByFarmhouseService(farmhouseId uint) []vo.BiologyDevice {
 	var result []vo.BiologyDevice
@@ -352,11 +352,11 @@ func GetPortableDeviceListByFarmhouseService(farmhouseId uint) []vo.BiologyDevic
 
 // @Summary API of golang gin backend
 // @Tags Device-fixed
-// @description get user's auth fixed device list : 获取当前用户有权限的所有固定式设备信息 参数列表：[] 访问携带token
+// @description get user's auth fixed device list
 // @version 1.0
 // @accept application/json
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /device/fixed/get_auth_list [get]
 func GetAuthFixedDeviceListService(userId uint) []vo.AuthFixedDevice {
 	companies := dao.GetCompanyListByUserID(userId)
@@ -384,11 +384,11 @@ func GetAuthFixedDeviceListService(userId uint) []vo.AuthFixedDevice {
 
 // @Summary API of golang gin backend
 // @Tags Device-fixed
-// @description get own fixed device list : 获取当前用户拥有的所有固定式设备信息 参数列表：[] 访问携带token
+// @description get own fixed device list
 // @version 1.0
 // @accept application/json
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /device/fixed/own_list [get]
 func GetOwnFixedDeviceListService(userId uint) []vo.OwnFixedDevice {
 	var fixedDeviceInfoList []vo.OwnFixedDevice
@@ -409,11 +409,11 @@ func GetOwnFixedDeviceListService(userId uint) []vo.OwnFixedDevice {
 
 // @Summary API of golang gin backend
 // @Tags Device-portable
-// @description get own portable device list : 获取当前用户拥有的所有便携式设备信息 参数列表：[] 访问携带token
+// @description get own portable device list
 // @version 1.0
 // @accept application/json
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /device/portable/own_list [get]
 func GetOwnPortableDeviceListService(userId uint) []vo.OwnPortableDevice {
 	var portableDeviceInfoList []vo.OwnPortableDevice
@@ -434,12 +434,12 @@ func GetOwnPortableDeviceListService(userId uint) []vo.OwnPortableDevice {
 
 // @Summary API of golang gin backend
 // @Tags Device-portable
-// @description get biology portable device list : 获取指定生物绑定的所有便携式设备信息 参数列表：[生物id] 访问携带token
+// @description get biology portable device list
 // @version 1.0
 // @accept application/json
 // @param BiologyId query string true "biology id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /device/portable/get_by_biology [get]
 func GetPortableDeviceListByBiologyService(biologyId uint) []vo.BiologyPortableDevice {
 	portableDeviceList := dao.GetPortableDeviceListByBiology(biologyId)
@@ -460,12 +460,12 @@ func GetPortableDeviceListByBiologyService(biologyId uint) []vo.BiologyPortableD
 
 // @Summary API of golang gin backend
 // @Tags Device-fixed
-// @description get fixed device statistic : 获取指定牧场中的固定设备统计信息 参数列表：[牧场Id] 访问携带token
+// @description get fixed device statistic
 // @version 1.0
 // @accept application/json
 // @param CompanyId query int true "company id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /device/fixed/get_statistic [get]
 func GetFixedDeviceStatisticService(companyId uint) map[string]uint {
 	result := make(map[string]uint)
@@ -478,12 +478,12 @@ func GetFixedDeviceStatisticService(companyId uint) map[string]uint {
 
 // @Summary API of golang gin backend
 // @Tags Device-portable
-// @description get portable device statistic : 获取指定牧场中的便携设备统计信息 参数列表：[牧场Id] 访问携带token
+// @description get portable device statistic
 // @version 1.0
 // @accept application/json
 // @param CompanyId query int true "company id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /device/portable/get_statistic [get]
 func GetPortableDeviceStatisticService(companyId uint) map[string]uint {
 	result := make(map[string]uint)

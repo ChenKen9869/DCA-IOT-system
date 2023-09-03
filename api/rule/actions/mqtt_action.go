@@ -10,9 +10,7 @@ import (
 
 var MqttActionChannel chan (string)
 
-// 发布一条消息到 mqtt
 func ExecMqttAction(params string) {
-	// params: address, port, username, password, topic, msg
 	address, port, username, password, topic, msg, portStr := parseMqttParams(params)
 
 	opts := mqtt.NewClientOptions().AddBroker(fmt.Sprintf("tcp://%s:%d", address, port)).SetUsername(username).SetPassword(password)
@@ -22,17 +20,14 @@ func ExecMqttAction(params string) {
 		panic(token.Error())
 	}
 
-	// 断开连接
 	defer c.Disconnect(200)
 
-	// 发布消息
 	token := c.Publish(topic, 0, false, msg)
 	token.Wait()
 	fmt.Println("[Mqtt Executor] Message: { " + msg + " } has send to mqtt topic: { " + topic + " } of { " + address + ":" + portStr + " }! ")
 }
 
 func parseMqttParams(params string) (string, int, string, string, string, string, string) {
-	// params = strings.Replace(params, " ", "", -1)
 	paramList := strings.Split(params, ",")
 	address := strings.Replace(paramList[0], " ", "", -1)
 	portStr := strings.Replace(paramList[1], " ", "", -1)

@@ -21,10 +21,9 @@ import (
 // @param Action formData string true "action"
 // @param CompanyId formData int true "company id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /rule/create [post]
 func CreateRuleService(companyId uint, datasource string, condition string, action string, owner uint) uint {
-	// prePROCESS: auth devices
 	if !preprosess.AuthDevices(datasource, companyId) {
 		panic("rule auth error!")
 	}
@@ -47,26 +46,20 @@ func CreateRuleService(companyId uint, datasource string, condition string, acti
 // @param RuleId query int true "rule id"
 // @param ExecInternal query string true "exec internal"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /rule/start [get]
 func StartRuleService(ruleId uint, internal string) {
-	// 先查出来 rule
 	rule := dao.GetRuleInfo(ruleId)
-	// 判断规则状态是否是未启动
 	if rule.Stat != entity.RuleInactive {
 		panic("Error: rule has started or scheduled!")
 	}
-	// preprocess: 取出数据源索引，更新数据源管理器
 	preprosess.AddDatasource(rule.Datasource)
-	// 调用解释函数，解析文本, 获取模式匹配函数
 	matcherFunc := ruleparser.ParseRule(strconv.Itoa(int(rule.ID)), rule.Datasource, rule.Condition, rule.Action)
-	// 生成和注册模式匹配器
 	cronId, err := scheduler.RuleCron.AddFunc(internal, matcherFunc)
 	if err != nil {
 		panic(err.Error())
 	}
 	scheduler.RuleMap[ruleId] = cronId
-	// 修改规则状态
 	dao.UpdateRuleStat(ruleId, entity.RuleActive)
 }
 
@@ -77,7 +70,7 @@ func StartRuleService(ruleId uint, internal string) {
 // @accept application/json
 // @param RuleId query int true "rule id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /rule/end [get]
 func EndRuleService(ruleId uint) {
 	scheduler.RuleCron.Remove(scheduler.RuleMap[ruleId])
@@ -94,7 +87,7 @@ func EndRuleService(ruleId uint) {
 // @param ExecInternal query string true "exec internal"
 // @param FutureTime query string true "future start time"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /rule/schedule [get]
 func ScheduleRuleService(ruleId uint, internal string, futureTime time.Time) {
 	time.AfterFunc(time.Until(futureTime), func() {
@@ -118,7 +111,7 @@ func getRuleRecursive(companyId uint, ruleList *[]entity.Rule) {
 // @accept application/json
 // @param CompanyId query int true "company id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /rule/get_company [get]
 func GetCompanyRuleService(companyId uint) []vo.RuleInfo {
 	var result []vo.RuleInfo
@@ -145,7 +138,7 @@ func GetCompanyRuleService(companyId uint) []vo.RuleInfo {
 // @version 1.0
 // @accept application/json
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /rule/get_user [get]
 func GetUserRuleService(userId uint) []vo.RuleInfo {
 	var result []vo.RuleInfo
@@ -172,7 +165,7 @@ func GetUserRuleService(userId uint) []vo.RuleInfo {
 // @accept application/json
 // @param RuleId query int true "rule id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /rule/delete [delete]
 func DeleteRuleService(ruleId uint) vo.RuleInfo {
 	rule := dao.DeleteRule(ruleId)
@@ -198,7 +191,7 @@ func DeleteRuleService(ruleId uint) vo.RuleInfo {
 // @param Action query string true "action"
 // @param RuleId query int true "rule id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /rule/update [put]
 func UpdateRuleDCAService(ruleId uint, datasource string, condition string, action string) {
 	dao.UpdateRuleDCA(ruleId, datasource, condition, action)

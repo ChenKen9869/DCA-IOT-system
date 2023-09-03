@@ -63,12 +63,12 @@ func AuthVisitor(userId uint, companyId uint) bool {
 
 // @Summary API of golang gin backend
 // @Tags Company
-// @description delete company : 删除一个公司 参数列表：[公司ID] 访问携带token
+// @description delete company
 // @version 1.0
 // @accept application/json
 // @param CompanyId query int true "company id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /company/delete [delete]
 func DeleteCompanyService(companyId uint, operator entity.User) error {
 	companyNode := dao.GetCompanyInfoByID(companyId)
@@ -172,11 +172,11 @@ func makeTreeByCompanyId(currentId uint) vo.CompanyTreeNode {
 
 // @Summary API of golang gin backend
 // @Tags Company
-// @description get user's company tree : 获取当前用户有权限的所有公司信息（以树形结构返回） 参数列表：[] 访问携带token
+// @description get user's company tree
 // @version 1.0
 // @accept application/json
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /company/get/treelist [get]
 func GetCompanyTreeListService(userId uint) ([]vo.CompanyTreeNode, []uint) {
 	companies := dao.GetCompanyListByUserID(userId)
@@ -194,14 +194,14 @@ func GetCompanyTreeListService(userId uint) ([]vo.CompanyTreeNode, []uint) {
 
 // @Summary API of golang gin backend
 // @Tags Company
-// @description create company : 创建一个公司 参数列表：[公司名称、该公司的父公司ID（root公司的父公司ID填写0）、该公司的地理位置信息描述（前端自己决定格式，具体看第三方天气定位等服务的接口要求，后端只负责保存地理信息，不做其他处理）] 访问携带token
+// @description create company
 // @version 1.0
 // @accept mpfd
 // @param Name formData string true "company_name"
 // @param ParentId formData int true "parent id"
 // @param Location formData string true "location"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /company/create [post]
 func CreateCompanyService(parentId uint, name string, owner uint, location string) (uint, error) {
 	if len(name) == 0 {
@@ -233,13 +233,13 @@ func CreateCompanyService(parentId uint, name string, owner uint, location strin
 
 // @Summary API of golang gin backend
 // @Tags Company
-// @description add company auth to user : 为指定用户分配指定公司的权限（接口访问者需要事先拥有该公司的权限） 参数列表：[公司ID、用户ID] 访问携带token
+// @description add company auth to user
 // @version 1.0
 // @accept mpfd
 // @param CompanyId formData string true "company id"
 // @param UserId formData string true "user id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /company/company_user/create [post]
 func CreateCompanyUserService(companyId uint, userId uint) error {
 	companyInfo := dao.GetCompanyInfoByID(companyId)
@@ -259,12 +259,12 @@ func CreateCompanyUserService(companyId uint, userId uint) error {
 	}
 	for _, company := range companyList {
 		if company.CompanyID == companyId {
-			err := errors.New("权限已经存在")
+			err := errors.New("permission already exists")
 			return err
 		}
 		for _, ancestorId := range ancestorList {
 			if company.CompanyID == ancestorId {
-				err := errors.New("权限已经存在")
+				err := errors.New("permission already exists")
 				return err
 			}
 		}
@@ -274,8 +274,7 @@ func CreateCompanyUserService(companyId uint, userId uint) error {
 		UserID:    userId,
 	}
 	dao.CreateCompanyUser(companyUserInfo)
-	// l := dao.GetOwnCompanyList(userId)
-	// _, l := GetCompanyTreeListService(userId)
+
 	defaultCompany := dao.GetUserInfoById(userId).DefaultCompany
 	if defaultCompany == 0 {
 		dao.UpdateUserDefaultCompany(userId, companyId)
@@ -285,13 +284,13 @@ func CreateCompanyUserService(companyId uint, userId uint) error {
 
 // @Summary API of golang gin backend
 // @Tags Company
-// @description delete company auth of user : 从指定用户处收回指定公司的权限 参数列表：[公司ID、用户ID] 访问携带token
+// @description delete company auth of user
 // @version 1.0
 // @accept application/json
 // @param CompanyId query int true "company id"
 // @param UserId query string true "user id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /company/company_user/delete [delete]
 func DeleteCompanyUserService(companyId uint, userId uint) {
 	companyUser := dao.GetCompanyUser(companyId, userId)
@@ -308,12 +307,12 @@ func DeleteCompanyUserService(companyId uint, userId uint) {
 
 // @Summary API of golang gin backend
 // @Tags Company
-// @description get employee list of company : 获取公司的员工列表 参数列表：[公司ID] 访问携带token
+// @description get employee list of company
 // @version 1.0
 // @accept application/json
 // @param CompanyId query string true "company id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /company/get/employeelist [get]
 func GetEmployeeListService(companyId uint) map[entity.User][]uint {
 	employeeList := make(map[entity.User][]uint)
@@ -335,12 +334,12 @@ func GetEmployeeRecursive(companyId uint, employeeList map[entity.User][]uint) {
 
 // @Summary API of golang gin backend
 // @Tags Company
-// @description get company information : 获取公司的详细信息 参数列表：[公司ID] 访问携带token
+// @description get company information
 // @version 1.0
 // @accept application/json
 // @param CompanyId query string true "company id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /company/get/info [get]
 func GetCompanyInfoService(companyId uint) vo.CompanyInfo {
 	company := dao.GetCompanyInfoByID(companyId)
@@ -354,11 +353,11 @@ func GetCompanyInfoService(companyId uint) vo.CompanyInfo {
 
 // @Summary API of golang gin backend
 // @Tags Company
-// @description get own company list : 获取当前用户拥有的公司列表 参数列表：[] 访问携带token
+// @description get own company list
 // @version 1.0
 // @accept application/json
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /company/get/own_list [get]
 func GetOwnCompanyListService(userId uint) []vo.CompanyTreeNode {
 	companyList := dao.GetOwnCompanyList(userId)
@@ -372,14 +371,14 @@ func GetOwnCompanyListService(userId uint) []vo.CompanyTreeNode {
 
 // @Summary API of golang gin backend
 // @Tags Company
-// @description update company info : 更新公司信息 参数列表：[公司ID，新名字，新地址] 访问携带token
+// @description update company info
 // @version 1.0
 // @accept application/json
 // @param Name query string true "company_name"
 // @param Location query string true "location"
 // @param CompanyId query int true "company id"
 // @param Authorization header string true "token"
-// @Success 200 {object} server.SuccessResponse200 "成功"
+// @Success 200 {object} server.SuccessResponse200 "success"
 // @router /company/update [put]
 func UpdateCompanyInfoService(companyId uint, name string, location string) {
 	dao.UpdateCompanyInfo(companyId, name, location)

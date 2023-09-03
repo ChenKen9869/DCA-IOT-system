@@ -11,7 +11,6 @@ import (
 )
 
 func parseExampleMessage(msg string) (deviceId string, deviceType string, attribute string, value float64) {
-	// 0000001, collar, temperature, 25.6
 	msg = strings.Replace(msg, " ", "", -1)
 	msgList := strings.Split(msg, ",")
 	deviceId = msgList[0]
@@ -41,11 +40,9 @@ func processExampleMsg(conn net.Conn) {
 		fmt.Println("[Example Accepter] Accept Message: " + recvStr)
 		conn.Write([]byte("[Message from server] Message accepted!"))
 
-		// deviceId, msgDeviceType, attribute, value := messageArrive()
 		deviceId, msgDeviceType, attribute, value := parseExampleMessage(recvStr)
 		fmt.Println("[Example Accepter] Message has parsed! ")
 		deviceType := getDeviceTypeInMysql(msgDeviceType)
-		// 在 mysql 中查找对应设备的 主键id
 		var id int
 		if deviceType == PortableDeviceType {
 			var deviceInfo entity.PortableDevice
@@ -57,7 +54,6 @@ func processExampleMsg(conn net.Conn) {
 			id = int(deviceInfo.ID)
 		}
 		updateDatasourceManagement(id, deviceType, attribute, value)
-		// time.Sleep(30 * time.Second)
 	}
 }
 
@@ -78,7 +74,6 @@ func StartExampleAccepter() {
 	}
 }
 
-// 查找并更新数据源管理器的数据
 func updateDatasourceManagement(id int, deviceType string, attr string, value float64) {
 
 	index := DeviceIndex{
@@ -108,8 +103,3 @@ func getDeviceTypeInMysql(msgDeviceType string) string {
 		return FixedDeviceType
 	}
 }
-
-// 模拟数据到达
-// func messageArrive() (deviceId string, deviceType string, attribute string, value float64) {
-// 	return "0000001", "collar", "temperature", float64(25.6)
-// }
