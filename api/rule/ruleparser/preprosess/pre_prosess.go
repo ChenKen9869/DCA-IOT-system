@@ -2,11 +2,9 @@ package preprosess
 
 import (
 	"fmt"
-	"go-backend/api/common/common"
 	"go-backend/api/rule/accepter"
 	"go-backend/api/rule/ruleparser"
 	"go-backend/api/server/dao"
-	"go-backend/api/server/entity"
 )
 
 func AddDatasource(datasource string) {
@@ -67,18 +65,17 @@ func AuthDevices(datasource string, companyId uint) bool {
 	for _, ds := range datasourceList {
 		id := ds.DeviceId
 		typeS := ds.DeviceType
-		// auth company and device
-		if ds.DeviceType == accepter.PortableDeviceType {
-			var device entity.PortableDevice
-			common.GetDB().Table(accepter.DeviceDBMap[typeS].TableName).Where("id = ?", id).First(&device)
-			pid := dao.GetBiologyInfoById(device.BiologyID).FarmhouseID
+
+		if typeS == accepter.PortableDeviceType {
+			deviceInfo := dao.GetPortableDeviceInfoById(uint(id))
+			pid := dao.GetBiologyInfoById(deviceInfo.BiologyID).FarmhouseID
 			if pid != companyId {
 				return false
 			}
-		} else if ds.DeviceType == accepter.FixedDeviceType {
-			var device entity.FixedDevice
-			common.GetDB().Table(accepter.DeviceDBMap[typeS].TableName).Where("id = ?", id).First(&device)
-			if device.FarmhouseID != companyId {
+		} else if typeS == accepter.FixedDeviceType {
+			deviceInfo := dao.GetFixedDeviceInfoById(uint(id))
+
+			if deviceInfo.FarmhouseID != companyId {
 				fmt.Println("[Auth Rule] Auth Error: Company does not have the access permission to such datasource!")
 				return false
 			}

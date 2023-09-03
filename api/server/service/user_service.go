@@ -2,7 +2,7 @@ package service
 
 import (
 	"errors"
-	"go-backend/api/common/common"
+	"go-backend/api/common"
 	"go-backend/api/server/dao"
 	"go-backend/api/server/entity"
 	"go-backend/api/server/tools/server"

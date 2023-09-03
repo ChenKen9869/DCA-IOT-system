@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"go-backend/api/common/common"
+	"go-backend/api/common/db"
 	"go-backend/api/common/middleware"
 	"go-backend/api/rule"
 	"go-backend/api/server/router"
@@ -36,14 +36,14 @@ import (
 // @BasePath /
 func main() {
 	InitConfig()
-	db := common.InitDB()
-	deviceDb := common.InitDeviceDB()
+	database := db.InitDB()
+	deviceDb := db.InitDeviceDB()
 	sensor.InitCollections()
 	geocontainer.InitContainer()
 	monitor.InitMonitor()
 	rule.InitRule()
-	defer db.Close()
-	defer deviceDb.Client().Disconnect(common.Ctx)
+	defer database.Close()
+	defer deviceDb.Client().Disconnect(db.Ctx)
 
 	r := gin.Default()
 	r.Use(middleware.LoggerToFile())

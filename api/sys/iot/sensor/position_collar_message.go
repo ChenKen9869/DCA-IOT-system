@@ -2,7 +2,7 @@ package sensor
 
 import (
 	"context"
-	"go-backend/api/common/common"
+	"go-backend/api/common/db"
 	"go-backend/api/server/tools/util"
 	"time"
 	"go.mongodb.org/mongo-driver/bson"
@@ -27,7 +27,7 @@ func GetLatestDataListPosCollar(deviceId string, nums int64) []PositionCollarMes
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	opts := options.Find().SetSort(bson.D{primitive.E{Key: "_id", Value: -1}}).SetLimit(nums)
-	cursor, err := common.GetDeviceDB().Collection(posCollarCollection).Find(ctx, filter, opts)
+	cursor, err := db.GetDeviceDB().Collection(posCollarCollection).Find(ctx, filter, opts)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -49,7 +49,7 @@ func GetRecordListByTimePosCollar(deviceId string, startTime string, endTime str
 	defer cancel()
 	opts := options.Find().SetSort(bson.D{primitive.E{Key: "_id", Value: -1}})
 	var results []PositionCollarMessage
-	cursor, err := common.GetDeviceDB().Collection(posCollarCollection).Find(ctx, filter, opts)
+	cursor, err := db.GetDeviceDB().Collection(posCollarCollection).Find(ctx, filter, opts)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -66,7 +66,7 @@ func GetLatestDataPosCollar(deviceId string) PositionCollarMessage {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	opts := options.FindOne().SetSort(bson.D{primitive.E{Key: "_id", Value: -1}})
-	err := common.GetDeviceDB().Collection(posCollarCollection).FindOne(ctx, filter, opts).Decode(&result)
+	err := db.GetDeviceDB().Collection(posCollarCollection).FindOne(ctx, filter, opts).Decode(&result)
 	if err != nil {
 		panic(err.Error())
 	}

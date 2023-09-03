@@ -3,8 +3,7 @@ package accepter
 import (
 	"bufio"
 	"fmt"
-	"go-backend/api/common/common"
-	"go-backend/api/server/entity"
+	"go-backend/api/server/dao"
 	"net"
 	"strconv"
 	"strings"
@@ -45,12 +44,10 @@ func processExampleMsg(conn net.Conn) {
 		deviceType := getDeviceTypeInMysql(msgDeviceType)
 		var id int
 		if deviceType == PortableDeviceType {
-			var deviceInfo entity.PortableDevice
-			common.GetDB().Table(DeviceDBMap[deviceType].TableName).Where(DeviceDBMap[deviceType].ColumnName+" = ?", msgDeviceType).Where("device_id = ?", deviceId).First(&deviceInfo)
+			deviceInfo := dao.GetPortableDeviceInfoByMessagePayload(deviceId, msgDeviceType)
 			id = int(deviceInfo.ID)
-		} else {
-			var deviceInfo entity.FixedDevice
-			common.GetDB().Table(DeviceDBMap[deviceType].TableName).Where(DeviceDBMap[deviceType].ColumnName+" = ?", msgDeviceType).Where("device_id = ?", deviceId).First(&deviceInfo)
+		} else if deviceType == FixedDeviceType {
+			deviceInfo := dao.GetFixedDeviceInfoByMessagePayload(deviceId, msgDeviceType)
 			id = int(deviceInfo.ID)
 		}
 		updateDatasourceManagement(id, deviceType, attribute, value)

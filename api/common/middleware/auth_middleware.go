@@ -1,10 +1,11 @@
 package middleware
 
 import (
-	"go-backend/api/common/common"
+	"go-backend/api/common"
 	"go-backend/api/server/dao"
 	"net/http"
 	"strings"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,7 +25,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		if err != nil || !token.Valid {
 			ctx.JSON(http.StatusUnauthorized, gin.H{
 				"code": 401,
-				"msg": "invalidated token",
+				"msg":  "invalidated token",
 			})
 			ctx.Abort()
 			return
