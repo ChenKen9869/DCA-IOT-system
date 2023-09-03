@@ -7,9 +7,8 @@ import (
 	"strconv"
 )
 
-func MatcherGenerator(symbolTable SymbolTable, conditionType string, tokenList []Token, actionList []Action) func() {
+func MatcherGenerator(ruleIdStr string, symbolTable SymbolTable, conditionType string, tokenList []Token, actionList []Action) func() {
 	return func() {
-		fmt.Println("[Rule Matcher] Start matching rule, waiting for result ... ")
 		// 构建内符号表
 		currData := make(InnerTable)
 		for symbol, symbolData := range symbolTable {
@@ -19,18 +18,18 @@ func MatcherGenerator(symbolTable SymbolTable, conditionType string, tokenList [
 				DeviceType: symbolData.DeviceType,
 			}]
 			if !exist {
-				panic("[Rule Matcher] Device information does not exist in datasource management!")
+				panic("[Rule Matcher: " + ruleIdStr + "] Rule Device information does not exist in datasource management!")
 			}
 			data, e := v[symbolData.Attr]
 			if !e {
-				panic("[Rule Matcher] Attribute information does not exist in device info of datasource!")
+				panic("[Rule Matcher: " + ruleIdStr + "] Attribute information does not exist in device info of datasource!")
 			}
 			currData[symbol] = data.Value
 			accepter.DMLock.Unlock()
 		}
 		// 查找并调用匹配算法
 		if MatcherMap[conditionType](tokenList, currData) {
-			fmt.Println("[Rule Matcher] Rule matched! ")
+			fmt.Println("[Rule Matcher: " + ruleIdStr + "] Rule matched! ")
 			for _, ac := range actionList {
 				// 使用内符号表替换 actionparams
 				params := ac.ActionParams
@@ -39,13 +38,12 @@ func MatcherGenerator(symbolTable SymbolTable, conditionType string, tokenList [
 				if exist {
 					actionChannel <- params
 				} else {
-					panic("Syntax error: action type " + ac.ActionType + "does not exist! ")
+					panic("[Rule Matcher: " + ruleIdStr + "]Syntax error: action type " + ac.ActionType + "does not exist! ")
 				}
 			}
-			fmt.Println("[Rule Matcher] Action params has all sent to their executors! ")
 			return
 		}
-		fmt.Println("[Rule Matcher] Rule not matched! ")
+		fmt.Println("[Rule Matcher: " + ruleIdStr + "] Rule not matched! ")
 	}
 }
 

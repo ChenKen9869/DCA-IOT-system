@@ -1,14 +1,12 @@
 package matcher
 
 import (
-	"fmt"
 	"go-backend/api/rule/ruleparser"
 	"go-backend/api/server/tools/util"
 )
 
 // 基于 stack 的匹配算法
 func MatchExpressionCondition(tokenList []ruleparser.Token, innerTable ruleparser.InnerTable) bool {
-	fmt.Println("[Rule Matcher] Start matching expression condition with current data!")
 	var st util.Stack
 	for _, token := range tokenList {
 		if token.TokenType == ruleparser.NumTokenType {
@@ -44,7 +42,7 @@ func caculateToken(operandA, operandB, operator ruleparser.Token) ruleparser.Tok
 	switch operatorStr {
 	case "*":
 		if AType != ruleparser.NumTokenType || BType != ruleparser.NumTokenType {
-			panic("syntax error!")
+			panic("Syntax Error!")
 		}
 		return ruleparser.Token{
 			TokenType:  ruleparser.NumTokenType,
@@ -53,7 +51,10 @@ func caculateToken(operandA, operandB, operator ruleparser.Token) ruleparser.Tok
 		}
 	case "/":
 		if AType != ruleparser.NumTokenType || BType != ruleparser.NumTokenType {
-			panic("syntax error!")
+			panic("Syntax Error!")
+		}
+		if util.IsFloat64Equal(operandB.RealNum, float64(0)) {
+			panic("Error: The divisor is 0!")
 		}
 		return ruleparser.Token{
 			TokenType:  ruleparser.NumTokenType,
@@ -62,7 +63,7 @@ func caculateToken(operandA, operandB, operator ruleparser.Token) ruleparser.Tok
 		}
 	case "+":
 		if AType != ruleparser.NumTokenType || BType != ruleparser.NumTokenType {
-			panic("syntax error!")
+			panic("Syntax Error!")
 		}
 		return ruleparser.Token{
 			TokenType:  ruleparser.NumTokenType,
@@ -71,7 +72,7 @@ func caculateToken(operandA, operandB, operator ruleparser.Token) ruleparser.Tok
 		}
 	case "-":
 		if AType != ruleparser.NumTokenType || BType != ruleparser.NumTokenType {
-			panic("syntax error!")
+			panic("Syntax Error!")
 		}
 		return ruleparser.Token{
 			TokenType:  ruleparser.NumTokenType,
@@ -80,7 +81,7 @@ func caculateToken(operandA, operandB, operator ruleparser.Token) ruleparser.Tok
 		}
 	case ">":
 		if AType != ruleparser.NumTokenType || BType != ruleparser.NumTokenType {
-			panic("syntax error!")
+			panic("Syntax Error!")
 		}
 		var boolValue int
 		if operandA.RealNum > operandB.RealNum {
@@ -95,7 +96,7 @@ func caculateToken(operandA, operandB, operator ruleparser.Token) ruleparser.Tok
 		}
 	case "<":
 		if AType != ruleparser.NumTokenType || BType != ruleparser.NumTokenType {
-			panic("syntax error!")
+			panic("Syntax Error!")
 		}
 		var boolValue int
 		if operandA.RealNum < operandB.RealNum {
@@ -110,7 +111,7 @@ func caculateToken(operandA, operandB, operator ruleparser.Token) ruleparser.Tok
 		}
 	case "!=":
 		if AType != ruleparser.NumTokenType || BType != ruleparser.NumTokenType {
-			panic("syntax error!")
+			panic("Syntax Error!")
 		}
 		var boolValue int
 		if !util.IsFloat64Equal(operandA.RealNum, operandB.RealNum) {
@@ -125,7 +126,7 @@ func caculateToken(operandA, operandB, operator ruleparser.Token) ruleparser.Tok
 		}
 	case "==":
 		if AType != ruleparser.NumTokenType || BType != ruleparser.NumTokenType {
-			panic("syntax error!")
+			panic("Syntax Error!")
 		}
 		var boolValue int
 		if util.IsFloat64Equal(operandA.RealNum, operandB.RealNum) {
@@ -140,7 +141,7 @@ func caculateToken(operandA, operandB, operator ruleparser.Token) ruleparser.Tok
 		}
 	case "&":
 		if AType != ruleparser.BoolTokenType || BType != ruleparser.BoolTokenType {
-			panic("syntax error!")
+			panic("Syntax Error!")
 		}
 		var boolValue int
 		if util.IsFloat64Equal(operandA.RealNum, float64(1)) && util.IsFloat64Equal(operandB.RealNum, float64(1)) {

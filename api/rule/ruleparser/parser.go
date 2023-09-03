@@ -19,7 +19,7 @@ type SymbolTable = map[Name]SymbolElem
 
 // // 解析规则，传入规则所在文件
 // // 规则文件传到后端后，先统一保存在某个文件目录下，然后再解析
-func ParseRule(datasource string, condition string, action string) func() {
+func ParseRule(ruleIdStr string, datasource string, condition string, action string) func() {
 	datasourceList := ParseDatasource(datasource)
 	conditionWithType := ParseCondition(condition)
 	actionList := ParseAction(action)
@@ -43,7 +43,7 @@ func ParseRule(datasource string, condition string, action string) func() {
 		tokenList = parseFunctionCondition(conditionWithType.StrTokenList, symbolTable)
 	}
 
-	fmt.Println("[Rule Parser] Rule has parsed. Condition type: " + conditionWithType.ConditionType)
+	fmt.Println("[Rule Parser: " + ruleIdStr + "] Rule has parsed. Condition type: " + conditionWithType.ConditionType)
 	// 3. 生成并返回模式匹配函数，将外符号表，类型标识符，TokenList，actionList一起传进去
-	return MatcherGenerator(symbolTable, conditionWithType.ConditionType, tokenList, actionList)
+	return MatcherGenerator(ruleIdStr, symbolTable, conditionWithType.ConditionType, tokenList, actionList)
 }

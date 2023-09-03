@@ -94,9 +94,9 @@ func updateDatasourceManagement(id int, deviceType string, attr string, value fl
 			v.Value = value
 			DatasourceManagement[index][attr] = v
 		}
-		fmt.Println("[Example Accepter] Update datasource management down!")
+		fmt.Println("[Example Accepter] Datasource management update is complete!")
 	} else {
-		fmt.Println("[Example Accepter] Datasource management has not updated!")
+		fmt.Println("[Example Accepter] Datasource management was not updated!")
 	}
 	DMLock.Unlock()
 }

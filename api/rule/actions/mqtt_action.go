@@ -12,7 +12,6 @@ var MqttActionChannel chan (string)
 
 // 发布一条消息到 mqtt
 func ExecMqttAction(params string) {
-	fmt.Println("[Mqtt Action] Start executing mqtt action... ")
 	// params: address, port, username, password, topic, msg
 	address, port, username, password, topic, msg, portStr := parseMqttParams(params)
 

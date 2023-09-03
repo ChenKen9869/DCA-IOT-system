@@ -7,6 +7,7 @@ import (
 	"go-backend/api/server/dao"
 	"go-backend/api/server/entity"
 	"go-backend/api/server/vo"
+	"strconv"
 	"time"
 )
 
@@ -53,12 +54,12 @@ func StartRuleService(ruleId uint, internal string) {
 	rule := dao.GetRuleInfo(ruleId)
 	// 判断规则状态是否是未启动
 	if rule.Stat != entity.RuleInactive {
-		panic("error: rule has started or scheduled!")
+		panic("Error: rule has started or scheduled!")
 	}
 	// preprocess: 取出数据源索引，更新数据源管理器
 	preprosess.AddDatasource(rule.Datasource)
 	// 调用解释函数，解析文本, 获取模式匹配函数
-	matcherFunc := ruleparser.ParseRule(rule.Datasource, rule.Condition, rule.Action)
+	matcherFunc := ruleparser.ParseRule(strconv.Itoa(int(rule.ID)), rule.Datasource, rule.Condition, rule.Action)
 	// 生成和注册模式匹配器
 	cronId, err := scheduler.RuleCron.AddFunc(internal, matcherFunc)
 	if err != nil {

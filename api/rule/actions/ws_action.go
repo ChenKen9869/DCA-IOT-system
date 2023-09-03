@@ -12,12 +12,13 @@ import (
 // params: userId, msg
 func sendWebsocketMSG(userId uint, msg string) {
 	ch, exist := monitor.MonitorCenter[userId]
+	userIdStr := strconv.Itoa(int(userId))
 	if exist {
 		ch.MessageChan <- msg
 
-		fmt.Println("[WebSocket Action] Message: { " + msg + " } has sent to target user!")
+		fmt.Println("[WebSocket Action] Message: { " + msg + " } has sent to target user { " + userIdStr + " } successfully!")
 	} else {
-		panic("[WebSocket Action] Warning: Message was not sent. The target user is not connected to Monitoring Center!")
+		panic("[WebSocket Action] Warning: Message{ " + msg + " }  was not sent. The target user { " + userIdStr + " }" + "is not connected to Monitoring Center!")
 	}
 
 }
@@ -25,7 +26,6 @@ func sendWebsocketMSG(userId uint, msg string) {
 var WsActionChannel chan (string)
 
 func ExecWsAction(params string) {
-	fmt.Println("[WebSocket Action] Start executing websocket action... ")
 	var paramList []string
 	for i, c := range params {
 		if string(c) == "," {
