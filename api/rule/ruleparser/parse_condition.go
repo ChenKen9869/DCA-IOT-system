@@ -5,6 +5,7 @@ import (
 )
 
 var Expression string = "expression"
+var PointSurfaceFunction string = "PointSurface"
 
 var StrTokenType string = "STR"
 var NumTokenType string = "NUM"

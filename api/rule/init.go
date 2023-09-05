@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"go-backend/api/rule/accepter"
 	"go-backend/api/rule/actions"
-	"go-backend/api/rule/funcondition"
 	"go-backend/api/rule/ruleparser"
 	"go-backend/api/rule/ruleparser/matcher"
 	"go-backend/api/rule/scheduler"
@@ -27,12 +26,12 @@ func InitRule() {
 
 	ruleparser.MatcherMap = make(map[string]func([]ruleparser.Token, map[string]float64) bool)
 	ruleparser.MatcherMap[ruleparser.Expression] = matcher.MatchExpressionCondition
+	ruleparser.MatcherMap[ruleparser.PointSurfaceFunction] = matcher.MatchPointSurfaceFunctionCondition
 
 	scheduler.RuleCron = cron.New()
 	scheduler.RuleMap = make(map[uint]cron.EntryID)
 	scheduler.RuleCron.Start()
 
-	funcondition.FunctionCondition = make(map[string]func(map[string]ruleparser.SymbolElem) bool)
 
 	actions.ActionChannels = make(map[string]chan string)
 
