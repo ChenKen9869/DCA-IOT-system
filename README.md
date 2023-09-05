@@ -13,7 +13,7 @@ The system is designed for manage the IoT devices and devices' messages.
 - Make decision by writing DCA rules.
 - Allow to write multi-devices rules.
 - High speed & easy to use.
-- Allow for sharing device data among other users.
+- Allow for sharing device data among users.
 
 ## Outline
 - [DCA IOT system](#dca-iot-system)
@@ -149,7 +149,7 @@ After deployed and started service, test the system at swagger api webpage : <ht
 
 10. When finish testing, remember to end the rule. 
 
-    Or, you may have to **change the rule's status in MySQL terminal manually**. 
+    If you just close the service without end the rule, you should **change the rule's status in MySQL manually**. 
 
     ```sql
     UPDATE rules SET stat='Inactive' WHERE id=id_of_the_test_rule;
@@ -161,7 +161,7 @@ After deployed and started service, test the system at swagger api webpage : <ht
 
 ## Architecture
 
-The system is made up by following 
+The system is made up by following architecture.
 
 
 
@@ -188,25 +188,51 @@ Action syntax:
 
 ​	**ActionType : params; ActionType : params**
 
+
+
+How to use in webpage?
+
+test html
+
 ### Message Accepter
 
 Write about how to create message accepter for developers.
+
+1. inner accepter
+
+2. outside accepter: update Datasource Management by http api or rpc call
 
 ### Rule Matcher
 
 Write about how to create function rules for developers
 
+create new matcher function
+
+create the function condition type symbol
+
+initial it in api/rule/init.go
+
 ### Action Executor
 
 Write about how to create action executor for developers
 
+create executor function and it's param channel
+
+define the params list
+
+initial it in api/rule/init.go
+
 ## WebSocket Connector
 
+How it works?
 
+connect
 
+disconnect
 
+use it inside the system
 
-
+Or, use it outside by http api or rpc call
 
 # License
 
