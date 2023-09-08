@@ -11,6 +11,10 @@ import (
 func MatchPointSurfaceFunctionCondition(tokenList []ruleparser.Token, innerTable ruleparser.InnerTable) bool {
 	var point geocontainer.Point
 	var polygon geocontainer.Polygon
+	if tokenList[0].TokenType != ruleparser.ValTokenType || tokenList[1].TokenType != ruleparser.ValTokenType {
+		fmt.Println("[Point Surface Rule Matcher] Error Occur: params type error!")
+		return false
+	}
 	for symbol, value := range innerTable {
 		if symbol == tokenList[0].TokenValue {
 			point.Longitude = value
@@ -28,6 +32,7 @@ func MatchPointSurfaceFunctionCondition(tokenList []ruleparser.Token, innerTable
 		currNum, err := strconv.ParseFloat(token.TokenValue, 64)
 		if err != nil {
 			fmt.Println("[Point Surface Rule Matcher] Error Occur: " + err.Error())
+			return false
 		}
 		numList = append(numList, currNum)
 	}
