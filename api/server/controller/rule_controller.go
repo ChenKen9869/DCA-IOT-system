@@ -13,7 +13,6 @@ import (
 )
 
 func CreateRuleController(ctx *gin.Context) {
-	// Rule Upload
 	dString := ctx.PostForm("Datasource")
 	cString := ctx.PostForm("Condition")
 	aString := ctx.PostForm("Action")
@@ -35,12 +34,10 @@ func CreateRuleController(ctx *gin.Context) {
 		return
 	}
 
-	// Save Rule
 	ruleId := service.CreateRuleService(uint(companyId), dString, cString, aString, user.ID)
 	server.ResponseSuccess(ctx, gin.H{"ruleId": ruleId}, server.Success)
 }
 
-// 用 rule id 做索引找到退出管道，以无限循环的子进程方式实现模式匹配器，利用管道将数据推送至模式匹配器
 func StartRuleController(ctx *gin.Context) {
 	ruleIdString := ctx.Query("RuleId")
 	execInternal := ctx.Query("ExecInternal")
@@ -55,7 +52,6 @@ func StartRuleController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, err.Error())
 		return
 	}
-	// auth
 	rule := dao.GetRuleInfo(uint(ruleId))
 	if !service.AuthCompanyUser(user.ID, rule.ParentId) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
@@ -66,7 +62,6 @@ func StartRuleController(ctx *gin.Context) {
 }
 
 func EndRuleController(ctx *gin.Context) {
-	// 根据 rule id 查找 cron id，然后 remove 掉这个任务即可
 	ruleIdString := ctx.Query("RuleId")
 	userInfo, exists := ctx.Get("user")
 	if !exists {
@@ -79,7 +74,6 @@ func EndRuleController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, err.Error())
 		return
 	}
-	// auth
 	rule := dao.GetRuleInfo(uint(ruleId))
 	if !service.AuthCompanyUser(user.ID, rule.ParentId) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
@@ -94,7 +88,6 @@ func EndRuleController(ctx *gin.Context) {
 }
 
 func DeleteRuleController(ctx *gin.Context) {
-	// 只有非激活状态的规则可以删除
 	ruleIdString := ctx.Query("RuleId")
 	userInfo, exists := ctx.Get("user")
 	if !exists {
@@ -107,7 +100,6 @@ func DeleteRuleController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, err.Error())
 		return
 	}
-	// auth
 	rule := dao.GetRuleInfo(uint(ruleId))
 	if !service.AuthCompanyUser(user.ID, rule.ParentId) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
@@ -138,7 +130,6 @@ func UpdateRuleController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, err.Error())
 		return
 	}
-	// auth
 	rule := dao.GetRuleInfo(uint(ruleId))
 	if !service.AuthCompanyUser(user.ID, rule.ParentId) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
@@ -148,13 +139,11 @@ func UpdateRuleController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusForbidden, 403, nil, "error: rule is active or scheduled!")
 		return
 	}
-	// Update Rule
 	service.UpdateRuleDCAService(rule.ID, dString, cString, aString)
 	server.ResponseSuccess(ctx, nil, server.Success)
 }
 
 func ScheduleRuleController(ctx *gin.Context) {
-	// 利用 cron 的 schedule 实现这个 schedule
 	ruleIdString := ctx.Query("RuleId")
 	execInternal := ctx.Query("ExecInternal")
 	futureTime := ctx.Query("FutureTime")
@@ -170,7 +159,6 @@ func ScheduleRuleController(ctx *gin.Context) {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, err.Error())
 		return
 	}
-	// auth
 	rule := dao.GetRuleInfo(uint(ruleId))
 	if !service.AuthCompanyUser(user.ID, rule.ParentId) {
 		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
@@ -181,7 +169,6 @@ func ScheduleRuleController(ctx *gin.Context) {
 }
 
 func GetCompanyRuleController(ctx *gin.Context) {
-	// 查询一个公司的所有 rule（包括其子公司）
 	companyIdString := ctx.Query("CompanyId")
 	companyId, errAtoi := strconv.Atoi(companyIdString)
 	if errAtoi != nil {
@@ -202,7 +189,6 @@ func GetCompanyRuleController(ctx *gin.Context) {
 }
 
 func GetUserRuleController(ctx *gin.Context) {
-	// 查询一个用户创建的所有 rule
 	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")

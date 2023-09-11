@@ -7,6 +7,7 @@ import (
 	"go-backend/api/rule/ruleparser"
 	"go-backend/api/rule/ruleparser/matcher"
 	"go-backend/api/rule/scheduler"
+	"time"
 
 	"github.com/robfig/cron/v3"
 )
@@ -31,7 +32,7 @@ func InitRule() {
 	scheduler.RuleCron = cron.New()
 	scheduler.RuleMap = make(map[uint]cron.EntryID)
 	scheduler.RuleCron.Start()
-
+	scheduler.ScheduledMap = make(map[uint]*time.Timer)
 
 	actions.ActionChannels = make(map[string]chan string)
 

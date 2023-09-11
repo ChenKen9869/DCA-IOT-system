@@ -17,7 +17,9 @@ func LexerCondition(exp string, symbolTable SymbolTable) []Token {
 			continue
 		}
 		if isOpt(string(c)) {
-			generateToken(temp, &result, symbolTable)
+			if *temp != "" {
+				generateToken(temp, &result, symbolTable)
+			}
 			if string(c) == "!" || string(c) == "=" {
 				if next := string(exp[index+1]); next == "=" {
 					skip = true
@@ -57,7 +59,8 @@ func isOpt(str string) bool {
 		str == "+" || str == "-" ||
 		str == ">" || str == "<" ||
 		str == "!" || str == "=" ||
-		str == "&"
+		str == "&" || str == "(" ||
+		str == ")"
 }
 
 func isNumOrCharacter(str string) bool {
@@ -96,7 +99,7 @@ func generateToken(value *string, tokenList *[]Token, symbolTable SymbolTable) {
 			}
 		}
 		if !found {
-			panic("Syntax Error: Symbol not exist!")
+			panic("Syntax Error: Symbol " + *value + " not exist!")
 		}
 	}
 	*value = ""

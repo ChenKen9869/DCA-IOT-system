@@ -26,6 +26,7 @@ func AddDatasource(datasource string) {
 			keyAttr, existA := val[attrS]
 			if existA {
 				keyAttr.RefNum += 1
+				val[attrS] = keyAttr
 			} else {
 				val[attrS] = accepter.InitFloatDatasource()
 			}

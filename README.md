@@ -190,7 +190,7 @@ After deployed and started service, test the system by using swagger api webpage
 
 The system is made up by following architecture.
 
-![image-20230906001024716](.\README.assets\image-20230906001024716.png)
+![image-20230906001024716](./README.assets/image-20230906001024716.png)
 
 ## Key Concepts
 

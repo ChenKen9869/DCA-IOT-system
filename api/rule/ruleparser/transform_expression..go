@@ -1,6 +1,8 @@
 package ruleparser
 
-import "go-backend/api/server/tools/util"
+import (
+	"go-backend/api/server/tools/util"
+)
 
 func TransformCondition(infix []Token) []Token {
 	var suffix []Token
@@ -22,6 +24,7 @@ func TransformCondition(infix []Token) []Token {
 					} else {
 						optSt.Pop()
 						found = true
+						break
 					}
 				}
 				if !found {
@@ -59,16 +62,23 @@ func IsHigherPriority(optA string, optB string) bool {
 func getPriorityNum(opt string) int {
 	switch opt {
 	case "*":
+		return 1
 	case "/":
 		return 1
 	case "+":
+		return 2
 	case "-":
 		return 2
 	case ">":
+		return 3
 	case "<":
+		return 3
 	case "!=":
+		return 3
 	case "==":
 		return 3
+	case "&":
+		return 4
 	}
-	return 4
+	panic("operator " + opt + " does not exit! ")
 }
