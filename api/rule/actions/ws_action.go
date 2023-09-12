@@ -1,7 +1,7 @@
 package actions
 
 import (
-	"fmt"
+	"go-backend/api/rule/rulelog"
 	"go-backend/api/sys/iot/monitor"
 	"strconv"
 	"strings"
@@ -13,9 +13,9 @@ func sendWebsocketMSG(userId uint, msg string) {
 	if exist {
 		ch.MessageChan <- msg
 
-		fmt.Println("[WebSocket Action] Message: { " + msg + " } has sent to target user { " + userIdStr + " } successfully!")
+		rulelog.RuleLog.Println("[WebSocket Action] Message: { " + msg + " } has sent to target user { " + userIdStr + " } successfully!")
 	} else {
-		fmt.Println("[WebSocket Action] Warning: Message{ " + msg + " }  was not sent. The target user { " + userIdStr + " }" + "is not connected to Monitoring Center!")
+		rulelog.RuleLog.Println("[WebSocket Action] Warning: Message{ " + msg + " }  was not sent. The target user { " + userIdStr + " }" + "is not connected to Monitoring Center!")
 	}
 
 }

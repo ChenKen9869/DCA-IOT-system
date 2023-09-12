@@ -1,9 +1,9 @@
 package ruleparser
 
 import (
-	"fmt"
 	"go-backend/api/rule/accepter"
 	"go-backend/api/rule/actions"
+	"go-backend/api/rule/rulelog"
 	"strconv"
 )
 
@@ -27,7 +27,7 @@ func MatcherGenerator(ruleIdStr string, symbolTable SymbolTable, conditionType s
 			accepter.DMLock.Unlock()
 		}
 		if MatcherMap[conditionType](tokenList, currData) {
-			fmt.Println("[Rule Matcher: " + ruleIdStr + "] Rule matched! ")
+			rulelog.RuleLog.Println("[Rule Matcher: " + ruleIdStr + "] Rule matched! ")
 			for _, ac := range actionList {
 				params := ac.ActionParams
 				params = replaceSymbolInParams(params, currData)
@@ -40,7 +40,7 @@ func MatcherGenerator(ruleIdStr string, symbolTable SymbolTable, conditionType s
 			}
 			return
 		}
-		fmt.Println("[Rule Matcher: " + ruleIdStr + "] Rule not matched! ")
+		rulelog.RuleLog.Println("[Rule Matcher: " + ruleIdStr + "] Rule not matched! ")
 	}
 }
 

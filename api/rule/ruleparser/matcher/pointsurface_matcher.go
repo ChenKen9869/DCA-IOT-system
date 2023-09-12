@@ -1,7 +1,7 @@
 package matcher
 
 import (
-	"fmt"
+	"go-backend/api/rule/rulelog"
 	"go-backend/api/rule/ruleparser"
 	"go-backend/api/sys/gis/geo/geoalgorithm"
 	"go-backend/api/sys/gis/geo/geocontainer"
@@ -12,7 +12,7 @@ func MatchPointSurfaceFunctionCondition(tokenList []ruleparser.Token, innerTable
 	var point geocontainer.Point
 	var polygon geocontainer.Polygon
 	if tokenList[0].TokenType != ruleparser.ValTokenType || tokenList[1].TokenType != ruleparser.ValTokenType {
-		fmt.Println("[Point Surface Rule Matcher] Error Occur: params type error!")
+		rulelog.RuleLog.Println("[Point Surface Rule Matcher] Error Occur: params type error!")
 		return false
 	}
 	for symbol, value := range innerTable {
@@ -31,7 +31,7 @@ func MatchPointSurfaceFunctionCondition(tokenList []ruleparser.Token, innerTable
 	for _, token := range tokenList[2:] {
 		currNum, err := strconv.ParseFloat(token.TokenValue, 64)
 		if err != nil {
-			fmt.Println("[Point Surface Rule Matcher] Error Occur: " + err.Error())
+			rulelog.RuleLog.Println("[Point Surface Rule Matcher] Error Occur: " + err.Error())
 			return false
 		}
 		numList = append(numList, currNum)

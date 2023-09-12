@@ -2,7 +2,7 @@ package accepter
 
 import (
 	"bufio"
-	"fmt"
+	"go-backend/api/rule/rulelog"
 	"go-backend/api/server/dao"
 	"net"
 	"strconv"
@@ -27,20 +27,20 @@ func processExampleMsg(conn net.Conn) {
 	defer conn.Close()
 	for {
 		reader := bufio.NewReader(conn)
-		fmt.Println("[Example Accepter] Waiting for message from client ...")
+		rulelog.RuleLog.Println("[Example Accepter] Waiting for message from client ...")
 		var buf [128]byte
 		n, err := reader.Read(buf[:])
 		if err != nil {
-			fmt.Println("[Example Accepter] Error Occur: Read from client failed, " + err.Error())
-			fmt.Println("[Example Accepter] Client closed the connection")
+			rulelog.RuleLog.Println("[Example Accepter] Error Occur: Read from client failed, " + err.Error())
+			rulelog.RuleLog.Println("[Example Accepter] Client closed the connection")
 			return
 		}
 		recvStr := string(buf[:n])
-		fmt.Println("[Example Accepter] Accept Message: " + recvStr)
+		rulelog.RuleLog.Println("[Example Accepter] Accept Message: " + recvStr)
 		conn.Write([]byte("[Message from server] Message accepted!"))
 
 		deviceId, msgDeviceType, attribute, value := parseExampleMessage(recvStr)
-		fmt.Println("[Example Accepter] Message has parsed! ")
+		rulelog.RuleLog.Println("[Example Accepter] Message has parsed! ")
 		deviceType := getDeviceTypeInMysql(msgDeviceType)
 		var id int
 		if deviceType == PortableDeviceType {
@@ -60,13 +60,13 @@ func StartExampleAccepter() {
 		panic(err.Error())
 	}
 	for {
-		fmt.Println("[Example Accepter] Waiting for connect ... ")
+		rulelog.RuleLog.Println("[Example Accepter] Waiting for connect ... ")
 		conn, err := listen.Accept()
 		if err != nil {
-			fmt.Println("[Example Accepter] Connection establish failed, " + err.Error())
+			rulelog.RuleLog.Println("[Example Accepter] Connection establish failed, " + err.Error())
 			continue
 		}
-		fmt.Println("[Example Accepter] Connection established successfully!")
+		rulelog.RuleLog.Println("[Example Accepter] Connection established successfully!")
 		processExampleMsg(conn)
 	}
 }

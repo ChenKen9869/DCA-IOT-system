@@ -9,7 +9,7 @@ const (
 	MqttActionType      string = "Mqtt"
 )
 
-func StartActionExecutor() {
+func startActionExecutor() {
 	for {
 		select {
 		case params := <-WsActionChannel:
@@ -22,4 +22,14 @@ func StartActionExecutor() {
 			})
 		}
 	}
+}
+
+func InitAction() {
+	ActionChannels = make(map[string]chan string)
+
+	WsActionChannel = make(chan string)
+	MqttActionChannel = make(chan string)
+	ActionChannels[WebsocketActionType] = WsActionChannel
+	ActionChannels[MqttActionType] = MqttActionChannel
+	go startActionExecutor()
 }

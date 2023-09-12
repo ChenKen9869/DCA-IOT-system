@@ -1,6 +1,8 @@
 package ruleparser
 
-import "fmt"
+import (
+	"go-backend/api/rule/rulelog"
+)
 
 type Token struct {
 	TokenType  string
@@ -38,6 +40,6 @@ func ParseRule(ruleIdStr string, datasource string, condition string, action str
 		tokenList = parseFunctionCondition(conditionWithType.StrTokenList, symbolTable)
 	}
 
-	fmt.Println("[Rule Parser: " + ruleIdStr + "] Rule has parsed. Condition type: " + conditionWithType.ConditionType)
+	rulelog.RuleLog.Println("[Rule Parser: " + ruleIdStr + "] Rule has parsed. Condition type: " + conditionWithType.ConditionType)
 	return MatcherGenerator(ruleIdStr, symbolTable, conditionWithType.ConditionType, tokenList, actionList)
 }

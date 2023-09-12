@@ -1,8 +1,11 @@
 package accepter
 
 import (
-	"fmt"
+	"go-backend/api/rule/rulelog"
+	"strconv"
 	"sync"
+
+	"github.com/bits-and-blooms/bloom"
 )
 
 var DMLock *sync.Mutex = &sync.Mutex{}
@@ -19,6 +22,8 @@ type DeviceIndex struct {
 	DeviceType string
 }
 
+var BloomFilter *bloom.BloomFilter
+
 var DatasourceManagement map[DeviceIndex]KeyAttr
 
 func InitFloatDatasource() Attribute {
@@ -27,12 +32,17 @@ func InitFloatDatasource() Attribute {
 
 func updateDatasourceManagement(id int, deviceType string, attr string, value float64) {
 
+	if !BloomFilter.Test([]byte(strconv.Itoa(id) + deviceType + attr)) {
+		return
+	}
+
 	index := DeviceIndex{
 		Id:         id,
 		DeviceType: deviceType,
 	}
 
 	DMLock.Lock()
+	defer DMLock.Unlock()
 	v1, exist1 := DatasourceManagement[index]
 	if exist1 {
 		v, exist := v1[attr]
@@ -40,9 +50,8 @@ func updateDatasourceManagement(id int, deviceType string, attr string, value fl
 			v.Value = value
 			DatasourceManagement[index][attr] = v
 		}
-		fmt.Println("[Example Accepter] Datasource management update is complete!")
+		rulelog.RuleLog.Println("[Example Accepter] Datasource management update is complete!")
 	} else {
-		fmt.Println("[Example Accepter] Datasource management was not updated!")
+		return
 	}
-	DMLock.Unlock()
 }

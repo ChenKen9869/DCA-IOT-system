@@ -1,9 +1,8 @@
 package service
 
 import (
-	"fmt"
+	"go-backend/api/rule/rulelog"
 	"go-backend/api/rule/ruleparser"
-	"go-backend/api/rule/ruleparser/preprosess"
 	"go-backend/api/rule/scheduler"
 	"go-backend/api/server/dao"
 	"go-backend/api/server/entity"
@@ -25,7 +24,7 @@ import (
 // @Success 200 {object} server.SuccessResponse200 "success"
 // @router /rule/create [post]
 func CreateRuleService(companyId uint, datasource string, condition string, action string, owner uint) uint {
-	if !preprosess.AuthDevices(datasource, companyId) {
+	if !ruleparser.AuthDevices(datasource, companyId) {
 		panic("rule auth error!")
 	}
 	ruleId := dao.CreateRule(entity.Rule{
@@ -54,14 +53,16 @@ func StartRuleService(ruleId uint, internal string) {
 	if rule.Stat != entity.RuleInactive {
 		panic("Error: rule has started or scheduled!")
 	}
-	preprosess.AddDatasource(rule.Datasource)
+	dao.UpdateRuleStat(ruleId, entity.RuleActive)
+	rulelog.RuleLog.Println("[Rule Scheduler " + strconv.Itoa(int(ruleId)) + " ] Rule start! ")
+
+	ruleparser.AddDatasource(rule.Datasource)
 	matcherFunc := ruleparser.ParseRule(strconv.Itoa(int(rule.ID)), rule.Datasource, rule.Condition, rule.Action)
 	cronId, err := scheduler.RuleCron.AddFunc(internal, matcherFunc)
 	if err != nil {
 		panic(err.Error())
 	}
 	scheduler.RuleMap[ruleId] = cronId
-	dao.UpdateRuleStat(ruleId, entity.RuleActive)
 }
 
 // @Summary API of golang gin backend
@@ -83,14 +84,14 @@ func EndRuleService(ruleId uint) {
 		scheduler.SMLock.Unlock()
 		dao.UpdateRuleStat(ruleId, entity.RuleInactive)
 
-		fmt.Println("[Rule Scheduler " + strconv.Itoa(int(ruleId)) + " ] Scheduled rule has canceled! ")
+		rulelog.RuleLog.Println("[Rule Scheduler " + strconv.Itoa(int(ruleId)) + " ] Scheduled rule has canceled! ")
 		return
 	}
 	scheduler.RuleCron.Remove(scheduler.RuleMap[ruleId])
-	preprosess.RemoveDatasource(dao.GetRuleInfo(ruleId).Datasource)
+	ruleparser.RemoveDatasource(dao.GetRuleInfo(ruleId).Datasource)
 	dao.UpdateRuleStat(ruleId, entity.RuleInactive)
 
-	fmt.Println("[Rule Scheduler " + strconv.Itoa(int(ruleId)) + " ] Active rule has ended! ")
+	rulelog.RuleLog.Println("[Rule Scheduler " + strconv.Itoa(int(ruleId)) + " ] Active rule has ended! ")
 }
 
 // @Summary API of golang gin backend
@@ -110,12 +111,12 @@ func ScheduleRuleService(ruleId uint, internal string, futureTime time.Time) {
 		panic("Error: rule has started or scheduled!")
 	}
 
-	fmt.Println("[Rule Scheduler " + strconv.Itoa(int(ruleId)) + " ] Rule scheduled! ")
+	rulelog.RuleLog.Println("[Rule Scheduler " + strconv.Itoa(int(ruleId)) + " ] Rule scheduled! ")
 	t := time.AfterFunc(time.Until(futureTime), func() {
-		fmt.Println("[Rule Scheduler " + strconv.Itoa(int(ruleId)) + " ] Scheduled rule start! ")
+		rulelog.RuleLog.Println("[Rule Scheduler " + strconv.Itoa(int(ruleId)) + " ] Scheduled rule start! ")
 
 		dao.UpdateRuleStat(ruleId, entity.RuleActive)
-		preprosess.AddDatasource(rule.Datasource)
+		ruleparser.AddDatasource(rule.Datasource)
 		matcherFunc := ruleparser.ParseRule(strconv.Itoa(int(rule.ID)), rule.Datasource, rule.Condition, rule.Action)
 		cronId, err := scheduler.RuleCron.AddFunc(internal, matcherFunc)
 		if err != nil {
@@ -124,8 +125,8 @@ func ScheduleRuleService(ruleId uint, internal string, futureTime time.Time) {
 		scheduler.RuleMap[ruleId] = cronId
 
 		scheduler.SMLock.Lock()
+		defer scheduler.SMLock.Unlock()
 		delete(scheduler.ScheduledMap, ruleId)
-		scheduler.SMLock.Unlock()
 	})
 	scheduler.SMLock.Lock()
 	scheduler.ScheduledMap[ruleId] = t
@@ -239,6 +240,6 @@ func UpdateRuleDCAService(ruleId uint, datasource string, condition string, acti
 	rule := dao.GetRuleInfo(ruleId)
 	if rule.Stat != entity.RuleInactive {
 		panic("Error: rule has started or scheduled!")
-	}	
+	}
 	dao.UpdateRuleDCA(ruleId, datasource, condition, action)
 }

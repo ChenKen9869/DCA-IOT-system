@@ -2,6 +2,7 @@ package actions
 
 import (
 	"fmt"
+	"go-backend/api/rule/rulelog"
 	"strconv"
 	"strings"
 
@@ -24,7 +25,7 @@ func ExecMqttAction(params string) {
 
 	token := c.Publish(topic, 0, false, msg)
 	token.Wait()
-	fmt.Println("[Mqtt Executor] Message: { " + msg + " } has send to mqtt topic: { " + topic + " } of { " + address + ":" + portStr + " }! ")
+	rulelog.RuleLog.Println("[Mqtt Executor] Message: { " + msg + " } has send to mqtt topic: { " + topic + " } of { " + address + ":" + portStr + " }! ")
 }
 
 func parseMqttParams(params string) (string, int, string, string, string, string, string) {

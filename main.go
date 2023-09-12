@@ -76,5 +76,6 @@ func InitConfig() {
 	if err != nil {
 		panic("")
 	}
+
 	fmt.Println("[INITIAL SUCCESS] System config is initialized successfully!")
 }
