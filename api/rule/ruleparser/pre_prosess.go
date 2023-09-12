@@ -4,6 +4,7 @@ import (
 	"go-backend/api/rule/accepter"
 	"go-backend/api/rule/rulelog"
 	"go-backend/api/server/dao"
+	"strconv"
 )
 
 func AddDatasource(datasource string) {
@@ -12,6 +13,7 @@ func AddDatasource(datasource string) {
 		id := ds.DeviceId
 		typeS := ds.DeviceType
 		attrS := ds.Attribute
+
 		deviceIndex := accepter.DeviceIndex{
 			Id:         id,
 			DeviceType: typeS,
@@ -19,6 +21,8 @@ func AddDatasource(datasource string) {
 		accepter.DMLock.Lock()
 		val, exist := accepter.DatasourceManagement[deviceIndex]
 		if !exist {
+			accepter.BloomFilter.Add([]byte(strconv.Itoa(id) + typeS + attrS))
+
 			accepter.DatasourceManagement[deviceIndex] = make(accepter.KeyAttr)
 			accepter.DatasourceManagement[deviceIndex][attrS] = accepter.InitFloatDatasource()
 		} else {
