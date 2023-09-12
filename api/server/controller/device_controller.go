@@ -26,11 +26,11 @@ func CreateFixedDeviceController(ctx *gin.Context) {
 	}
 	companyId, err := strconv.Atoi(CompanyIdString)
 	if err != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "server inter failed")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, err.Error())
 		return
 	}
 	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	company := dao.GetCompanyInfoByID(uint(companyId))
@@ -38,7 +38,7 @@ func CreateFixedDeviceController(ctx *gin.Context) {
 	installDate := util.ParseDate(installTime)
 	boughtDate := util.ParseDate(boughtTime)
 	if !dao.ExistFixedDeviceType(typeId) {
-		server.Response(ctx, http.StatusBadRequest, 400, nil, "不支持的固定设备类型")
+		server.Response(ctx, http.StatusBadRequest, 400, nil, "fixed device type not exist")
 		return
 	}
 	id := service.CreateFixedDeviceService(deviceId, uint(companyId), typeId, owner, installDate, boughtDate)
@@ -56,7 +56,7 @@ func DeleteFixedDeviceController(ctx *gin.Context) {
 	}
 	companyId := dao.GetFixedDeviceInfoById(uint(fixedDeviceId)).FarmhouseID
 	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	service.DeleteFixedDeviceService(uint(fixedDeviceId))
@@ -74,7 +74,7 @@ func CreatePortableDeviceController(ctx *gin.Context) {
 	boughtDate := util.ParseDate(boughtTime)
 	biologyId, err := strconv.Atoi(biologyIdString)
 	if err != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "server inter failed")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, err.Error())
 		return
 	}
 	userInfo, exists := ctx.Get("user")
@@ -85,11 +85,11 @@ func CreatePortableDeviceController(ctx *gin.Context) {
 	user := userInfo.(entity.User)
 	companyId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
 	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	if !dao.ExistPortableDeviceType(typeId) {
-		server.Response(ctx, http.StatusBadRequest, 400, nil, "不支持的携带设备类型")
+		server.Response(ctx, http.StatusBadRequest, 400, nil, "portable device type not exist")
 		return
 	}
 	id := service.CreatePortableDeviceService(uint(biologyId), portableDeviceId, typeId, installDate, boughtDate)
@@ -109,7 +109,7 @@ func DeletePortableDeviceController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	service.DeletePortableDeviceService(uint(portableDeviceId))
@@ -160,12 +160,12 @@ func GetMonitorStreamController(ctx *gin.Context) {
 	user := userInfo.(entity.User)
 	companyId := dao.GetFixedDeviceInfoById(uint(deviceIdInt)).FarmhouseID
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	deviceType := dao.GetFixedDeviceInfoById(uint(deviceIdInt)).FixedDeviceTypeID
-	if deviceType != "摄像头" {
-		server.Response(ctx, http.StatusUnauthorized, 403, nil, "设备类型错误")
+	if deviceType != "monitor" {
+		server.Response(ctx, http.StatusUnauthorized, 403, nil, "device type error")
 		return
 	}
 	resultUrl, resultExpireTime, id, msg, accessToken := service.GetMonitorStreamByDeviceIdService(uint(deviceIdInt))
@@ -197,12 +197,12 @@ func GetNewCollarRealtimeController(ctx *gin.Context) {
 	biologyId := deviceInfo.BiologyID
 	companyId := dao.GetBiologyInfoById(biologyId).FarmhouseID
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	deviceType := deviceInfo.PortableDeviceTypeID
-	if deviceType != "中农智联耳标" {
-		server.Response(ctx, http.StatusUnauthorized, 403, nil, "设备类型错误")
+	if deviceType != "collar" {
+		server.Response(ctx, http.StatusUnauthorized, 403, nil, "device type error")
 		return
 	}
 	data, msg := service.GetNewCollarRealtimeByDeviceIdService(uint(deviceIdInt))
@@ -225,7 +225,7 @@ func GetLatestFioController(ctx *gin.Context) {
 	user := userInfo.(entity.User)
 	companyId := dao.GetFixedDeviceInfoById(uint(fioId)).FarmhouseID
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	data := service.GetLatestFioService(uint(fioId))
@@ -246,7 +246,7 @@ func GetFioListByTime(ctx *gin.Context) {
 	user := userInfo.(entity.User)
 	companyId := dao.GetFixedDeviceInfoById(uint(fioId)).FarmhouseID
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	result := service.GetFioRecordListByTimeService(uint(fioId), startTime, endTime)
@@ -258,7 +258,7 @@ func GetFixedDeviceListByFarmhouseController(ctx *gin.Context) {
 
 	companyId, errAtoiComanyId := strconv.Atoi(companyIdString)
 	if errAtoiComanyId != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "服务器内部错误")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoiComanyId.Error())
 	}
 	userInfo, exists := ctx.Get("user")
 	if !exists {
@@ -267,7 +267,7 @@ func GetFixedDeviceListByFarmhouseController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	fixedDeviceList := service.GetFixedDeviceListByFarmhouseService(uint(companyId))
@@ -302,7 +302,7 @@ func GetPortableDeviceListByFarmhouseController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	result := service.GetPortableDeviceListByFarmhouseService(uint(companyId))
@@ -325,7 +325,7 @@ func GetPortableDeviceListByBiologyController(ctx *gin.Context) {
 	user := userInfo.(entity.User)
 	companyId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	result := service.GetPortableDeviceListByBiologyService(uint(biologyId))
@@ -367,7 +367,11 @@ func GetOwnPortableListController(ctx *gin.Context) {
 func GetLatestPosCollarController(ctx *gin.Context) {
 	posCollarIdString := ctx.Query("Id")
 
-	posCollarId, _ := strconv.Atoi(posCollarIdString)
+	posCollarId, errAtoi := strconv.Atoi(posCollarIdString)
+	if errAtoi != nil {
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
+		return
+	}
 	userInfo, exists := ctx.Get("user")
 	if !exists {
 		server.Response(ctx, http.StatusInternalServerError, 500, nil, "user information does not exists in application context")
@@ -377,7 +381,7 @@ func GetLatestPosCollarController(ctx *gin.Context) {
 	biologyId := dao.GetPortableDeviceInfoById(uint(posCollarId)).BiologyID
 	companyId := dao.GetBiologyInfoById(biologyId).FarmhouseID
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	data := service.GetLatestPosCollarService(uint(posCollarId))
@@ -387,14 +391,18 @@ func GetLatestPosCollarController(ctx *gin.Context) {
 func GetFixedDeviceStatisticController(ctx *gin.Context) {
 	companyIdString := ctx.Query("CompanyId")
 
-	companyId, _ := strconv.Atoi(companyIdString)
+	companyId, errAtoi := strconv.Atoi(companyIdString)
+	if errAtoi != nil {
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
+		return
+	}
 	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
 	user := userInfo.(entity.User)
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	result := service.GetFixedDeviceStatisticService(uint(companyId))
@@ -417,14 +425,18 @@ func GetFixedDeviceStatisticController(ctx *gin.Context) {
 func GetPortableDeviceStatisticController(ctx *gin.Context) {
 	companyIdString := ctx.Query("CompanyId")
 
-	companyId, _ := strconv.Atoi(companyIdString)
+	companyId, errAtoi := strconv.Atoi(companyIdString)
+	if errAtoi != nil {
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
+		return
+	}
 	userInfo, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
 	}
 	user := userInfo.(entity.User)
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	result := service.GetPortableDeviceStatisticService(uint(companyId))

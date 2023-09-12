@@ -31,11 +31,11 @@ func CreateBiologyController(ctx *gin.Context) {
 	birthday := util.ParseDate(birth)
 	companyId, err := strconv.Atoi(farmhouseIdString)
 	if err != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "server inter failed")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, err.Error())
 		return
 	}
 	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	companyInfo := dao.GetCompanyInfoByID(uint(companyId))
@@ -60,7 +60,7 @@ func DeleteBiologyController(ctx *gin.Context) {
 
 	biologyId, err := strconv.Atoi(biologyIdString)
 	if err != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "server inter failed")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, err.Error())
 		return
 	}
 	userInfo, exists := ctx.Get("user")
@@ -71,7 +71,7 @@ func DeleteBiologyController(ctx *gin.Context) {
 	user := userInfo.(entity.User)
 	companyId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
 	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	service.DeleteBiologyService(operator, telephoneNumber, leavePlace, uint(biologyId))
@@ -83,7 +83,7 @@ func GetBiologyListController(ctx *gin.Context) {
 
 	companyId, errAtoi := strconv.Atoi(companyIdString)
 	if errAtoi != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi error")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
 		return
 	}
 	userInfo, exists := ctx.Get("user")
@@ -92,7 +92,7 @@ func GetBiologyListController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	biologyList := service.GetBiologyListService(uint(companyId))
@@ -121,7 +121,7 @@ func GetBiologyInfoController(ctx *gin.Context) {
 
 	biologyId, errAtoi := strconv.Atoi(biologyIdString)
 	if errAtoi != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi error")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
 		return
 	}
 	companyId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
@@ -131,7 +131,7 @@ func GetBiologyInfoController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	biologyInfo := service.GetBiologyInfoService(uint(biologyId))
@@ -157,7 +157,7 @@ func GetBiologyWithDeviceListController(ctx *gin.Context) {
 
 	companyId, errAtoi := strconv.Atoi(companyIdString)
 	if errAtoi != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi error")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
 		return
 	}
 	userInfo, exists := ctx.Get("user")
@@ -166,7 +166,7 @@ func GetBiologyWithDeviceListController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	biologyWithDeviceList := service.GetBiologyWithDeviceListService(uint(companyId))
@@ -196,15 +196,15 @@ func UpdateBiologyFarmhouseController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if !(service.AuthCompanyUser(user.ID, currentBiology.FarmhouseID) && service.AuthCompanyUser(user.ID, uint(farmhouseId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	if int(currentBiology.FarmhouseID) == farmhouseId {
-		server.Response(ctx, http.StatusBadRequest, 400, nil, "转入转出地 id 相同")
+		server.Response(ctx, http.StatusBadRequest, 400, nil, "same farmhouse id")
 		return
 	}
 	if dao.GetCompanyInfoByID(uint(farmhouseId)).Owner != currentBiology.Owner {
-		server.Response(ctx, http.StatusBadRequest, 400, nil, "不允许跨集团转舍")
+		server.Response(ctx, http.StatusBadRequest, 400, nil, "cross-group transfers are not permitted")
 		return
 	}
 	service.UpdateBiologyFarmhouseService(operator, telephoneNumber, uint(biologyId), uint(farmhouseId))
@@ -218,7 +218,7 @@ func CreateEpidemicPreventionRecordController(ctx *gin.Context) {
 
 	biologyId, errAtoi := strconv.Atoi(biologyIdString)
 	if errAtoi != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "biology id atoi err")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
 		return
 	}
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
@@ -228,7 +228,7 @@ func CreateEpidemicPreventionRecordController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if !service.AuthCompanyUser(user.ID, farmhouseId) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	service.CreateEpidemicPreventionRecordService(uint(biologyId), vaccineDescription, inoculationTime)
@@ -240,7 +240,7 @@ func GetEpidemicPreventRecordListController(ctx *gin.Context) {
 
 	biologyId, errAtoi := strconv.Atoi(biologyIdString)
 	if errAtoi != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi err")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
 		return
 	}
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
@@ -250,7 +250,7 @@ func GetEpidemicPreventRecordListController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if (!service.AuthCompanyUser(user.ID, uint(farmhouseId))) && (!service.AuthVisitor(user.ID, uint(farmhouseId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	resultList := service.GetEpidemicPreventionRecordListService(uint(biologyId))
@@ -266,7 +266,7 @@ func CreateOperationRecordController(ctx *gin.Context) {
 
 	biologyId, errAtoi := strconv.Atoi(biologyIdString)
 	if errAtoi != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "biology id atoi err")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
 		return
 	}
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
@@ -276,7 +276,7 @@ func CreateOperationRecordController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if (!service.AuthCompanyUser(user.ID, uint(farmhouseId))) && (!service.AuthVisitor(user.ID, uint(farmhouseId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	service.CreateOperationRecordService(uint(biologyId), doctor, operationTime, processDescription, result)
@@ -288,7 +288,7 @@ func GetOperationRecordListController(ctx *gin.Context) {
 
 	biologyId, errAtoi := strconv.Atoi(biologyIdString)
 	if errAtoi != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi err")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
 		return
 	}
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
@@ -298,7 +298,7 @@ func GetOperationRecordListController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if (!service.AuthCompanyUser(user.ID, uint(farmhouseId))) && (!service.AuthVisitor(user.ID, uint(farmhouseId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	resultList := service.GetOperationRecordListService(uint(biologyId))
@@ -313,7 +313,7 @@ func CreateMedicalRecordController(ctx *gin.Context) {
 
 	biologyId, errAtoi := strconv.Atoi(biologyIdString)
 	if errAtoi != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "biology id atoi err")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
 		return
 	}
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
@@ -323,7 +323,7 @@ func CreateMedicalRecordController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if !service.AuthCompanyUser(user.ID, farmhouseId) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	service.CreateMedicalRecordService(uint(biologyId), disease, illnessTime, treatmentPlan)
@@ -335,7 +335,7 @@ func GetMedicalRecordListController(ctx *gin.Context) {
 
 	biologyId, errAtoi := strconv.Atoi(biologyIdString)
 	if errAtoi != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi err")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
 		return
 	}
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
@@ -345,7 +345,7 @@ func GetMedicalRecordListController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if (!service.AuthCompanyUser(user.ID, uint(farmhouseId))) && (!service.AuthVisitor(user.ID, uint(farmhouseId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	resultList := service.GetMedicalRecordListService(uint(biologyId))
@@ -357,7 +357,7 @@ func UpdateBiologyPictureController(ctx *gin.Context) {
 
 	biologyId, errAtoi := strconv.Atoi(biologyIdString)
 	if errAtoi != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi err")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
 		return
 	}
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
@@ -367,7 +367,7 @@ func UpdateBiologyPictureController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if !service.AuthCompanyUser(user.ID, farmhouseId) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	oldPicturePath := service.GetBiologyPicturePathService(uint(biologyId))
@@ -375,7 +375,7 @@ func UpdateBiologyPictureController(ctx *gin.Context) {
 	file, _ := ctx.FormFile("BiologyPicture")
 	fileExt := strings.ToLower(path.Ext(file.Filename))
 	if fileExt != ".png" && fileExt != ".jpg" {
-		server.Response(ctx, http.StatusBadRequest, 400, nil, "上传文件的格式错误")
+		server.Response(ctx, http.StatusBadRequest, 400, nil, "file format error")
 		return
 	}
 	pictureDir := viper.GetString("biology.picturedir")
@@ -393,7 +393,7 @@ func GetBiologyPictureController(ctx *gin.Context) {
 
 	biologyId, errAtoi := strconv.Atoi(biologyIdString)
 	if errAtoi != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi err")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
 		return
 	}
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
@@ -403,7 +403,7 @@ func GetBiologyPictureController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if (!service.AuthCompanyUser(user.ID, uint(farmhouseId))) && (!service.AuthVisitor(user.ID, uint(farmhouseId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	picture := service.GetBiologyPictureService(uint(biologyId))
@@ -415,7 +415,7 @@ func GetBiologyPicturePathController(ctx *gin.Context) {
 
 	biologyId, errAtoi := strconv.Atoi(biologyIdString)
 	if errAtoi != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi err")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
 		return
 	}
 	farmhouseId := dao.GetBiologyInfoById(uint(biologyId)).FarmhouseID
@@ -425,7 +425,7 @@ func GetBiologyPicturePathController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if (!service.AuthCompanyUser(user.ID, uint(farmhouseId))) && (!service.AuthVisitor(user.ID, uint(farmhouseId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	picturePath := service.GetBiologyPicturePathService(uint(biologyId))
@@ -463,7 +463,7 @@ func GetBiologyStatisticController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	result := service.GetBiologyStatisticService(uint(companyId))
@@ -493,7 +493,7 @@ func GetBiologyGenderStatisticController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	result := service.GetBiologyGenderStatisticService(uint(companyId))

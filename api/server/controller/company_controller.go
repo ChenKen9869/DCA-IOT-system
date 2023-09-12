@@ -3,10 +3,11 @@ package controller
 import (
 	"go-backend/api/server/dao"
 	"go-backend/api/server/entity"
-	"go-backend/api/server/tools/server"
 	"go-backend/api/server/service"
+	"go-backend/api/server/tools/server"
 	"net/http"
 	"strconv"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,13 +23,13 @@ func CreateCompanyController(ctx *gin.Context) {
 	user := userInfo.(entity.User)
 	parent, err := strconv.Atoi(parentId)
 	if err != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi error")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, err.Error())
 		return
 	}
 	if parent == 0 {
 		id, errService := service.CreateCompanyService(uint(parent), name, user.ID, location)
 		if errService != nil {
-			server.Response(ctx, http.StatusUnprocessableEntity, 422, nil, "param error")
+			server.Response(ctx, http.StatusUnprocessableEntity, 422, nil, errService.Error())
 			return
 		}
 		service.CreateCompanyUserService(id, user.ID)
@@ -36,12 +37,12 @@ func CreateCompanyController(ctx *gin.Context) {
 		return
 	}
 	if user.ID != dao.GetCompanyInfoByID(uint(parent)).Owner {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	id, errService := service.CreateCompanyService(uint(parent), name, user.ID, location)
 	if errService != nil {
-		server.Response(ctx, http.StatusUnprocessableEntity, 422, nil, "param error")
+		server.Response(ctx, http.StatusUnprocessableEntity, 422, nil, errService.Error())
 		return
 	}
 	server.ResponseSuccess(ctx, gin.H{"CompanyId": id}, server.Success)
@@ -56,7 +57,7 @@ func GetCompanyTreeListController(ctx *gin.Context) {
 	user := userInfo.(entity.User)
 	treeList, companyList := service.GetCompanyTreeListService(user.ID)
 	companyTreeList := gin.H{
-		"mechanism": treeList,
+		"mechanism":    treeList,
 		"company_list": companyList,
 	}
 	server.ResponseSuccess(ctx, companyTreeList, server.Success)
@@ -67,7 +68,7 @@ func DeleteCompanyController(ctx *gin.Context) {
 
 	companyId, errAtoi := strconv.Atoi(companyIdString)
 	if errAtoi != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "服务器内部错误")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
 	}
 	userInfo, exists := ctx.Get("user")
 	if !exists {
@@ -76,7 +77,7 @@ func DeleteCompanyController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	err := service.DeleteCompanyService(uint(companyId), user)
@@ -102,7 +103,7 @@ func CreateCompanyUserController(ctx *gin.Context) {
 	companyId, errAtoiComanyId := strconv.Atoi(companyIdString)
 	userId, errAtoiUserId := strconv.Atoi(userIdString)
 	if errAtoiComanyId != nil || errAtoiUserId != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "服务器内部错误")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoiComanyId.Error())
 	}
 	userInfo, exists := ctx.Get("user")
 	if !exists {
@@ -111,7 +112,7 @@ func CreateCompanyUserController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	err := service.CreateCompanyUserService(uint(companyId), uint(userId))
@@ -127,7 +128,7 @@ func CreateCompanyUserController(ctx *gin.Context) {
 			return
 		}
 	}
-	server.ResponseSuccess(ctx, gin.H{"companyId" : companyId, "userId" : userId,}, server.Success)
+	server.ResponseSuccess(ctx, gin.H{"companyId": companyId, "userId": userId}, server.Success)
 }
 
 func DeleteCompanyUserController(ctx *gin.Context) {
@@ -137,7 +138,7 @@ func DeleteCompanyUserController(ctx *gin.Context) {
 	companyId, errAtoiComanyId := strconv.Atoi(companyIdString)
 	userId, errAtoiUserId := strconv.Atoi(userIdString)
 	if errAtoiComanyId != nil || errAtoiUserId != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "服务器内部错误")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoiComanyId.Error())
 	}
 	userInfo, exists := ctx.Get("user")
 	if !exists {
@@ -146,12 +147,12 @@ func DeleteCompanyUserController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	service.DeleteCompanyUserService(uint(companyId), uint(userId))
-	server.ResponseSuccess(ctx, 
-		gin.H{"companyId" : companyId, "userId" : userId,}, 
+	server.ResponseSuccess(ctx,
+		gin.H{"companyId": companyId, "userId": userId},
 		server.Success)
 }
 
@@ -160,7 +161,7 @@ func GetEmployeeListController(ctx *gin.Context) {
 
 	companyId, errAtoiComanyId := strconv.Atoi(companyIdString)
 	if errAtoiComanyId != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "服务器内部错误")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoiComanyId.Error())
 	}
 	userInfo, exists := ctx.Get("user")
 	if !exists {
@@ -169,21 +170,21 @@ func GetEmployeeListController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	employeeList := service.GetEmployeeListService(uint(companyId))
 	result := []gin.H{}
 	for employee := range employeeList {
 		result = append(result, gin.H{
-			"id" : employee.ID,
-			"name" : employee.Name,
-			"authCompany" : employeeList[employee],
-			"telephone_number" : employee.Telephone,
-			"email" : employee.Email,
+			"id":               employee.ID,
+			"name":             employee.Name,
+			"authCompany":      employeeList[employee],
+			"telephone_number": employee.Telephone,
+			"email":            employee.Email,
 		})
 	}
-	server.ResponseSuccess(ctx, gin.H{"employeeList":result}, server.Success)
+	server.ResponseSuccess(ctx, gin.H{"employeeList": result}, server.Success)
 }
 
 func GetCompanyInfoController(ctx *gin.Context) {
@@ -191,7 +192,7 @@ func GetCompanyInfoController(ctx *gin.Context) {
 
 	companyId, errAtoiComanyId := strconv.Atoi(companyIdString)
 	if errAtoiComanyId != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "服务器内部错误")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoiComanyId.Error())
 	}
 	userInfo, exists := ctx.Get("user")
 	if !exists {
@@ -200,7 +201,7 @@ func GetCompanyInfoController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	result := service.GetCompanyInfoService(uint(companyId))
@@ -225,7 +226,7 @@ func UpdateCompanyInfoController(ctx *gin.Context) {
 
 	companyId, errAtoi := strconv.Atoi(companyIdString)
 	if errAtoi != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "服务器内部错误")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
 	}
 	userInfo, exists := ctx.Get("user")
 	if !exists {
@@ -234,7 +235,7 @@ func UpdateCompanyInfoController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	service.UpdateCompanyInfoService(uint(companyId), companyName, location)

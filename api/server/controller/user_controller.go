@@ -75,7 +75,7 @@ func UpdateUserInfoController(ctx *gin.Context) {
 	password := ctx.Query("Password")
 	telephone := ctx.Query("Telephone")
 	email := ctx.Query("Email")
-	
+
 	user, exists := ctx.Get("user")
 	if !exists {
 		panic("error: user information does not exists in application context")
@@ -87,7 +87,7 @@ func UpdateUserInfoController(ctx *gin.Context) {
 
 func UpdateUserDefaultCompanyController(ctx *gin.Context) {
 	companyIdString := ctx.Query("CompanyId")
-	
+
 	companyId, _ := strconv.Atoi(companyIdString)
 	user, exists := ctx.Get("user")
 	if !exists {
@@ -95,7 +95,7 @@ func UpdateUserDefaultCompanyController(ctx *gin.Context) {
 	}
 	user_info := user.(entity.User)
 	if (!service.AuthCompanyUser(user_info.ID, uint(companyId))) && (!service.AuthVisitor(user_info.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	service.UpdateUserDefaultCompanyService(user_info.ID, uint(companyId))

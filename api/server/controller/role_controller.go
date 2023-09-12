@@ -18,7 +18,7 @@ func CreateVisitorController(ctx *gin.Context) {
 	companyId, errAtoiComanyId := strconv.Atoi(companyIdString)
 	userId, errAtoiUserId := strconv.Atoi(userIdString)
 	if errAtoiComanyId != nil || errAtoiUserId != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "服务器内部错误")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoiComanyId.Error())
 	}
 	userInfo, exists := ctx.Get("user")
 	if !exists {
@@ -27,7 +27,7 @@ func CreateVisitorController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	service.CreateVisitorService(uint(companyId), uint(userId))
@@ -41,7 +41,7 @@ func DeleteVisitorController(ctx *gin.Context) {
 	companyId, errAtoiComanyId := strconv.Atoi(companyIdString)
 	userId, errAtoiUserId := strconv.Atoi(userIdString)
 	if errAtoiComanyId != nil || errAtoiUserId != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "服务器内部错误")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoiComanyId.Error())
 		return
 	}
 	userInfo, exists := ctx.Get("user")
@@ -51,11 +51,11 @@ func DeleteVisitorController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	if !dao.GetVisitorInfoExists(uint(companyId), uint(userId)) {
-		server.Response(ctx, http.StatusBadRequest, 400, nil, "权限信息不存在")
+		server.Response(ctx, http.StatusBadRequest, 400, nil, "permission information does not exist")
 		return
 	}
 	service.DeleteVisitorService(uint(companyId), uint(userId))
@@ -67,7 +67,7 @@ func GetVisitorListController(ctx *gin.Context) {
 
 	companyId, errAtoiComanyId := strconv.Atoi(companyIdString)
 	if errAtoiComanyId != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "服务器内部错误")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoiComanyId.Error())
 	}
 	userInfo, exists := ctx.Get("user")
 	if !exists {
@@ -76,7 +76,7 @@ func GetVisitorListController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if user.ID != dao.GetCompanyInfoByID(uint(companyId)).Owner {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	visitorList := service.GetVisitorListService(uint(companyId))

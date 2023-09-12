@@ -236,5 +236,9 @@ func DeleteRuleService(ruleId uint) vo.RuleInfo {
 // @Success 200 {object} server.SuccessResponse200 "success"
 // @router /rule/update [put]
 func UpdateRuleDCAService(ruleId uint, datasource string, condition string, action string) {
+	rule := dao.GetRuleInfo(ruleId)
+	if rule.Stat != entity.RuleInactive {
+		panic("Error: rule has started or scheduled!")
+	}	
 	dao.UpdateRuleDCA(ruleId, datasource, condition, action)
 }

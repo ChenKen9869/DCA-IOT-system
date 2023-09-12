@@ -26,11 +26,11 @@ func CreateRuleController(ctx *gin.Context) {
 
 	companyId, err := strconv.Atoi(companyIdString)
 	if err != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "server inter failed")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, err.Error())
 		return
 	}
 	if !service.AuthCompanyUser(user.ID, uint(companyId)) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 
@@ -54,7 +54,7 @@ func StartRuleController(ctx *gin.Context) {
 	}
 	rule := dao.GetRuleInfo(uint(ruleId))
 	if !service.AuthCompanyUser(user.ID, rule.ParentId) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	service.StartRuleService(rule.ID, execInternal)
@@ -76,11 +76,11 @@ func EndRuleController(ctx *gin.Context) {
 	}
 	rule := dao.GetRuleInfo(uint(ruleId))
 	if !service.AuthCompanyUser(user.ID, rule.ParentId) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	if rule.Stat == entity.RuleInactive {
-		server.Response(ctx, http.StatusForbidden, 403, nil, "error: rule is inactive!")
+		server.Response(ctx, http.StatusForbidden, 403, nil, "rule is inactive!")
 		return
 	}
 	service.EndRuleService(rule.ID)
@@ -102,11 +102,11 @@ func DeleteRuleController(ctx *gin.Context) {
 	}
 	rule := dao.GetRuleInfo(uint(ruleId))
 	if !service.AuthCompanyUser(user.ID, rule.ParentId) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	if rule.Stat != entity.RuleInactive {
-		server.Response(ctx, http.StatusForbidden, 403, nil, "error: rule is active or scheduled!")
+		server.Response(ctx, http.StatusForbidden, 403, nil, "rule is active or scheduled!")
 		return
 	}
 	deletedRule := service.DeleteRuleService(rule.ID)
@@ -132,11 +132,11 @@ func UpdateRuleController(ctx *gin.Context) {
 	}
 	rule := dao.GetRuleInfo(uint(ruleId))
 	if !service.AuthCompanyUser(user.ID, rule.ParentId) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	if rule.Stat != entity.RuleInactive {
-		server.Response(ctx, http.StatusForbidden, 403, nil, "error: rule is active or scheduled!")
+		server.Response(ctx, http.StatusForbidden, 403, nil, "rule is active or scheduled!")
 		return
 	}
 	service.UpdateRuleDCAService(rule.ID, dString, cString, aString)
@@ -161,7 +161,7 @@ func ScheduleRuleController(ctx *gin.Context) {
 	}
 	rule := dao.GetRuleInfo(uint(ruleId))
 	if !service.AuthCompanyUser(user.ID, rule.ParentId) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	service.ScheduleRuleService(rule.ID, execInternal, util.ParseDate(futureTime))
@@ -172,7 +172,7 @@ func GetCompanyRuleController(ctx *gin.Context) {
 	companyIdString := ctx.Query("CompanyId")
 	companyId, errAtoi := strconv.Atoi(companyIdString)
 	if errAtoi != nil {
-		server.Response(ctx, http.StatusInternalServerError, 500, nil, "atoi error")
+		server.Response(ctx, http.StatusInternalServerError, 500, nil, errAtoi.Error())
 		return
 	}
 	userInfo, exists := ctx.Get("user")
@@ -181,7 +181,7 @@ func GetCompanyRuleController(ctx *gin.Context) {
 	}
 	user := userInfo.(entity.User)
 	if (!service.AuthCompanyUser(user.ID, uint(companyId))) && (!service.AuthVisitor(user.ID, uint(companyId))) {
-		server.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
+		server.Response(ctx, http.StatusUnauthorized, 401, nil, "permission denied")
 		return
 	}
 	ruleList := service.GetCompanyRuleService(uint(companyId))
