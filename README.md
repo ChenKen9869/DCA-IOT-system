@@ -23,7 +23,7 @@ And this is also a prototype system of [*A Flexible IoT Rule Engine Framework fo
   - [Installation](#installation)
   - [Basic Use](#basic-use)
 - [Documentation](#documentation)
-  - [Rules for testing](#rules-for-testing)
+  - [Rules For Testing](#rules-for-testing)
   - [Architecture](#architecture)
   - [Key Concepts](#key-concepts)
   - [Expand DCA Rule](#expand-dca-rule)
@@ -192,7 +192,7 @@ After deployed and started service, test the system by using swagger api webpage
 
 **Get more information about REST APIs that the system offers at [Swagger UI webpage](http://localhost:5930/swagger/index.html#/) when the system has been deployed.**
 
-## Rules for testing
+## Rules For Testing
 
 Use  **[[POST]/rule/create](#http://localhost:5930/swagger/index.html#/Rule/post_rule_create)** to create and test more rules. Remember to create devices first. And you should also change the payload of messages send by the test python script.
 
