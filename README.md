@@ -23,6 +23,7 @@ And this is also a prototype system of [*A Flexible IoT Rule Engine Framework fo
   - [Installation](#installation)
   - [Basic Use](#basic-use)
 - [Documentation](#documentation)
+  - [Rules for testing](#rules-for-testing)
   - [Architecture](#architecture)
   - [Key Concepts](#key-concepts)
   - [Expand DCA Rule](#expand-dca-rule)
@@ -31,6 +32,7 @@ And this is also a prototype system of [*A Flexible IoT Rule Engine Framework fo
     - [Rule Matcher](#rule-matcher)
     - [Action Executor](#action-executor)
   - [WebSocket Connector](#websocket-connector)
+
 
 # Quick Start
 
@@ -196,7 +198,7 @@ Use  **[[POST]/rule/create](#http://localhost:5930/swagger/index.html#/Rule/post
 
 Here are some of the basic test cases we provide:
 
-### 1. Verify single device rule with expression condition and multi actions
+**1. Verify single device rule with expression condition and multi actions**
 
 Rule1:
 
@@ -218,7 +220,7 @@ tem > 22.3
 WebSocket: 1,rule Matched, temperature is $tem!;Mqtt: localhost, 1883, admin, emqx@123456, command, open the electric fan
 ```
 
-### 2. Verify multi-device linkage rule with expression condition and multi actions
+**2. Verify multi-device linkage rule with expression condition and multi actions**
 
 Rule2:
 
@@ -240,7 +242,7 @@ tem_1{1, Portable, temperature}; tem_2{1, Fixed, temperature}
 WebSocket: 1,rule Matched, temperature is \$tem_2 and $tem_1!;Mqtt: localhost, 1883, admin, emqx@123456, command, open fan
 ```
 
-### 3. Verify functional condition with multi acitons
+**3. Verify functional condition with multi acitons**
 
 Rule3:
 
@@ -264,7 +266,7 @@ WebSocket: 1,rule Matched, position is \$longitude $longitude!;Mqtt: localhost, 
 
 The function of the PointSurface functional condition used in Rule 3 is to determine whether a point is in a surface. We use this rule to determine if the target device is in the given range. Starting from the third parameter and working backwards, we fill in the longitude coordinates and latitude coordinates of the points that enclose the polygon of the given range (the coordinate points are taken from the Amap API). In order to protect privacy, we have blurred the specific coordinate points in the test cases, using x instead of some numbers.
 
-### 4. Verify multi rules concurrent running
+**4. Verify multi rules concurrent running**
 
 In order to test whether multiple rules run concurrently to get the expected results,  testing Rule 1, Rule 2, and Rule 3 concurrently using the four REST API interfaces of the scheduling rules.
 
