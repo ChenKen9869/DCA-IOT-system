@@ -2,7 +2,9 @@
 
 # Introduction
 
-DCA IoT System is a rule-based device monitoring and message processing system.
+DCA IoT System is a rule-based device monitoring and message processing system. 
+
+And this is also a prototype system of [*A Flexible IoT Rule Engine Framework for Customizing Monitoring and Control Strategies*](A_Flexible_IoT_Rule_Engine_Framework_for_Customizing_Monitoring_and_Control_Strategies.pdf).
 
 ## Features
 
@@ -185,6 +187,86 @@ After deployed and started service, test the system by using swagger api webpage
     If rule's status equals "Active" of "Scheduled", error will occur when you start or schedule the rule in the next time.
 
 # Documentation
+
+**Get more information about REST APIs that the system offers at [Swagger UI webpage](http://localhost:5930/swagger/index.html#/) when the system has been deployed.**
+
+## Rules for testing
+
+Use  **[[POST]/rule/create](#http://localhost:5930/swagger/index.html#/Rule/post_rule_create)** to create and test more rules. Remember to create devices first. And you should also change the payload of messages send by the test python script.
+
+Here are some of the basic test cases we provide:
+
+### 1. Verify single device rule with expression condition and multi actions
+
+Rule1:
+
+**Datasource:** 
+
+```
+tem{1, Portable, temperature}
+```
+
+**Condition:**
+
+```
+tem > 22.3
+```
+
+**Action:**
+
+```
+WebSocket: 1,rule Matched, temperature is $tem!;Mqtt: localhost, 1883, admin, emqx@123456, command, open the electric fan
+```
+
+### 2. Verify multi-device linkage rule with expression condition and multi actions
+
+Rule2:
+
+**Datasource:** 
+
+```
+tem_1{1, Portable, temperature}; tem_2{1, Fixed, temperature}
+```
+
+**Condition:**
+
+```
+(tem_2 > 25.3) & (tenm_1 > tem_2 +3 )
+```
+
+**Action:**
+
+```
+WebSocket: 1,rule Matched, temperature is \$tem_2 and $tem_1!;Mqtt: localhost, 1883, admin, emqx@123456, command, open fan
+```
+
+### 3. Verify functional condition with multi acitons
+
+Rule3:
+
+**Datasource:** 
+
+```
+longitude{1, Portable, longitude}; latitude{1, Portable, latitude}
+```
+
+**Condition:**
+
+```
+PointSurface: longitude, latitude, 1xx.40xxx2, 3x.92xx55, xx6.4xx70x, xx.89xx55, 1xx.40xx92, x9.8xx353, xxx.38xx46, xx.89x365
+```
+
+**Action:**
+
+```
+WebSocket: 1,rule Matched, position is \$longitude $longitude!;Mqtt: localhost, 1883, admin, emqx@123456, command, find device
+```
+
+The function of the PointSurface functional condition used in Rule 3 is to determine whether a point is in a surface. We use this rule to determine if the target device is in the given range. Starting from the third parameter and working backwards, we fill in the longitude coordinates and latitude coordinates of the points that enclose the polygon of the given range (the coordinate points are taken from the Amap API). In order to protect privacy, we have blurred the specific coordinate points in the test cases, using x instead of some numbers.
+
+### 4. Verify multi rules concurrent running
+
+In order to test whether multiple rules run concurrently to get the expected results,  testing Rule 1, Rule 2, and Rule 3 concurrently using the four REST API interfaces of the scheduling rules.
 
 ## Architecture
 
