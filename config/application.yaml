@@ -5,7 +5,7 @@ datasource:
   host: localhost
   port: 3306
   database: farm
-  username: root
+  username: aken
   password: 123456
   charset: utf8
   loc: Asia/Shanghai
@@ -21,23 +21,25 @@ newcollar:
   uname: xxxxx
   psw: xxxxxx
 mongodb:
-  host: localhost
+  host: xx.xx.xx.xx
   port: 27017
   database: xxxxxx
   collar: xxxxxx
   fio: xxxxxx
   position-collar: xxxxxx
-  username: root
-  password: 123456
+  username: xxxx
+  password: xxxxxx
+fence:
+  spec: 10s
 geo:
   coordinates: GCJ-02
 biology:
-  picturedir: absolute_path_of_project/assets/biology_pictures/
+  picturedir: xxxx/assets/biology_pictures/
 emqx:
-  host: localhost
+  host: 124.70.208.224
   port: 1883
-  username: root
-  password: emqx@123456
+  username: xumu
+  password: xumu@123456
   collar: collar/#
-  fio: fio/#
+  fio: smartag01/#
   position-collar: poscollar/#
