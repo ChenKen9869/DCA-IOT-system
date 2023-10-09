@@ -20,8 +20,8 @@ plt.plot(time, mem_res_MB,color='blue', linewidth=0.2)
 
 plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%H:%M:%S"))
 plt.plot(time, mem_res_MB, zorder=1)
-plt.xlabel("Time")#横坐标名字
-plt.ylabel("Memory Usage(MB)")#纵坐标名字
+plt.xlabel("Time")
+plt.ylabel("Memory Usage(MB)")
 plt.gcf().autofmt_xdate()
 plt.yticks(range(int(min(mem_res_MB)), int(max(mem_res_MB)) + 1, 60))
 
