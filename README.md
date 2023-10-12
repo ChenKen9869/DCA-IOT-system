@@ -4,7 +4,7 @@
 
 DCA IoT System is a rule-based device monitoring and message processing system. 
 
-This is a prototype system of [*An Adaptable IoT Rule Engine Framework for Dataflow Monitoring and Control Strategies*](https://arxiv.org/abs/2310.05493).
+The implementation principle of the system is here: [*An Adaptable IoT Rule Engine Framework for Dataflow Monitoring and Control Strategies*](https://arxiv.org/abs/2310.05493).
 
 ## Features
 
