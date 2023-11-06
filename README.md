@@ -38,7 +38,7 @@ The implementation principle of the system is here: [*An Adaptable IoT Rule Engi
 
 ## Requirements
 
-[MySQL service](#https://www.mysql.com) and [EMQX service](#https://www.emqx.io/) is required to running this system.
+[MySQL service](#https://www.mysql.com) and [EMQX service](#https://www.emqx.io/) is required for running this system.
 
 - Deploy MySQL service 
 - Deploy EMQX service
