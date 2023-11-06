@@ -143,27 +143,27 @@ After deployed and started service, test the system by using swagger api webpage
    WebSocket: 1,rule Matched, temperature is $tem!;Mqtt: localhost, 1883, admin, emqx@123456, command, open the electric fan
    ```
 
-6. Use websocket client to **connect to the monitor center** by visit below url.
+6. Use websocket client to **connect the monitor center** by visit below url.
 
    ```
    ws//locallhost:5930/monitorCenter/connect
    ```
 
-   **Do not** use swagger to direct visit this api. 
+   **Do not** use swagger to visit this api directly. 
 
-   If you want to disconnect with service, use **[[DELETE]/monitorCenter/disconnect](#http://localhost:5930/swagger/index.html#/MonitorCenter/delete_monitorCenter_disconnect)**, or just close the websocket client.
+   If you are willing to disconnect with service, use **[[DELETE]/monitorCenter/disconnect](#http://localhost:5930/swagger/index.html#/MonitorCenter/delete_monitorCenter_disconnect)**, or just close the websocket client.
 
-7. Use MQTT client to listen the command **topic "command"** and get the message send by DCA runtime object. 
+7. Use MQTT client to listen the command topic **"command"** and get messages. 
 
 8. Start the DCA rule: **[[GET]/rule/start](#http://localhost:5930/swagger/index.html#/Rule/get_rule_start)**
 
-9. Run test python script to send data to the system. This script simulate sensor data.
+9. Run test python script to send data to the system. This script simulates sensor data.
 
    ```shell
    python ./script/example_device.py
    ```
 
-   And send the following test message to the system.
+   Send the following test message to the system.
 
    ```
    0000001, collar, temperature, 25.6
