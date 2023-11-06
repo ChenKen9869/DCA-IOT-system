@@ -117,7 +117,7 @@ After deployed and started service, test the system by using swagger api webpage
 
 4. Create a Portable Device or a Fixed Device: **[[POST]/device/portable/create](#http://localhost:5930/swagger/index.html#/Device-portable/post_device_portable_create)** or **[[POST]/device/fixed/create](#http://localhost:5930/swagger/index.html#/Device-fixed/post_device_fixed_create)**
 
-   Remember the device id, so you can use it in 5.
+   Record the device id, so you can use it in 5.
 
 5. Create a DCA rule: **[[POST]/rule/create](#http://localhost:5930/swagger/index.html#/Rule/post_rule_create)**
 
