@@ -176,7 +176,7 @@ After deployed and started service, test the system by using swagger api webpage
 
    You can change the data in this message form. But when you do this, **change the device's information and rule description at the same time.**
 
-10. Waite a moment, you should find message in your WebSocket client and command in MQTT topic "command".
+10. You should find message in your WebSocket client and command in MQTT topic "command".
 
 11. When finish testing, remember to end the rule: **[[GET]/rule/end](#http://localhost:5930/swagger/index.html#/Rule/get_rule_end)**
 
