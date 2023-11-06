@@ -121,7 +121,7 @@ After deployed and started service, test the system by using swagger api webpage
 
 5. Create a DCA rule: **[[POST]/rule/create](#http://localhost:5930/swagger/index.html#/Rule/post_rule_create)**
 
-   For example, you just created a portable device for id = 1. And the device is collar device which message has the attribute "temperature". 
+   For example, you just created a portable device whose id = 1. The device type is collar, and its message has the attribute "temperature". 
 
    If you'd like to monitor this device and control the temperature of farmhouse by send command to the MQTT topic "command", you should write DCA rule such like this:
 
