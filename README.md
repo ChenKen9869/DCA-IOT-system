@@ -305,6 +305,7 @@ The system is made up by following architecture.
 Datasource syntax: 
 
 ​		**Name{id, type, attribute}; Name{id, type, attribute}**
+
 Condition syntax: 
 
 ​		**Expression of Name**
