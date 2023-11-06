@@ -107,7 +107,7 @@ After deployed and started service, test the system by using swagger api webpage
 
 1. Create an account: **[[POST]/user/register](#http://localhost:5930/swagger/index.html#/User/post_user_register)**, this api will return "token". 
 
-   Copy "token", and put "Bearer " before it. 
+   Copy "token", and add "Bearer " before it. 
 
    Paste the "token" with "Bearer " into "Authorization" header when visit other api.
 
