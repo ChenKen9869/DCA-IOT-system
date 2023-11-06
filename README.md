@@ -196,7 +196,7 @@ After deployed and started service, test the system by using swagger api webpage
 
 Use  **[[POST]/rule/create](#http://localhost:5930/swagger/index.html#/Rule/post_rule_create)** to create and test more rules. Remember to create devices first. And you should also change the payload of messages send by the test python script.
 
-Here are some of the basic test cases we provide:
+Here are some of the basic test cases:
 
 **1. Verify single device rule with expression condition and multi actions**
 
