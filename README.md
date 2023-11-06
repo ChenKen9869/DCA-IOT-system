@@ -308,11 +308,7 @@ Datasource syntax:
 
 Condition syntax: 
 
-​		**Expression of Name**
-
-​		or 
-
-​		**TypeSymbol: { params list contains Name split by "," }**
+​		**Expression of Name** or **TypeSymbol: { params list contains Name split by "," }**
 
 Action syntax: 
 
